@@ -11,25 +11,23 @@ A simple Shinu UwU
 
 > **Commands**
 > **Info**
- channelinfo
- count-bumps
-help, invites
-
-ping
-roleinfo
-serverinfo
-test
-uptime
-userinfo
-userperm
+- [ ] channelinfo
+- [ ] count-bumps
+- [ ] help, invites
+- [ ] ping
+- [ ] roleinfo
+- [ ] serverinfo
+- [ ] uptime
+- [ ] userinfo
+- [ ] userperm
 
 > **Actions/Roleplay**
-cat
-cry
-dance
-die
-dog
-hug
+- [ ] cat
+- [ ] cry
+- [ ] dance
+- [ ] die
+- [ ] dog
+- [ ] hug
 kill
 kiss
 laugh

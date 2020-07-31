@@ -1,13 +1,20 @@
-# Shinu-
+# Shinu Bot UwU
 A simple Shinu UwU
 
-**Language:**
 
-**Commands**
-**Info**
-channelinfo
-count-bumps
+- [x] Moderation Command übernehmen
+- [x] list syntax required (any unordered or ordered list supported)
+- [x] this is a complete item
+- [ ] this is an incomplete item
+
+> **Language**
+
+> **Commands**
+> **Info**
+ channelinfo
+ count-bumps
 help, invites
+
 ping
 roleinfo
 serverinfo
@@ -16,7 +23,7 @@ uptime
 userinfo
 userperm
 
-**Actions/Roleplay**
+> **Actions/Roleplay**
 cat
 cry
 dance
@@ -31,13 +38,13 @@ lick
 nom
 slap
 
-**Moderation**
+> **Moderation**
 clear
 kick
 nsfw
 rolecolor
 
-**Fun**
+> **Fun**
 8ball
 avatar
 coinflip

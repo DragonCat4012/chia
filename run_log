@@ -1,0 +1,3 @@
+#!/bin/bash
+cd /public/applications/shinu
+./run >> log.log 

@@ -1,3 +1,12 @@
+# Security
+/.env
+/.vscode
+/config.json
+/package-lock.json
+
+# Node Modules
+/node_modules
+
 # Logs
 logs
 *.log

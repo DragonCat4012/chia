@@ -1,0 +1,20 @@
+const {Message} = require('discord.js');
+const { colors, confirmAction, newEmb } = require('../utilities');
+
+module.exports = {
+    name: 'Ping',
+    syntax: 'ping',
+    args: false,
+    description: 'Ping!',
+    commands: ['ping','pong'],
+    
+    /**
+     *@document
+     * @this
+     * @param {Message} msg Nachricht in dem der Befehl geschickt wurde
+     * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
+     */
+    execute(msg, args) {
+        msg.reply("**PONG**")
+    }
+};

@@ -1,0 +1,18 @@
+
+  if (command === "serverlist") {
+    let emb = new RichEmbed().setColor(0xc31515).setTitle(`${message.author.username} Du bist leider kein Bot Owner qwq`);
+    if (message.author.id !== config.owner) return message.channel.send(emb);
+
+    emb.setTitle('Serverlist').setColor(red)
+
+    let names = client.guilds.map(g => g.name);
+    let ids = client.guilds.map(g => g.id);
+    let created = client.guilds.map(g => g.createdAt.toUTCString().substr(0, 16));
+    let joinedAt = client.guilds.map(g => moment.utc(g.joinedAt).format("do. MMMM. YYYY"));
+
+    for (let i=0;i<names.length;i++) {
+      emb.addField(`\`${names[i]}\` ◈ \`${ids[i]}\``, `\`${created[i]}\` ◈ \`${joinedAt[i]}\``)
+  }
+
+    message.channel.send(emb);
+}

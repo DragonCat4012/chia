@@ -1,0 +1,22 @@
+{
+  "name": "lena-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "express": "^4.17.1",
+    "moment": "^2.26.0",
+    "node-fetch": "^2.6.0",
+    "sequelize": "5.21.13",
+    "snekfetch": "^4.0.4",
+    "sqlite3": "^5.0.0"
+  }
+}

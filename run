@@ -1,0 +1,8 @@
+#!/bin/bash
+for (( ; ; ))
+do
+echo "`date +"%D %T"` starting.."
+sudo node index.js
+echo "`date +"%D %T"` crahsed"
+sleep 1
+done

@@ -1,5 +1,5 @@
 # Shinu Bot UwU
-A simple Shinu UwU
+A simple Shinuu UwU
 
 
 - [x] Moderation Command übernehmen

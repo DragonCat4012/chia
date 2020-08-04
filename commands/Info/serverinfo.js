@@ -67,7 +67,7 @@ module.exports = {
         roles_s =
           roles
             //.map(r => (r.mentionable ? `<@&${r.id}>` : "`" + r.name + "`"))
-            .map(r => "<@&"+r.id+">")
+            .map(r => `<@&${r.id}>`)
             .join(" | ") + " **. . .**";
 
       } else {

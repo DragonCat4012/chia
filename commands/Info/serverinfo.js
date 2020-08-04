@@ -64,25 +64,7 @@ module.exports = {
     if (roles.size > 0) {
       if (roles.size > 10) {
         roles = roles.array().slice(0, 10);
-        roles_s =
-          roles
-<<<<<<< HEAD
-<<<<<<< HEAD
-            .map(r => (r.mentionable ? `<@&${r.id}>` : "`" + r.name + "`"))
-            //.map(r => `<@&${r.id}>`)
-=======
-            //.map(r => (r.mentionable ? `<@&${r.id}>` : "`" + r.name + "`"))
-<<<<<<< HEAD
-            .map(r => r.toString())
->>>>>>> parent of 5698139... Update serverinfo.js
-=======
-            .map(r => "<@&"+r.id+">")
->>>>>>> parent of 5812eab... Update serverinfo.js
-=======
-            //.map(r => (r.mentionable ? `<@&${r.id}>` : "`" + r.name + "`"))
-            .map(r => `<@&${r.id}>`)
->>>>>>> parent of e00311b... Update serverinfo.js
-            .join(" | ") + " **. . .**";
+        roles_s = roles.map(r => (r.mentionable ? `<@&${r.id}>` : "`" + r.name + "`")).join(" | ")+" . . .";
 
       } else {
         roles_s = roles.map(m => `<&${m.id}>`).join(" | ");

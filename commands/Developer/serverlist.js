@@ -1,6 +1,5 @@
 const { Message } = require('discord.js');
 const { newEmb } = require('../utilities');
-const { dev } = require("./debug.json");
 
 module.exports = {
   name: 'serverlist',

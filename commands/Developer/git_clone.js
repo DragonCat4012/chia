@@ -17,17 +17,13 @@ module.exports = {
    * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
    */
   execute(msg, args) {
-    confirmAction(msg, 'Willst du den Bot wirklich updaten via Git?', async () => {
-      exec("git pull", function (error, stdout, stderr) {
-        let emb = newEmb(msg).setTitle("Cloned Git, Results:");
-        if (error != null) emb.addField("**Error:**", "```"+error.message+"```");
-        if (stdout != "") emb.addField("**Stdout:**", "```"+stdout+"```");
-        if (stderr != "") emb.addField("**Stderr:**", "```"+stderr+"```");
-        
-        msg.channel.send(emb);
-      });
-    }, () => {
+    exec("git pull", function (error, stdout, stderr) {
+      let emb = newEmb(msg).setTitle("Cloned Git, Results:");
+      if (error != null) emb.addField("**Error:**", "```" + error.message + "```");
+      if (stdout != "") emb.addField("**Stdout:**", "```" + stdout + "```");
+      if (stderr != "") emb.addField("**Stderr:**", "```" + stderr + "```");
 
-    })
+      msg.channel.send(emb);
+    });
   }
 };

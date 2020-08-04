@@ -3,12 +3,12 @@ var { exec } = require('child_process');
 const { colors, confirmAction, newEmb } = require('../utilities');
 
 module.exports = {
-  name: 'Shutdown',
-  syntax: 'shutdown',
+  name: 'Git Update',
+  syntax: 'git-update',
   args: false,
-  description: 'Stops the Bot',
+  description: 'Updates The Bot',
   perm: 'ADMINISTRATOR',
-  commands: ['shutdown', 'restart', 'disconnect'],
+  commands: ['git', 'git-update', 'update'],
 
   /**
    *@document

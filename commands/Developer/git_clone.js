@@ -21,11 +21,11 @@ module.exports = {
       exec("ls", function (error, stdout, stderr) {
         let emb = newEmb(msg).setTitle("Cloned Git, Results");
         if (error != null) emb.addField("**Error:**", `\`${error.message}\``);
-        if (stdout != null) emb.addField("**Stdout:**", stdout)
-        if (stderr != null) emb.addField("**Stderr:**", stderr)
+        if (stdout != "") emb.addField("**Stdout:**", stdout)
+        if (stderr != "") emb.addField("**Stderr:**", stderr)
         
         msg.channel.send(emb);
-      }).disconnect();
+      });
     }, () => {
 
     })

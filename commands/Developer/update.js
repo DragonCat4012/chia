@@ -7,7 +7,7 @@ module.exports = {
   syntax: 'update',
   args: false,
   description: 'der aktuelle Update bericht!!',
-  perm: 'ADMINISTRATOR',
+  perm: 'DEVELOPER',
   commands: ['update'],
 
   /**
@@ -24,9 +24,9 @@ module.exports = {
    
       .setTitle("Bot Update 03.08. ")
       .addField("**Welcome Message etc.**", "Wilkomemns und verabscheidunsgnachrihcten funktionieren nun :tada:")
-      .addField("**XP System**", "Datenbank struktur für Econemy und Level System wurden erstellt")
+      .addField("**XP System**", "Datenbank struktur fï¿½r Econemy und Level System wurden erstellt")
       .addField("**Online Zeit:**", "Der Bot wird nun wieder dauerhaft online sien OvO")
-	.addField("**weitere pläne:**", "Moderations Cmd übernehmen, verwarnungsystem, level system")
+	.addField("**weitere plï¿½ne:**", "Moderations Cmd ï¿½bernehmen, verwarnungsystem, level system")
 
     msg.channel.send(emb);
 

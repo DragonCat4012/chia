@@ -6,7 +6,7 @@ module.exports = {
     syntax: 'shutdown',
     args: false,
     description: 'Stops the Bot',
-    perm: 'ADMINISTRATOR',
+    perm: 'DEVELOPER',
     commands: ['shutdown','restart', 'disconnect'],
     
     /**

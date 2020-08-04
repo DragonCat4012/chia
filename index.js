@@ -221,7 +221,7 @@ client.on("message", async message => {
 
 
     let test = message.mentions.members.first()
-    if (test && test.id == client.user.id && !message.content.startsWith(prefix)) message.channel.send("Mein Prefix für diesen Server ist " + "\`" + prefix + "\`")
+    if (test && test.id == client.user.id && !message.content.startsWith(prefix)) message.channel.send("Mein Prefix fï¿½r diesen Server ist " + "\`" + prefix + "\`")
 
 
     if (!message.content.startsWith(prefix) || message.author.bot) return;
@@ -246,7 +246,7 @@ client.on("message", async message => {
     }
 
     if (!["text", "news", "store"].includes(message.channel.type)) {
-        emb.setDescription("Ich führe keine Befehle in DMs aus qwq");
+        emb.setDescription("Ich fï¿½hre keine Befehle in DMs aus qwq");
         return message.channel.send(emb);
     }
 
@@ -402,11 +402,13 @@ const reloadModules = async function (argument, msg) {
                 });
 
                 text += `\n **>** \`${module_name}/${newCommand.name}\``;
-                msg.edit(text);
+                //msg.edit(text);
             } catch (error) {
                 console.log(error);
                 msg.channel.send(`Beim neuladen von \`${newCommand.name}\` ist ein Fehler aufgetreten:\n\`${error.message}\``);
             }
         }
     }
+
+    msg.edit(text);
 }

@@ -71,8 +71,12 @@ module.exports = {
             //.map(r => `<@&${r.id}>`)
 =======
             //.map(r => (r.mentionable ? `<@&${r.id}>` : "`" + r.name + "`"))
+<<<<<<< HEAD
             .map(r => r.toString())
 >>>>>>> parent of 5698139... Update serverinfo.js
+=======
+            .map(r => "<@&"+r.id+">")
+>>>>>>> parent of 5812eab... Update serverinfo.js
             .join(" | ") + " **. . .**";
 
       } else {

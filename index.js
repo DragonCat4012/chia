@@ -252,8 +252,7 @@ client.on("message", async message => {
 
     var guild_config = await client.database.server_configs.getConfig(message.guild.id);
     let target = guild_config.team_role;
-    let role = message.guild.roles.cache.get(target)
-    console.log(command.perm)
+    let role = message.guild.roles.cache.get(target);
 
     var emb = rawEmb(message);
     if (command.perm) {

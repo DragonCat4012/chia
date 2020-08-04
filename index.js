@@ -221,7 +221,7 @@ client.on("message", async message => {
 
 
     let test = message.mentions.members.first()
-    if (test && test.id == client.user.id && !message.content.startsWith(prefix)) message.channel.send("Mein Prefix fÔøΩr diesen Server ist " + "\`" + prefix + "\`")
+    if (test && test.id == client.user.id && !message.content.startsWith(prefix)) message.channel.send("Mein Prefix f¸r diesen Server ist " + "\`" + prefix + "\`")
 
 
     if (!message.content.startsWith(prefix) || message.author.bot) return;
@@ -258,7 +258,7 @@ client.on("message", async message => {
     if (command.perm) {
         if (command.perm == 'DEVELOPER') {
             if (!config.owner.includes(Number(message.author.id))) {
-                emb.setDescription("**Dieser Befehl ist nur f√ºr Developer**").setColor(colors.nothing);
+                emb.setDescription("**Du bist kein `Developer`** ").setColor(colors.nothing);
                 return message.channel.send(emb);
             }
         } else {

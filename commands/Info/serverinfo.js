@@ -1,5 +1,6 @@
 const { Message } = require('discord.js');
 const { colors, confirmAction, newEmb } = require('../utilities');
+const { red, error, info, success, unimportant, nothing, warning } = colors
 //const { prefix, token, owner } = require("../config.json");
 
 const moment = require("moment");

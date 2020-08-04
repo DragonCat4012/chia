@@ -25,14 +25,15 @@ module.exports = {
 
         let segments = [];
 
-        if (days > 0) segments.push(days + ' Tage' + ((days == 1) ? '' : 's'));
-        if (hours > 0) segments.push(hours + ' Stunden' + ((hours == 1) ? '' : 's'));
-        if (minutes > 0) segments.push(minutes + ' Minuten' + ((minutes == 1) ? '' : 's'));
-        if (seconds > 0) segments.push(seconds + ' Sekunden' + ((seconds == 1) ? '' : 's'));
-        const timeString = segments.join(', ');
+      if (days > 0) segments.push(days + ' Tag' + ((days == 1) ? '' : 'e'));
+        if (hours > 0) segments.push(hours + ' Stunde' + ((hours == 1) ? '' : 'n'));
+        if (minutes > 0) segments.push(minutes + ' Minute' + ((minutes == 1) ? '' : 'n'));
+        if (seconds > 0) segments.push(seconds + ' Sekunde' + ((seconds == 1) ? '' : 'n'));        
+const timeString = segments.join(', ');
 
         let emb = newEmb(msg)
             .setTitle(timeString)
+.setColor('0x2C2F33')
         emb.footer = undefined;
         emb.timestamp = undefined;
         msg.channel.send(emb);

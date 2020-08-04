@@ -7,6 +7,7 @@ module.exports = {
   syntax: 'update',
   args: false,
   description: 'der aktuelle Update bericht!!',
+  perm: 'ADMINISTRATOR',
   commands: ['update'],
 
   /**
@@ -21,11 +22,11 @@ module.exports = {
 
     let emb = newEmb(msg)
    
-      .setTitle("Bot Update 15.07 ")
-      .addField("**Datenbank**", "Die Server Datenbank geht nun, Prefix kann z.B. geändert werden")
-      .addField("**Moderation**", "der clear cmd wurde üebrarbeitet, die restlichen cmd brauhcne noch eine weile")
-      .addField("**Version:**", "Der Bot wird weiterhin auf Discord.js V12 geupdated!")
-.addField("**weitere pläne:**", "Datenbank für die user, wilkommensnachricht fertig machen")
+      .setTitle("Bot Update 03.08. ")
+      .addField("**Welcome Message etc.**", "Wilkomemns und verabscheidunsgnachrihcten funktionieren nun :tada:")
+      .addField("**XP System**", "Datenbank struktur für Econemy und Level System wurden erstellt")
+      .addField("**Online Zeit:**", "Der Bot wird nun wieder dauerhaft online sien OvO")
+	.addField("**weitere pläne:**", "Moderations Cmd übernehmen, verwarnungsystem, level system")
 
     msg.channel.send(emb);
 

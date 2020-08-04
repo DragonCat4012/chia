@@ -7,6 +7,7 @@ module.exports = {
   syntax: 'serverlist',
   args: false,
   description: 'Eine liste aller server auf denen ich bin mit deren id, damit du sie finden kannst UwU',
+perm: 'ADMINISTRATOR',
   commands: ['serverlist', 'slist'],
 
   /**

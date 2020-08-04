@@ -7,6 +7,7 @@ module.exports = {
     syntax: 'up',
     args: false,
     description: 'Bin ich online.....?',
+    perm: 'ADMINISTRATOR',
     commands: ['up'],
     
     /**
@@ -19,7 +20,12 @@ module.exports = {
 
 
         let emb = newEmb(msg)
-        .setTitle("Sure, bin offline uwu");
+		emb.setColor('0x2C2F33')
+ 	emb.setTitle("Sure, bin offline uwu")
+	emb.footer = undefined;
+        emb.timestamp = undefined;
+
+       
         msg.channel.send(emb);
 
     }

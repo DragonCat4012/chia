@@ -9,15 +9,13 @@ const colors = {
     info: 0x1AE3F9,
     success: 0x13EF8D,
     warning: 0xF9D71A,
-    nothing: 0x2C2F33,
-    unimportant: 0x738F8A,
-nothing: 0x2C2F33
-
+    nothing: 0x303136,
+    unimportant: 0x738F8A
 }
 const emotes = {
     false: "<:false:739523416431919226>",
     true: "<:true:739523416406622258>"
-   
+
 }
 
 
@@ -118,7 +116,7 @@ const rawEmb = (msg) => {
  */
 const emptyEmb = (msg) => {
     return new MessageEmbed()
-    .setColor(colors.nothing);
+        .setColor(colors.nothing);
 
 }
 

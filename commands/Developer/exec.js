@@ -21,7 +21,7 @@ module.exports = {
 
     exec(command, function (error, stdout, stderr) {
       let emb = newEmb(msg).setTitle("Executed Command:");
-      emb.addField("**Command:**", command);
+      emb.addField("**Command:**", "```" + command + "```");
       if (error != null) emb.addField("**Error:**", "```" + error.message + "```");
       if (stdout != "") emb.addField("**Stdout:**", "```" + stdout + "```");
       if (stderr != "") emb.addField("**Stderr:**", "```" + stderr + "```");

@@ -64,9 +64,9 @@ module.exports = {
     if (roles.size > 0) {
       if (roles.size > 10) {
         roles = roles.array().slice(0, 10);
-        roles_s = roles.map(r => (false ? `<@&${r.id}>` : "`" + r.name + "`")).join(" | ")+" . . .";
+        roles_s = roles.map(m => `<@&${m.id}>`).join(" **,** ")+" . . .";
       } else {
-        roles_s = roles.map(m => `<&${m.id}>`).join(" | ");
+        roles_s = roles.map(m => `<@&${m.id}>`).join(" **,** ");
       }
     } else {
       roles_s = "Keine";

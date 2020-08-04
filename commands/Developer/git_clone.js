@@ -7,7 +7,7 @@ module.exports = {
   syntax: 'git-update',
   args: false,
   description: 'Updates The Bot',
-  perm: 'ADMINISTRATOR',
+  perm: 'DEVELOPER',
   commands: ['git', 'git-update', 'update'],
 
   /**

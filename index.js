@@ -168,7 +168,7 @@ client.on("guildMemberAdd", async member => {
         let channel = member.guild.channels.cache.get(guild_config.wlc_ch)
         let A = guild_config.wlc_msg;
         let B = A.replace(/%count%/i, member.guild.memberCount)
-        let C =  B.replace(/%user%/i, member)
+        let C = B.replace(/%user%/i, member)
         let text = C.replace(/%server%/i, member.guild.name)
         //  %level%, %user%, %count%
         let emb = new MessageEmbed().setTitle(member.guild.name).setDescription(text).setColor(colors.nothing).setFooter(member.displayName).setTimestamp()
@@ -179,7 +179,7 @@ client.on("guildMemberAdd", async member => {
                 member.roles.add(role)
             } catch (e) {
                 console.log(e)
-               if(e) channel.send("Unable to add Role: **<@&" + role + ">**")
+                if (e) channel.send("Unable to add Role: **<@&" + role + ">**")
             }
 
         }
@@ -196,7 +196,7 @@ client.on("guildMemberRemove", async member => {
         let channel = member.guild.channels.cache.get(guild_config.gb_ch)
         let A = guild_config.wlc_msg;
         let B = A.replace(/%count%/i, member.guild.memberCount)
-        let C =  B.replace(/%user%/i, member)
+        let C = B.replace(/%user%/i, member)
         let text = C.replace(/%server%/i, member.guild.name)
         let emb = new MessageEmbed().setTitle(member.guild.name).setDescription(text).setColor(colors.nothing).setFooter(member.displayName).setTimestamp()
         channel.send(emb)
@@ -228,7 +228,7 @@ client.on("message", async message => {
 
     var emb = newEmb(message)
         .setColor(colors.nothing)
-    
+
 
 
     const args = message.content.slice(prefix.length).split(/ +/);
@@ -255,28 +255,37 @@ client.on("message", async message => {
     let role = message.guild.roles.cache.get(target)
     console.log(command.perm)
 
-  
-    
-     if (command.perm &&!message.member.hasPermission(command.perm) || !message.member.roles.cache.has(role) && !config.owner.includes(Number(message.author.id))) {
-        var emb = rawEmb(message)
-        emb.setDescription("**Dir fehlt folgende Berechtigung:** `" + command.perm + "`").setColor(colors.nothing)
-        return message.channel.send(emb);
+    var emb = rawEmb(message);
+    if (command.perm) {
+        if (command.perm == 'DEVELOPER') {
+            if (!config.owner.includes(Number(message.author.id))) {
+                emb.setDescription("**Dieser Befehl ist nur für Developer**").setColor(colors.nothing);
+                return message.channel.send(emb);
+            }
+        } else {
+            if (!(message.member.hasPermission(command.perm) || message.member.roles.cache.has(role))) {
+                emb.setDescription("**Du brauchst die Berechtigung,** `"+command.perm+"` für diesen Befehl").setColor(colors.nothing);
+                return message.channel.send(emb);
+            }
+        }
     }
+
+
 
     if (command.args && !args.length) {
         emb.setDescription(`Du musst Argumente angeben, <@${message.member.id}>!`);
 
-      
+
 
         if (command.syntax) {
             emb.addField(`Syntax`, `\`${prefix}${command.syntax}\``)
-            
+
         }
 
         return message.channel.send(emb);
     }
 
-   
+
 
 
 

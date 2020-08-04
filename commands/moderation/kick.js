@@ -46,7 +46,7 @@ module.exports = {
         }
 
         if (kicked.length > 0) {
-            emb.addField(`**Erfolreich entfernt wurden ${kicked.lenght}**`,kicked.join(', '));
+            emb.addField(`**Erfolreich entfernt wurden ${kicked.length}**`,kicked.join(', '));
         }
 
         msg.channel.send(emb);

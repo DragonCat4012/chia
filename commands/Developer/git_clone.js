@@ -19,13 +19,13 @@ module.exports = {
   execute(msg, args) {
     confirmAction(msg, 'Willst du den Bot wirklich updaten via Git?', async () => {
       exec("ls", function (error, stdout, stderr) {
-        msg.channel.send(newEmb(msg)
-        .setTitle("Cloned Git, Results")
-        .addField("**Error:**", `\`${error.message}\``)
-        .addField("**Stdout:**", stdout)
-        .addField("**Stderr:**", stderr)
-        )
-      });
+        let emb = newEmb(msg).setTitle("Cloned Git, Results");
+        if (error != null) emb.addField("**Error:**", `\`${error.message}\``);
+        if (stdout != null) emb.addField("**Stdout:**", stdout)
+        if (stderr != null) emb.addField("**Stderr:**", stderr)
+        
+        msg.channel.send(emb);
+      }).disconnect();
     }, () => {
 
     })

@@ -53,7 +53,7 @@ const Server = serversql.define('server_tabelle', {
 
 
 
-    team_rolle: {
+    team_role: {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
@@ -61,9 +61,18 @@ const Server = serversql.define('server_tabelle', {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
-    xp_msg: {
+  join_role: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
+    },
+   xp: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+    },
+
+    xp_msg: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
     },
     xp_ch: {
         type: DataTypes.TEXT,
@@ -85,6 +94,8 @@ const Server = serversql.define('server_tabelle', {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
+
+
     gb: {
         type: DataTypes.BOOLEAN,
         defaultValue: false

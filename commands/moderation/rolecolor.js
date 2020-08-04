@@ -7,6 +7,7 @@ module.exports = {
     syntax: 'rolecolor <@role> <Farbe>',
     args: true,
     description: 'Ändert die Farbe einer Rolle',
+perm: 'MANAGE_ROLES',
     commands: ['rolecolor', 'rcolor'],
 
     /**
@@ -37,7 +38,7 @@ module.exports = {
 
     role.setColor(color).catch();
 
-      emb.setTitle(`Rollenfarbe geändert`)
+      emb.setTitle(`Rollenfarbe ge�ndert`)
       .addField("**Rolle:** ", role)
       .addField("**Farbe:** ", color)
       msg.channel.send(emb)

@@ -9,8 +9,17 @@ const colors = {
     info: 0x1AE3F9,
     success: 0x13EF8D,
     warning: 0xF9D71A,
-    unimportant: 0x738F8A
+    nothing: 0x2C2F33,
+    unimportant: 0x738F8A,
+nothing: 0x2C2F33
+
 }
+const emotes = {
+    false: "<:false:739523416431919226>",
+    true: "<:true:739523416406622258>"
+   
+}
+
 
 /**
  * @callback MessageAction
@@ -86,7 +95,6 @@ const confirmAction = (msg, text, confim, cancel) => {
  */
 const newEmb = (msg) => {
     return new MessageEmbed()
-        //.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
         .setColor(colors.red)
         .setFooter(msg.client.user.tag, msg.client.user.displayAvatarURL())
         .setTimestamp(new Date());
@@ -104,7 +112,15 @@ const rawEmb = (msg) => {
     //.setTimestamp(new Date());
 }
 
+/**
+ * @param {Message} msg 
+ * @returns {MessageEmbed} a clean Embed
+ */
+const emptyEmb = (msg) => {
+    return new MessageEmbed()
+    .setColor(colors.nothing);
 
+}
 
 /**
  * @param {string} search Wonach du suchen willst
@@ -127,4 +143,4 @@ async function getTenor(search) {
     return url;
 }
 
-module.exports = { colors, confirmAction, newEmb, rawEmb, getTenor };
+module.exports = { colors, confirmAction, newEmb, rawEmb, getTenor, emotes };

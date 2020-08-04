@@ -10,6 +10,7 @@ module.exports = {
     syntax: 'clear <anzahl> [autor] [suche]',
     args: true,
     description: 'Löscht Nachrichten die nicht älter als 2 Wochen sind UwU',
+    perm: 'MANAGE_MESSAGES',
     commands: ['clear', 'purge', 'delete'],
 
     /**
@@ -20,11 +21,7 @@ module.exports = {
      */
     async execute(msg, args) {
         let emb = newEmb(msg)
-            .setTitle('Dir fehlt leider folgende Berechtigung: \`MANAGE_MESSAGES\`')
-
-        if (!msg.member.hasPermission("MANAGE_MESSAGES"))
-            return msg.channel.send(emb);
-
+           
         var autor = msg.mentions.members.first();
         let anzahl = args[0]
 

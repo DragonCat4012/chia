@@ -1,13 +1,19 @@
 const { Message, MessageEmbed } = require("discord.js");
-//const red = "0xd40202";
 const colors = {
     error: 0xF91A3C,
     red: 0xd40202,
     info: 0x1AE3F9,
     success: 0x13EF8D,
     warning: 0xF9D71A,
-    unimportant: 0x738F8A
+    unimportant: 0x738F8A,
+nothing: 0x2C2F33
 }
+const emotes = {
+    false: "<:false:739523416431919226>",
+    true: "<:true:739523416406622258>"
+   
+}
+
 
 /**
  * @callback MessageAction
@@ -88,5 +94,26 @@ const newEmb = (msg) => {
         .setFooter(msg.client.user.tag, msg.client.user.displayAvatarURL())
         .setTimestamp(new Date());
 }
+/**
+ * @param {Message} msg 
+ * @returns {MessageEmbed} a clean Embed
+ */
+const rawEmb = (msg) => {
+    return new MessageEmbed()
+        //.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
+        .setColor(colors.red);
+    //.setFooter(msg.client.user.tag, msg.client.user.displayAvatarURL())
+    //.setTimestamp(new Date());
+}
 
-module.exports = { colors, confirmAction, newEmb };
+/**
+ * @param {Message} msg 
+ * @returns {MessageEmbed} a clean Embed
+ */
+const emptyEmb = (msg) => {
+    return new MessageEmbed()
+    .setColor(colors.nothing);
+
+}
+
+module.exports = { colors, confirmAction, newEmb, emptyEmb, rawEmb, emotes };

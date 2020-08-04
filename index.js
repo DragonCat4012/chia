@@ -355,6 +355,7 @@ const reloadModules = async function (argument, msg) {
 
     let text = "**LOAD MODULES**";
     msg = await msg.channel.send(text);
+    var module_count = 0;
 
     if (argument.includes('/')) {
         let dir = './commands/' + argument.split('/')[0];
@@ -377,6 +378,7 @@ const reloadModules = async function (argument, msg) {
                 module: module_name
             });
 
+            module_count++;
             text += `\n **>** \`${module_name}/${newCommand.name}\``;
             return msg.edit(text);
         } catch (error) {
@@ -409,6 +411,7 @@ const reloadModules = async function (argument, msg) {
                     module: module_name
                 });
 
+                module_count++;
                 text += `\n **>** \`${module_name}/${newCommand.name}\``;
                 //msg.edit(text);
             } catch (error) {
@@ -418,5 +421,5 @@ const reloadModules = async function (argument, msg) {
         }
     }
 
-    msg.edit(text);
+    msg.edit("Es wurden `"+module_count+"` Module neu geladen uwu");
 }

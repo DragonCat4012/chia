@@ -33,8 +33,8 @@ module.exports = {
                 await member.kick(reason);
                 kicked.push(member);
             } catch (err) {
-                console.log(err)
-                msg.channel.send(`**Fehler bei ${member}**` + err)
+                //console.log(err)
+                //msg.channel.send(`**Fehler bei ${member}**`)
                 not_kicked.push(member);
             }
         }

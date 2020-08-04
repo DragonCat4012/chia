@@ -67,6 +67,7 @@ module.exports = {
         roles_s =
           roles
 <<<<<<< HEAD
+<<<<<<< HEAD
             .map(r => (r.mentionable ? `<@&${r.id}>` : "`" + r.name + "`"))
             //.map(r => `<@&${r.id}>`)
 =======
@@ -77,6 +78,10 @@ module.exports = {
 =======
             .map(r => "<@&"+r.id+">")
 >>>>>>> parent of 5812eab... Update serverinfo.js
+=======
+            //.map(r => (r.mentionable ? `<@&${r.id}>` : "`" + r.name + "`"))
+            .map(r => `<@&${r.id}>`)
+>>>>>>> parent of e00311b... Update serverinfo.js
             .join(" | ") + " **. . .**";
 
       } else {

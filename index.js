@@ -420,6 +420,6 @@ const reloadModules = async function (argument, msg) {
             }
         }
     }
-
+    
     msg.edit("Es wurden `"+module_count+"` Module neu geladen uwu");
 }

@@ -71,4 +71,3 @@ module.exports = {
         msg.channel.send(emb);
     }
 };
-

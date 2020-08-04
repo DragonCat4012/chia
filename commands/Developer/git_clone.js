@@ -18,7 +18,7 @@ module.exports = {
    */
   execute(msg, args) {
     exec("git pull", function (error, stdout, stderr) {
-      let emb = newEmb(msg).setTitle("Cloned Git, Results:");
+      let emb = newEmb(msg).setTitle("Cloned from Git, Results:");
       if (error != null) emb.addField("**Error:**", "```" + error.message + "```");
       if (stdout != "") emb.addField("**Stdout:**", "```" + stdout + "```");
       if (stderr != "") emb.addField("**Stderr:**", "```" + stderr + "```");

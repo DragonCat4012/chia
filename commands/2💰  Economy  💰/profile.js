@@ -1,0 +1,79 @@
+const { Message } = require('discord.js');
+const { rawEmb, emotes, calcLevel } = require('../utilities');
+
+module.exports = {
+    name: 'Profile',
+    syntax: 'profile [@user]',
+    args: false,
+    description: 'Zeigt dir die Spieler Karte eines Spielers',
+    commands: ['profile', 'bal', 'money'],
+
+    /**
+     *@document
+     * @this
+     * @param {Message} msg Nachricht in dem der Befehl geschickt wurde
+      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
+     */
+    async execute(msg) {
+        let user;
+        if (msg.mentions.users.first()) {
+            user = msg.mentions.users.first();
+        } else { user = msg.author; }
+
+        var player = await msg.client.database.player_cache.getConfig(user.id);
+        var AK = 0;
+        var DK = 0;
+        let emb = rawEmb(msg).setTitle("Profil")
+
+        if (player.WEAPON == "0") { a = emotes.false } else {
+            let id = player.WEAPON
+            let uid = user.id
+            var order = await msg.client.database.order_cache.getOrder(id, uid)
+            if (!order || order == undefined) {
+                a = emotes.false
+            } else {
+                var item = await msg.client.database.item_cache.getConfig(order.IID);
+                if (item == undefined || item == null || !item) {
+                    msg.channel.send("Schwert konnte nicht identifiziert werden")
+                    a = emotes.false;
+                }
+                else if (item.TYPE !== "SWORD") { a = emotes.false }
+                else { a = item.NAME + "  [" + item.ATK + "/" + item.DEV + "]" }
+            }
+
+            AK += parseInt(item.ATK)
+            DK += parseInt(item.DEV)
+
+        }
+
+        if (player.SHIELD == "0") { b = emotes.false } else {
+            let id = player.SHIELD
+            let uid = user.id
+            var order = await msg.client.database.order_cache.getOrder(id, uid)
+            if (!order || order == undefined) {
+                b = emotes.false
+            } else {
+                item = await msg.client.database.item_cache.getConfig(order.IID);
+
+                if (item == undefined || item == null || !item) {
+                    msg.channel.send("Schild konnte nicht identifiziert werden")
+                    b = emotes.false;
+                }
+
+                else if (item.TYPE !== "SHIELD") { b = emotes.false }
+                else { b = item.NAME + "  [" + item.ATK + "/" + item.DEV + "]" }
+            }
+            AK += parseInt(item.ATK)
+            DK += parseInt(item.DEV)
+        }
+
+        emb.addField("⚔️", a)
+            .addField(emotes.shield, b)
+            .addField("**Münzen: **", (player.COINS).toLocaleString())
+            .addField("**Level: **", calcLevel(player.XP))
+            .addField("**Kampfstärke gesamt:**", `[${AK}/${DK}]`)
+
+        msg.channel.send(emb)
+
+    }
+};

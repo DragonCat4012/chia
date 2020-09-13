@@ -1,9 +1,12 @@
 {
-  "owner": [387655649934311427, 586905336850677760, 557945578169040914, 542369504370360320, 387655649934311427,407160561630183424],
-  "prefix" : "+",
-  "token": "NzA2ODM1NzM1OTgxODUwNjc1.XrAC1A.M4g31VbNMfp0a3L3Cvt2POTwA_s",
-  "dbAddress" : "localhost",
-  "dbName" : "database",
-  "dbUser" : "root",
-  "dbPassword" : "WASD-Wort"
+    "owner": [
+        "387655649934311427",
+        "586905336850677760",
+        "542369504370360320",
+        "557945578169040914",
+        "501060680246624260",
+        "407160561630183424"
+    ],
+    "prefix": "-",
+    "token": "NzQ0ODgzMDc0NTA4MjU5MzI5.XzpsbA.9-ddnwBknFw_dAc3H0jDoXzStg4"
 }

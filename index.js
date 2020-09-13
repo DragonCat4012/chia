@@ -2,7 +2,7 @@ const fs = require("fs");
 const Discord = require("discord.js");
 const { Message, Collection, Client, MessageEmbed } = require("discord.js");
 
-const { colors, confirmAction, newEmb, rawEmb } = require("./commands/utilities");
+const { colors, newEmb, rawEmb, calcLevel, emotes } = require("./commands/utilities");
 
 const config = require("./config.json");
 var { prefix, token, owner } = config;
@@ -28,88 +28,229 @@ process.on("unhandledRejection", error => {
 
 process.on("warning", console.warn);
 //==================================================================================================================================================
-
 //Currency and Levelingsystem
 //==================================================================================================================================================
-const { Server, Local_User, Global_User } = require('./database/dbInit');
+const { Spieler, Monster, Items, Order, syncDatabase } = require('./database/dbInit');
 
-const currency = new Collection();
+var monster_cache = new Collection();
+var item_cache = new Collection();
+var player_cache = new Collection();
+var order_cache = new Collection();
 
-Reflect.defineProperty(currency, "addCoins", {
+Reflect.defineProperty(player_cache, "addXP", {
     /**
      * @param {number} id User ID
      * @param {number} amount Amount of Cois
      * @returns {Model} new User
      */
-    value: async function add(id, amount) {
-        var user = currency.get(id);
-        if (!user) user = await Global_User.findOne({ where: { user_id: id } });
-        if (user) {
-            user.balance += Number(amount);
-            return user.save();
+    value: async function (id, amount) {
+        let points = 0;
+        if (amount) {
+            points = Math.floor(Math.random() * Math.cbrt(amount) + 2);
+        } else {
+            points = Math.floor(Math.floor(Math.random() * (5 - 1 + 1) + 1));
         }
-        var newUser = await Global_User.create({ user_id: id, balance: amount });
-        currency.set(id, newUser);
-        return newUser;
+
+        //let user = new Model(); 
+        let user = player_cache.get(id);
+        if (!user) user = await Spieler.findOne({ where: { UID: id } });
+
+        if (user) {
+            user.XP += Number(points);
+            user = await user.save();
+        } else {
+            user = await Spieler.create({ UID: id, XP: points });
+        }
+
+        player_cache.set(id, user);
+        return user;
     }
 });
 
-Reflect.defineProperty(currency, "getBalance", {
+
+
+
+Reflect.defineProperty(player_cache, "getConfig", {
     /**
      * @param {number} id User ID
-     * @returns {number} Amount
-     */
-    value: async function getBalance(id) {
-        var user = currency.get(id);
-        if (!user) user = await Global_User.findOne({ where: { user_id: id } });
-        if (!user) {
-            return await Global_User.create({ user_id: id }).balance;
-        } else {
-            return user.balance;
-        }
-    }
-});
-
-var server_configs = new Collection();
-
-Reflect.defineProperty(server_configs, "getConfig", {
-    /**
-     * @param {number} id Guild ID
      * @returns {Model} new User
      */
     value: async function (id) {
-        var guild = server_configs.get(id);
-        if (!guild) guild = await Server.findOne({ where: { guild_id: id } });
-        if (!guild) {
-            guild = await Server.create({ guild_id: id });
-            server_configs.set(id, guild);
+        var spieler = player_cache.get({ UID: id });
+        if (!spieler) spieler = await Spieler.findOne({ where: { UID: id } });
+        if (!spieler) {
+            spieler = await Spieler.create({ UID: id });
+            player_cache.set({ UID: id }, spieler);
         }
-        return guild;
+        return spieler;
     }
 });
 
-var guild_users = new Collection();
 
-Reflect.defineProperty(guild_users, "getConfig", {
+
+Reflect.defineProperty(order_cache, "getOrder", {
     /**
-     * @param {number} user_id User ID
-     * @param {number} guild_id Guild ID
+     * @param {number} id Guild ID
+     *  @param {number} uid Channel ID
      * @returns {Model} new User
      */
-    value: async function (user_id, guild_id) {
-        var guild_user = guild_users.get({ user_id: user_id, guild_id: guild_id });
-        if (!guild_user) guild_user = await Local_User.findOne({ where: { user_id: user_id, guild_id: guild_id } });
-        if (!guild_user) {
-            guild_user = await Local_User.create({ user_id: user_id, guild_id: guild_id });
-            guild_users.set({ user_id: user_id, guild_id: guild_id }, guild_user);
+    value: async function (id, uid) {
+        var order = order_cache.get({ IID: id, UID: uid })
+        if (!order) order = await Order.findOne({ where: { IID: id, UID: uid } });
+
+        else if (!order) {
+            order = null;
         }
-        return guild_user;
+        return order;
+    }
+});
+
+Reflect.defineProperty(order_cache, "setOrder", {
+    /**
+     * @param {number} id Guild ID
+     *  @param {number} uid Channel ID
+     * @returns {Model} new User
+     */
+    value: async function (id, uid) {
+        var order = await Order.create({ IID: id, UID: uid });
+        order_cache.set({ IID: id, UID: uid });
+        return order;
+    }
+});
+
+Reflect.defineProperty(order_cache, "deleteOrder", {
+    /**
+     * @param {number} id Guild ID
+     *  @param {number} uid Channel ID
+     * @returns {Model} new User
+     */
+    value: async function (id, uid) {
+        order_cache.delete({ IID: id, UID: uid })
+        let item = await Order.findOne({ where: { IID: id, UID: uid } })
+        await Order.destroy({ where: { IID: item.IID, UID: item.UID, id: item.id } });
+        return "S";
+
     }
 });
 
 
+Reflect.defineProperty(order_cache, "getInventory", {
+    /**
+     *  @param {number} uid Channel ID
+     * @returns {Model} new User
+     */
+    value: async function (uid) {
+        var order = order_cache.get({ UID: uid })
+        if (!order) order = await Order.findAll({ where: { UID: uid } });
+        else if (!order) {
+            order = null;
+        }
+        return order;
+    }
+});
+Reflect.defineProperty(item_cache, "getShop", {
+    /**
+     * @returns {Model} new User
+     */
+    value: async function () {
+        shop = await Items.findAll({});
+        return shop;
+    }
+});
 
-client.database = { server_configs, currency, guild_users };
+Reflect.defineProperty(monster_cache, "getDungeon", {
+    /**
+     * @returns {Model} new User
+     */
+    value: async function () {
+        dungeon = await Monster.findAll({});
+        return dungeon;
+    }
+});
+Reflect.defineProperty(monster_cache, "getConfig", {
+    /**
+     * @param {number} id Monster ID
+     * @returns {Model} new User
+     */
+    value: async function (id) {
+        id = "" + id + ""
+        var monster = monster_cache.get({ MID: id });
+        if (!monster) monster = await Monster.findOne({ where: { MID: id } });
+        if (!monster) console.log("No Results by searching for monster")
+        return monster;
+    }
+});
+
+Reflect.defineProperty(monster_cache, "getEnemy", {
+    /**
+     * @returns {Model} new User
+     */
+    value: async function () {
+        let M = (await Monster.findAll({})).length;
+        var size = Math.floor(Math.floor(Math.random() * (M - 0 + 1) + 0))
+        if (size == 0) size = 1
+        size = "" + size + ""
+
+        var monster = monster_cache.get({ MID: size })
+        if (!monster) monster = await Monster.findOne({ where: { MID: size } });
+
+        console.log("Gegner-ID:  " + size)
+        if (!monster) console.log("No Results by searching for Enemy")
+        return monster;
+    }
+});
+
+Reflect.defineProperty(item_cache, "getItem", {
+    /**
+     * @returns {Model} new User
+     */
+    value: async function () {
+        let t = await Items.findAll({})
+        let M = t.length;
+        var size = Math.floor(Math.floor(Math.random() * (M - 0 + 1) + 0))
+        if (size == 0) size = 1
+        size = "" + size + ""
+
+        var item = item_cache.get({ IID: size })
+        if (!item) item = await Items.findOne({ where: { IID: size } });
+
+        if (!item) console.log("No Results by searching for random Item")
+        return item;
+    }
+});
+
+Reflect.defineProperty(item_cache, "getConfig", {
+    /**
+     * @param {number} id Item ID
+     * @returns {Model} new User
+     */
+    value: async function (id) {
+        id = "" + id + ""
+        var item = item_cache.get({ IID: id });
+        if (!item) item = await Items.findOne({ where: { IID: id } });
+        if (!item) console.log("No Results by searching for Item")
+        return item;
+    }
+});
+
+//Sync
+const initDatabase = async () => {
+    await syncDatabase();
+
+    try {
+        for (let entr of (await Spieler.findAll())) player_cache.set(entr.UID, entr);
+        for (let entr of (await Items.findAll())) item_cache.set(entr.IID, entr);
+        for (let entr of (await Order.findAll())) { order_cache.set(entr.IID, entr.UID); }
+        for (let entr of (await Monster.findAll())) { monster_cache.set(entr.MID, entr); }
+
+        console.log(" > 🗸 Cached Database Entries");
+    } catch (e) {
+        console.log(" > ❌ Error While Caching Database")
+        console.log(e);
+    }
+}
+
+client.database = { player_cache, monster_cache, item_cache, order_cache };
 
 //==================================================================================================================================================
 
@@ -132,13 +273,41 @@ for (const dir of commandDirectorys) {
     }
 }
 
+
+//Starting the Bot
+//==================================================================================================================================================
+const start = async () => {
+    try {
+        console.log("Logging in...");
+        await client.login(token).catch(e => {
+            switch (e.code) {
+                case 500:
+                    console.log(" > ❌ Fetch Error");
+                    break;
+                default:
+                    console.log(" > ❌ Unknown Error");
+                    break;
+            }
+
+            //Preventing instant Restart
+            setTimeout(() => { throw e }, 5000); //5 Second Timeout
+        });
+
+        console.log("Starting Database");
+        await initDatabase();
+    } catch (e) {
+        console.log(e);
+    }
+    //console.log(await client.login(token));
+}
+start();
+
 //Ready
 //==================================================================================================================================================
-console.log("Logging in...");
 client.on("ready", async () => {
-    console.log("Logged in as: " + client.user.tag);
+    console.log(" >  Logged in as: " + client.user.tag);
 
-    client.user.setStatus("dnd");
+    client.user.setStatus("idle");
 
     setInterval(() => {
         const index = Math.floor(Math.random() * (activities_list.length - 1) + 1);
@@ -147,11 +316,9 @@ client.on("ready", async () => {
 
 
     const activities_list = [
-        "debugging . . .",
-        `${client.guilds.cache.size} Server UwU`,
-        `${config.prefix}help`,
-        `Zellteilung betreiben ^^`,
-        //()` Version: ${config.version}`
+        "Monster suchen",
+        "Shop aufräumen",
+        `${config.prefix}help`
     ];
 
     //Channel Um Fehler zu loggen
@@ -159,52 +326,6 @@ client.on("ready", async () => {
         .find(g => g.id == 553942677117337600)
         .channels.cache.find(c => c.id == error_channel && c.type == "text");
 });
-//==================================================================================================================================================
-//GuildMemberJoin
-//==================================================================================================================================================
-client.on("guildMemberAdd", async member => {
-    var guild_config = await client.database.server_configs.getConfig(member.guild.id);
-    if (guild_config.wlc == true && guild_config.wlc_msg !== 0 && guild_config.wlc_msg !== 0) {
-        let channel = member.guild.channels.cache.get(guild_config.wlc_ch)
-        let A = guild_config.wlc_msg;
-        let B = A.replace(/%count%/i, member.guild.memberCount)
-        let C = B.replace(/%user%/i, member)
-        let text = C.replace(/%server%/i, member.guild.name)
-        //  %level%, %user%, %count%
-        let emb = new MessageEmbed().setTitle(member.guild.name).setDescription(text).setColor(colors.nothing).setFooter(member.displayName).setTimestamp()
-        channel.send(emb)
-        if (guild_config.join_role != 0) {
-            let role = member.guild.roles.cache.get(guild_config.join_role)
-            try {
-                member.roles.add(role)
-            } catch (e) {
-                console.log(e)
-                if (e) channel.send("Unable to add Role: **<@&" + role + ">**")
-            }
-
-        }
-
-    }
-
-});
-//==================================================================================================================================================
-//GuildMemberLeave
-//==================================================================================================================================================
-client.on("guildMemberRemove", async member => {
-    var guild_config = await client.database.server_configs.getConfig(member.guild.id);
-    if (guild_config.gb == true && guild_config.gb_msg !== 0 && guild_config.gb_msg !== 0) {
-        let channel = member.guild.channels.cache.get(guild_config.gb_ch)
-        let A = guild_config.wlc_msg;
-        let B = A.replace(/%count%/i, member.guild.memberCount)
-        let C = B.replace(/%user%/i, member)
-        let text = C.replace(/%server%/i, member.guild.name)
-        let emb = new MessageEmbed().setTitle(member.guild.name).setDescription(text).setColor(colors.nothing).setFooter(member.displayName).setTimestamp()
-        channel.send(emb)
-    }
-});
-//==================================================================================================================================================
-
-
 
 
 
@@ -216,19 +337,41 @@ client.on("message", async message => {
         client.emit("guildMemberAdd", message.member);
     }
     /////////////////
-
-    prefix = (await server_configs.getConfig(message.guild.id)).prefix;
-
-
-    let test = message.mentions.members.first()
-    if (test && test.id == client.user.id && !message.content.startsWith(prefix)) message.channel.send("Mein Prefix f�r diesen Server ist " + "\`" + prefix + "\`")
-
-
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
-
     var emb = newEmb(message)
-        .setColor(colors.nothing)
+        .setColor(colors.nothing);
 
+
+    let prefix = config.prefix;
+
+
+
+    if (message.author.bot) return;
+
+    //Levelsystem
+    //==================================================================================================================================================
+    let old = (await player_cache.getConfig(message.author.id)).XP;//Siehe 100 Zeilen Tiefer
+
+    await player_cache.addXP(message.author.id, message.content.length);
+
+    setTimeout(async () => {
+        let neu = (await player_cache.getConfig(message.author.id)).XP;
+
+        if (calcLevel(neu) > calcLevel(old)) {
+            let channel = message.channel;
+            if (!channel) return;
+            me = message.member.toString() + " ist nun ein Level höher " + calcLevel(neu)
+            let emb = new MessageEmbed().setTitle(message.guild.name).setDescription(me).setColor(colors.nothing).setFooter(message.member.displayName).setTimestamp()
+            channel.send(emb).catch(console.log)
+
+        }
+    }, 1000);//Waiting for Database sync
+
+
+
+    //==================================================================================================================================================
+
+
+    if (!message.content.startsWith(prefix)) return;
 
 
     const args = message.content.slice(prefix.length).split(/ +/);
@@ -241,29 +384,41 @@ client.on("message", async message => {
 
     const { command, module } = commandObj;
 
-    if (command.commands.includes("reload") && owner.includes(Number(message.author.id))) {
+    if (command.commands.includes("reload") && owner.includes(message.author.id)) {
         return reloadModules(args[0].toLowerCase(), message);
     }
 
-    if (!["text", "news", "store"].includes(message.channel.type)) {
-        emb.setDescription("Ich f�hre keine Befehle in DMs aus qwq");
+    if (message.channel.type !== "text") {
+        emb.setDescription("Ich führe keine Befehle in DMs aus qwq");
         return message.channel.send(emb);
     }
 
-    var guild_config = await client.database.server_configs.getConfig(message.guild.id);
-    let target = guild_config.team_role;
-    let role = message.guild.roles.cache.get(target);
+
+    var emb = rawEmb(message);
+    if (command.needed) {
+        if (command.needed == 'NSFW') {
+            if (guild_config.nsfw == 0) {
+                emb.setDescription(emotes.false + " **NSFW Commands sind auf diesem Server gesperrt qwq**").setColor(colors.nothing);
+                return message.channel.send(emb);
+            }
+        } else {
+            if (!(message.guild.me.hasPermission(command.needed))) {
+                emb.setDescription(emotes.false + " **Mir fehlt folgende Berechtigung:** `" + command.needed).setColor(colors.nothing);
+                return message.channel.send(emb);
+            }
+        }
+    }
 
     var emb = rawEmb(message);
     if (command.perm) {
         if (command.perm == 'DEVELOPER') {
-            if (!config.owner.includes(Number(message.author.id))) {
-                emb.setDescription("**Du bist kein `Developer`** ").setColor(colors.nothing);
+            if (!config.owner.includes(message.author.id)) {
+                emb.setDescription("**Du bist leider kein `Developer` qwq** ").setColor(colors.nothing);
                 return message.channel.send(emb);
             }
         } else {
-            if (!(message.member.hasPermission(command.perm) || message.member.roles.cache.has(role))) {
-                emb.setDescription("**Du brauchst die Berechtigung,** `"+command.perm+"` für diesen Befehl").setColor(colors.nothing);
+            if (!(message.member.hasPermission(command.perm))) {
+                emb.setDescription("**Dir fehltfolgende Berechtigung:,** `" + command.perm).setColor(colors.nothing);
                 return message.channel.send(emb);
             }
         }
@@ -285,10 +440,6 @@ client.on("message", async message => {
     }
 
 
-
-
-
-
     if (!cooldowns.has(command.name)) {
         cooldowns.set(command.name, new Discord.Collection());
     }
@@ -296,7 +447,7 @@ client.on("message", async message => {
 
     const now = Date.now();
     const timestamps = cooldowns.get(command.name);
-    const cooldownAmount = (command.cooldown || 3) * 1000;
+    const cooldownAmount = (command.cooldown || 3) * 2000;
 
     if (timestamps.has(message.author.id)) {
         const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
@@ -304,7 +455,6 @@ client.on("message", async message => {
         if (now < expirationTime) {
             const timeLeft = (expirationTime - now) / 1000;
             emb
-                .setDescription(`Nicht so schnell mit den Jungen Pferden :D`)
                 .addField("Cooldown", timeLeft.toFixed(1));
             return message.channel.send(emb);
         }
@@ -328,7 +478,8 @@ client.on("message", async message => {
         emb = new Discord.MessageEmbed()
             .setAuthor(message.author.tag, message.author.displayAvatarURL())
             .setFooter(client.user.tag, client.user.displayAvatarURL())
-            .setTimestamp(new Date());
+            .setColor(colors.nothing)
+            .setTimestamp();
 
         emb
             .setTitle("Fehler")
@@ -341,10 +492,9 @@ client.on("message", async message => {
         error_channel.send(emb);
     }
 });
+
+
 //==================================================================================================================================================
-
-client.login(token);
-
 /**
  * @param {string} argument
  * @param {Message} msg
@@ -420,6 +570,6 @@ const reloadModules = async function (argument, msg) {
             }
         }
     }
-    
-    msg.edit("Es wurden `"+module_count+"` Module neu geladen uwu");
+
+    msg.edit("Es wurden `" + module_count + "` Module neu geladen uwu");
 }

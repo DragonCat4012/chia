@@ -1,11 +1,13 @@
 const { Message, MessageEmbed } = require("discord.js");
+const fs = require("fs")
+
 const fetch = require("node-fetch");
 const api_tenor = 'https://api.tenor.com/v1/search?q=' + 'SEARCH' + '&key=' + 'LIVDSRZULELA' + '&limit=20';
 
-//const red = "0xd40202";
 const colors = {
     error: 0xF91A3C,
-    red: 0xd40202,
+    blue: 0x93a7cf,
+    red: 0x3a3fe4,
     info: 0x1AE3F9,
     success: 0x13EF8D,
     warning: 0xF9D71A,
@@ -13,9 +15,20 @@ const colors = {
     unimportant: 0x738F8A
 }
 const emotes = {
-    false: "<:false:739523416431919226>",
-    true: "<:true:739523416406622258>"
+    false: "<:false:740942401413185656>",
+    true: "<:true:740942401161527426>",
+    mobile: "<:mobile:741225706843013122>",
+    bot: "<:Clyde:741225707203592232>",
+    desktop: "<:desktop:741225709351206993>",
+    coin: "<:coin:743414375255113739>",
+    shield: "<:shield:753309572055171173>"
 
+}
+
+const money = {
+    daily: 200,
+    weekly: 1200,
+    monthly: 3600,
 }
 
 
@@ -104,10 +117,7 @@ const newEmb = (msg) => {
  */
 const rawEmb = (msg) => {
     return new MessageEmbed()
-        //.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
-        .setColor(colors.red);
-    //.setFooter(msg.client.user.tag, msg.client.user.displayAvatarURL())
-    //.setTimestamp(new Date());
+        .setColor(colors.blue);
 }
 
 /**
@@ -141,4 +151,104 @@ async function getTenor(search) {
     return url;
 }
 
-module.exports = { colors, confirmAction, newEmb, rawEmb, getTenor, emotes };
+function getStats() {
+    var project_stats = {
+        files: 0,
+        lines: 0,
+        size: 0 //In KB
+    }
+
+    scanDir(".");
+    project_stats.size = Number(project_stats.size.toFixed(0));
+    return project_stats;
+
+    function scanDir(dirpath) {
+        var ls = fs.readdirSync(dirpath).filter((name) => !(["node_modules", ".git", ".vscode", "log.log"].includes(name)));
+
+        for (let file of ls) {
+            let path = dirpath + "/" + file;
+            let stat = fs.lstatSync(path);
+
+            if (stat.isFile()) {
+                project_stats.files++;
+                project_stats.size += stat.size / 1024;
+                project_stats.lines += fs.readFileSync(path).toString('utf8').split("\n").length;
+            } else if (stat.isDirectory()) {
+                scanDir(path);
+            }
+        }
+    }
+}
+
+/**
+ * @param {Message} msg  Message
+ * @param {string} question Question?
+ * @param {number} time Time in seconds
+ */
+const getAnswer = async (msg, question, time) => {
+    return new Promise(async (resolve, reject) => {
+        const channel = msg.channel;
+        let emb = rawEmb(msg);
+
+        await msg.channel.send(emb.setTitle(question).setColor(colors.info).setFooter("cancel, to abort | " + time + " Seconds to answer"));
+        emb = rawEmb(msg);
+
+        const collector = channel.createMessageCollector(m => m.author.id === msg.author.id, {
+            max: 1,
+            time: time * 1000,
+            errors: ['time']
+        });
+
+        collector.on("collect",
+            /** @param {Message} m  */
+            m => {
+                const cont = m.content;
+
+                if (cont === "" || !cont) {
+                    msg.channel.send(emb.setTitle("Empty Message").setColor(colors.error)).then(() => {
+                        reject("Empty Message Send");
+                    }).catch((e) => {
+                        reject("Couldnt Send Message\n" + e);
+                    });
+                } else if (cont.toLowerCase().includes("cancel")) {
+                    msg.channel.send(emb.setTitle("Canceld").setColor(colors.error)).then(() => {
+                        reject("Action Canceld");
+                    }).catch((e) => {
+                        reject("Couldnt Send Message\n" + e);
+                    });
+                } else {
+                    resolve(cont);
+                    /* Sendet das Angegebene nochmal
+          
+                    msg.channel.send(emb.setTitle(question).setDescription("> " + cont)).then(() => {
+                      resolve(cont);
+                    }).catch((e) => {
+                      reject("Couldnt Send Message\n" + e);
+                    });
+                    */
+                }
+            })
+
+        collector.on("end", (collected) => {
+            if (collected.size > 0) return; //Falls schon ne antwort kam
+
+            msg.channel.send(emb.setTitle("Time Expired").setColor(colors.error)).then(() => {
+                reject("Time expired");
+            }).catch((e) => {
+                reject("Couldnt Send Message\n" + e);
+            });
+        });
+    });
+}
+
+
+/**
+ * @param {number} xp
+ * @returns {number}
+ */
+const calcLevel = function (xp) {
+    return Math.floor(((1 * xp) ^ (3 / 5)) / 750);
+};
+
+
+module.exports = { colors, confirmAction, newEmb, rawEmb, getTenor, emotes, getStats, calcLevel, getAnswer, money };

@@ -2,7 +2,7 @@
 for (( ; ; ))
 do
 echo "`date +"%D %T"` starting.."
-sudo node index.js
+sudo node index.js -shinu
 echo "`date +"%D %T"` crahsed"
 sleep 1
 done

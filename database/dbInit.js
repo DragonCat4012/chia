@@ -1,152 +1,174 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
-const serversql = new Sequelize('server_tabelle', 'user', 'password', {
+const monstersql = new Sequelize('monster', 'user', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
     logging: false,
-    storage: 'server.sqlite',
+    storage: 'monster.sqlite',
 });
 
-const localsql = new Sequelize('local_user', 'user', 'password', {
+const itemsql = new Sequelize('items', 'user', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
     logging: false,
-    storage: 'local_user.sqlite',
+    storage: 'items.sqlite',
 });
 
-
-const globalsql = new Sequelize('Global_User', 'user', 'password', {
+const spielersql = new Sequelize('spieler', 'user', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
     logging: false,
-    storage: 'global_user.sqlite',
+    storage: 'spieler.sqlite',
 });
 
-const Global_User = globalsql.define('Global_User', {
-    user_id: {
+const ordersql = new Sequelize('order', 'user', 'password', {
+    host: 'localhost',
+    dialect: 'sqlite',
+    logging: false,
+    storage: 'order.sqlite',
+});
+
+
+
+const Spieler = spielersql.define('spieler', {
+    UID: {
         type: DataTypes.TEXT,
-        primaryKey: true,
-        unique: true
+        defaultValue: 0
     },
-    xp: {
+    XP: {
         type: DataTypes.INTEGER,
         defaultValue: 0
     },
-    coins: {
+    HP: {
+        type: DataTypes.INTEGER,
+        defaultValue: 25
+    },
+    COINS: {
+        type: DataTypes.INTEGER,
+        defaultValue: 20
+    },
+    PERK: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
+    },
+    WEAPON: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
+    },
+    SHIELD: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
+    },
+    ARROWS: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
+    },
+
+});
+
+
+const Items = itemsql.define('items', {
+    IID: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
+    },
+    NAME: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
+    },
+    TYPE: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
+    },
+    RARE: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
+    },
+    SALE: {
+        type: DataTypes.TEXT,
+        defaultValue: 1
+    },
+    USES: {
         type: DataTypes.INTEGER,
         defaultValue: 0
     },
+    DEV: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
+    },
+    ATK: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
+    },
+    VALUE: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
+    },
+
 });
 
-const Server = serversql.define('server_tabelle', {
-    guild_id: {
-        type: DataTypes.TEXT,
-        primaryKey: true,
-        unique: true
-    },
-    prefix: {
-        type: DataTypes.TEXT,
-        defaultValue: "+"
-    },
-
-
-
-
-
-    team_role: {
+const Monster = monstersql.define('monster', {
+    MID: {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
-    mute_role: {
+    NAME: {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
-  join_role: {
+    RARE: {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
-   xp: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-    },
-
-    xp_msg: {
+    DEV: {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
-    xp_ch: {
+    ATK: {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
 
-
-
-
-    wlc: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-    },
-    wlc_msg: {
-        type: DataTypes.TEXT,
+    DROPCOIN: {
+        type: DataTypes.INTEGER,
         defaultValue: 0
     },
-    wlc_ch: {
-        type: DataTypes.TEXT,
+    DROPRATE: {
+        type: DataTypes.INTEGER,
         defaultValue: 0
+    },
+    HP: {
+        type: DataTypes.INTEGER,
+        defaultValue: 10
     },
 
-
-    gb: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-    },
-    gb_msg: {
+});
+const Order = ordersql.define('order', {
+    UID: {
         type: DataTypes.TEXT,
-        defaultValue: 0
     },
-    gb_ch: {
+    IID: {
         type: DataTypes.TEXT,
-        defaultValue: 0
     },
-    
 });
 
 
 
-const Local_User = localsql.define('local_user', {
-    user_id: {
-        type: DataTypes.TEXT,
-        primaryKey: true,
-        unique: true
-    },
-    guild_id: {
-        type: DataTypes.TEXT,
-        defaultValue: 0
-    },
-    warn_i: {
-        type: DataTypes.TEXT,
-        defaultValue: 0
-    },
-    warn_ii: {
-        type: DataTypes.TEXT,
-        defaultValue: 0
-    },
-    warn_iii: {
-        type: DataTypes.TEXT,
-        defaultValue: 0
-    },
-    
-});
 
-const sync = async () => {
-    await serversql.sync();
-    console.log(' > ServerSQL Synced');
-    await localsql.sync();
-    console.log(' > LocallSQL Synced');
-    await globalsql.sync();
-    console.log(' > GlobalSQL Synced');
+const syncDatabase = async () => {
+    try {
+        await spielersql.sync();
+        console.log(' > 🗸 Player loaded');
+        await itemsql.sync();
+        console.log(' > 🗸 Items loaded');
+        await monstersql.sync();
+        console.log(' > 🗸 Monster loaded');
+        await ordersql.sync();
+        console.log(' > 🗸 Syncronisation Loaded')
+    } catch (e) {
+        console.log(e);
+        process.exit(1);
+    }
 }
 
-sync();
-
-module.exports = {Server, Local_User, Global_User}
+module.exports = { Spieler, Monster, Items, Order, syncDatabase }

@@ -9,12 +9,10 @@ var { prefix, token, owner } = config;
 
 const client = new Client();
 client.config = config;
-
 const cooldowns = new Collection();
 
 var error_channel;
 error_channel = 714557180757409942;
-
 
 //Error Handling
 //==================================================================================================================================================

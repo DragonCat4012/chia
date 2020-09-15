@@ -72,8 +72,8 @@ module.exports = {
             .addField("**Münzen: **", (player.COINS).toLocaleString())
             .addField("**Level: **", calcLevel(player.XP))
             .addField("**Kampfstärke gesamt:**", `[${AK}/${DK}]`)
+            .addField("**Rank:**", player.RANK)
 
         msg.channel.send(emb)
-
     }
 };

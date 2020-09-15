@@ -42,9 +42,8 @@ module.exports = {
         let answer = await getAnswer(msg, quest + "?", 30)
         if (answer !== "yes" && answer !== "ja" && answer !== "Yes" && answer !== "Ja") return msg.channel.send(emb.setDescription("Kampf abgebrochen"))
 
-        if (player.WEAPON)
-            if (player.WEAPON !== "0" && player.WEAPON !== 0) { var weapon = (await msg.client.database.item_cache.getConfig(player.WEAPON)).ATK }
-            else { weapon = 0 }
+        if (player.WEAPON !== "0" && player.WEAPON !== 0) { var weapon = (await msg.client.database.item_cache.getConfig(player.WEAPON)).ATK }
+        else { weapon = 0 }
         if (player.SHIELD !== "0" && player.SHIELD !== 0) { var shield = (await msg.client.database.item_cache.getConfig(player.SHIELD)).DEV }
         else { shield = 0 }
 
@@ -83,6 +82,8 @@ module.exports = {
 
             let Dropped = ""
             let value = percent()
+
+
             if (value == "drop") {
                 var drop = inventory[Math.floor(Math.random() * inventory.length)];
                 inventory = await msg.client.database.order_cache.deleteOrder(drop.IID, user.id)
@@ -96,16 +97,16 @@ module.exports = {
 
         if (P_Lifes <= 0) {
             if (player.COINS > 10) player.COINS -= 10;
-            let value = percent()
-
-
             if (value == "drop") {
-                msg.channel.send("Dropped something qwq")
+                var drop = inventory[Math.floor(Math.random() * inventory.length)];
+                inventory = await msg.client.database.order_cache.deleteOrder(drop.IID, user.id)
+                drop = await msg.client.database.item_cache.getConfig(drop.IID)
+                drop = `${drop.NAME}`
+                Dropped = "\n \n**Dropped** " + drop
             } else { }
 
-
             await player.save()
-            return msg.channel.send(emb.setTitle("Niederlage").setDescription("Du verlierst 10 Coins (falls du so viele besitzt)").setColor(colors.error))
+            return msg.channel.send(emb.setTitle("Niederlage").setDescription("Du verlierst 10 Coins (falls du so viele besitzt) " + `${Dropped}`).setColor(colors.error))
         }
     }
 };

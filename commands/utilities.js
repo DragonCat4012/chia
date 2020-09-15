@@ -185,7 +185,7 @@ function getStats() {
  * @param {string} question Question?
  * @param {number} time Time in seconds
  */
-const getAnswer = async (msg, question, time) => {
+const getAnswer = async (msg, question, time, user) => {
     return new Promise(async (resolve, reject) => {
         const channel = msg.channel;
         let emb = rawEmb(msg);
@@ -193,7 +193,8 @@ const getAnswer = async (msg, question, time) => {
         await msg.channel.send(emb.setTitle(question).setColor(colors.info).setFooter("cancel, to abort | " + time + " Seconds to answer"));
         emb = rawEmb(msg);
 
-        const collector = channel.createMessageCollector(m => m.author.id === msg.author.id, {
+        if (!user) user = msg.author
+        const collector = channel.createMessageCollector(m => m.author.id === user.id, {
             max: 1,
             time: time * 1000,
             errors: ['time']
@@ -218,14 +219,6 @@ const getAnswer = async (msg, question, time) => {
                     });
                 } else {
                     resolve(cont);
-                    /* Sendet das Angegebene nochmal
-          
-                    msg.channel.send(emb.setTitle(question).setDescription("> " + cont)).then(() => {
-                      resolve(cont);
-                    }).catch((e) => {
-                      reject("Couldnt Send Message\n" + e);
-                    });
-                    */
                 }
             })
 

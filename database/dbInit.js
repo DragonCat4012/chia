@@ -43,6 +43,10 @@ const Spieler = spielersql.define('spieler', {
         type: DataTypes.INTEGER,
         defaultValue: 25
     },
+    RANK: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
     COINS: {
         type: DataTypes.INTEGER,
         defaultValue: 20

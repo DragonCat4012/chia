@@ -18,6 +18,9 @@ module.exports = {
         user = msg.author;
         var player = await msg.client.database.player_cache.getConfig(user.id);
         let emb = rawEmb(msg)
+        ////////////////////////// -- ITEM BREAK --/////////////////////////////
+        var inventory = await msg.client.database.order_cache.getInventory(user.id)
+        ///////////////////////////////////////////////////////////////////////
 
         var enemy = await msg.client.database.monster_cache.getEnemy()
 
@@ -26,6 +29,7 @@ module.exports = {
         let E_Lifes = enemy.HP,
             rare = ""
 
+        ////////////////////////// -- Vorbereitung --/////////////////////////////
         if (enemy.RARE == 1) rare = "⭐"
         if (enemy.RARE == 2) rare = "⭐⭐"
         if (enemy.RARE == 3) rare = "⭐⭐⭐"
@@ -67,23 +71,46 @@ module.exports = {
             while (loot > 0) {
                 let item = (await msg.client.database.item_cache.getItem())
                 if (item.RARE == enemy.RARE) {
-                    if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
-                    if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
-                    if (item.TYPE == "MATERIAL") t = "[🍃]"
+                    if (item.TYPE == "SWORD") t = `**[ ⚔️ ATK:  ${item.ATK} ]**`
+                    if (item.TYPE == "SHIELD") t = `**[ ${emotes.shield} DEF:  ${item.DEV} ]**`
+                    if (item.TYPE == "MATERIAL") t = "**[ 🍃 ]**"
                     arr.push(`${t} ` + item.NAME)
                     let order = await msg.client.database.order_cache.setOrder(item.IID, user.id)
                     await order.save()
                     loot -= 1;
                 }
             }
+
+            let Dropped = ""
+            let value = percent()
+            if (value == "drop") {
+                var drop = inventory[Math.floor(Math.random() * inventory.length)];
+                inventory = await msg.client.database.order_cache.deleteOrder(drop.IID, user.id)
+                drop = await msg.client.database.item_cache.getConfig(drop.IID)
+                drop = `${drop.NAME}`
+                Dropped = "\n \n**Dropped** " + drop
+            } else { }
             if (arr.length == 0) arr.push("Kein Loot qwq", "qwq")
-            return msg.channel.send(emb.setTitle("Sieg").setDescription(arr.join("\n")).setColor(colors.success))
+            return msg.channel.send(emb.setTitle("Sieg").setDescription(arr.join("\n") + `${Dropped}`).setColor(colors.success))
         }
 
         if (P_Lifes <= 0) {
             if (player.COINS > 10) player.COINS -= 10;
+            let value = percent()
+
+
+            if (value == "drop") {
+                msg.channel.send("Dropped something qwq")
+            } else { }
+
+
             await player.save()
-            return msg.channel.send(emb.setTitle("Niederlage").setDescription("Du verlierst 10 Coins").setColor(colors.error))
+            return msg.channel.send(emb.setTitle("Niederlage").setDescription("Du verlierst 10 Coins (falls du so viele besitzt)").setColor(colors.error))
         }
     }
 };
+
+function percent() {
+    var rand = ["drop", "0", "0", "0"];
+    return rand[Math.floor(Math.random() * rand.length)];
+}

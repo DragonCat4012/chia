@@ -75,7 +75,6 @@ module.exports = {
             if (ranked) {
                 enemy_user.RANK += 3;
                 player.RANK -= 3;
-                if (player.RANK <= 0) player.RANK = 0;
 
                 await enemy_user.save()
                 emb.setDescription("Du verlierst 3 Punkte")

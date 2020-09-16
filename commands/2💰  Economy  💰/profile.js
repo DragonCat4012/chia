@@ -67,12 +67,18 @@ module.exports = {
             DK += parseInt(item.DEV)
         }
 
+        let query = parseInt(user.id)
+        var cache = msg.client.database.player_cache.array();
+        cache = cache.sort((a, b) => (parseInt(b.RANK) + parseInt(b.RANK)) - (parseInt(a.RANK) + parseInt(a.RANK)))
+        let A = cache.find(user => user.UID == query)
+        let rank = cache.indexOf(A) + 1
+
         emb.addField("⚔️", a)
             .addField(emotes.shield, b)
-            .addField("**Münzen: **", (player.COINS).toLocaleString())
+            .addField("**Münzen: **", (player.COINS).toLocaleString() + "¥")
             .addField("**Level: **", calcLevel(player.XP))
             .addField("**Kampfstärke gesamt:**", `[${AK}/${DK}]`)
-            .addField("**Rank:**", player.RANK)
+            .addField("**Rank:**", `${player.RANK} [${rank}]`)
 
         msg.channel.send(emb)
     }

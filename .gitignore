@@ -113,3 +113,4 @@ dist
 .tern-port
 order.sqlite
 commands/config.json
+config.json

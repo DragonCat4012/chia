@@ -41,7 +41,7 @@ Reflect.defineProperty(player_cache, "addXP", {
      * @param {number} amount Amount of Cois
      * @returns {Model} new User
      */
-    value: async function (id, amount) {
+    value: async function(id, amount) {
         let points = 0;
         if (amount) {
             points = Math.floor(Math.random() * Math.cbrt(amount) + 2);
@@ -73,7 +73,7 @@ Reflect.defineProperty(player_cache, "getConfig", {
      * @param {number} id User ID
      * @returns {Model} new User
      */
-    value: async function (id) {
+    value: async function(id) {
         var spieler = player_cache.get({ UID: id });
         if (!spieler) spieler = await Spieler.findOne({ where: { UID: id } });
         if (!spieler) {
@@ -92,7 +92,7 @@ Reflect.defineProperty(order_cache, "getOrder", {
      *  @param {number} uid Channel ID
      * @returns {Model} new User
      */
-    value: async function (id, uid) {
+    value: async function(id, uid) {
         var order = order_cache.get({ IID: id, UID: uid })
         if (!order) order = await Order.findOne({ where: { IID: id, UID: uid } });
 
@@ -109,7 +109,7 @@ Reflect.defineProperty(order_cache, "setOrder", {
      *  @param {number} uid Channel ID
      * @returns {Model} new User
      */
-    value: async function (id, uid) {
+    value: async function(id, uid) {
         var order = await Order.create({ IID: id, UID: uid });
         order_cache.set({ IID: id, UID: uid });
         return order;
@@ -122,7 +122,7 @@ Reflect.defineProperty(order_cache, "deleteOrder", {
      *  @param {number} uid Channel ID
      * @returns {Model} new User
      */
-    value: async function (id, uid) {
+    value: async function(id, uid) {
         order_cache.delete({ IID: id, UID: uid })
         let item = await Order.findOne({ where: { IID: id, UID: uid } })
         await Order.destroy({ where: { IID: item.IID, UID: item.UID, id: item.id } });
@@ -137,7 +137,7 @@ Reflect.defineProperty(order_cache, "getInventory", {
      *  @param {number} uid Channel ID
      * @returns {Model} new User
      */
-    value: async function (uid) {
+    value: async function(uid) {
         var order = order_cache.get({ UID: uid })
         if (!order) order = await Order.findAll({ where: { UID: uid } });
         else if (!order) {
@@ -150,7 +150,7 @@ Reflect.defineProperty(item_cache, "getShop", {
     /**
      * @returns {Model} new User
      */
-    value: async function () {
+    value: async function() {
         shop = await Items.findAll({});
         return shop;
     }
@@ -160,7 +160,7 @@ Reflect.defineProperty(monster_cache, "getDungeon", {
     /**
      * @returns {Model} new User
      */
-    value: async function () {
+    value: async function() {
         dungeon = await Monster.findAll({});
         return dungeon;
     }
@@ -170,7 +170,7 @@ Reflect.defineProperty(monster_cache, "getConfig", {
      * @param {number} id Monster ID
      * @returns {Model} new User
      */
-    value: async function (id) {
+    value: async function(id) {
         id = "" + id + ""
         var monster = monster_cache.get({ MID: id });
         if (!monster) monster = await Monster.findOne({ where: { MID: id } });
@@ -183,7 +183,7 @@ Reflect.defineProperty(monster_cache, "getEnemy", {
     /**
      * @returns {Model} new User
      */
-    value: async function () {
+    value: async function() {
         let M = (await Monster.findAll({})).length;
         var size = Math.floor(Math.floor(Math.random() * (M - 0 + 1) + 0))
         if (size == 0) size = 1
@@ -202,7 +202,7 @@ Reflect.defineProperty(item_cache, "getItem", {
     /**
      * @returns {Model} new User
      */
-    value: async function () {
+    value: async function() {
         let t = await Items.findAll({})
         let M = t.length;
         var size = Math.floor(Math.floor(Math.random() * (M - 0 + 1) + 0))
@@ -211,7 +211,6 @@ Reflect.defineProperty(item_cache, "getItem", {
 
         var item = item_cache.get({ IID: size })
         if (!item) item = await Items.findOne({ where: { IID: size } });
-
         if (!item) console.log("No Results by searching for random Item")
         return item;
     }
@@ -222,7 +221,7 @@ Reflect.defineProperty(item_cache, "getConfig", {
      * @param {number} id Item ID
      * @returns {Model} new User
      */
-    value: async function (id) {
+    value: async function(id) {
         id = "" + id + ""
         var item = item_cache.get({ IID: id });
         if (!item) item = await Items.findOne({ where: { IID: id } });
@@ -232,14 +231,14 @@ Reflect.defineProperty(item_cache, "getConfig", {
 });
 
 //Sync
-const initDatabase = async () => {
+const initDatabase = async() => {
     await syncDatabase();
 
     try {
-        for (let entr of (await Spieler.findAll())) player_cache.set(entr.UID, entr);
-        for (let entr of (await Items.findAll())) item_cache.set(entr.IID, entr);
-        for (let entr of (await Order.findAll())) { order_cache.set(entr.IID, entr.UID); }
-        for (let entr of (await Monster.findAll())) { monster_cache.set(entr.MID, entr); }
+        for (let entr of(await Spieler.findAll())) player_cache.set(entr.UID, entr);
+        for (let entr of(await Items.findAll())) item_cache.set(entr.IID, entr);
+        for (let entr of(await Order.findAll())) { order_cache.set(entr.IID, entr.UID); }
+        for (let entr of(await Monster.findAll())) { monster_cache.set(entr.MID, entr); }
 
         console.log(" > 🗸 Cached Database Entries");
     } catch (e) {
@@ -274,7 +273,7 @@ for (const dir of commandDirectorys) {
 
 //Starting the Bot
 //==================================================================================================================================================
-const start = async () => {
+const start = async() => {
     try {
         console.log("Logging in...");
         await client.login(token).catch(e => {
@@ -302,7 +301,7 @@ start();
 
 //Ready
 //==================================================================================================================================================
-client.on("ready", async () => {
+client.on("ready", async() => {
     console.log(" >  Logged in as: " + client.user.tag);
 
     client.user.setStatus("idle");
@@ -347,11 +346,11 @@ client.on("message", async message => {
 
     //Levelsystem
     //==================================================================================================================================================
-    let old = (await player_cache.getConfig(message.author.id)).XP;//Siehe 100 Zeilen Tiefer
+    let old = (await player_cache.getConfig(message.author.id)).XP; //Siehe 100 Zeilen Tiefer
 
     await player_cache.addXP(message.author.id, message.content.length);
 
-    setTimeout(async () => {
+    setTimeout(async() => {
         let neu = (await player_cache.getConfig(message.author.id)).XP;
 
         if (calcLevel(neu) > calcLevel(old)) {
@@ -362,7 +361,7 @@ client.on("message", async message => {
             channel.send(emb).catch(console.log)
 
         }
-    }, 1000);//Waiting for Database sync
+    }, 1000); //Waiting for Database sync
 
 
 
@@ -497,7 +496,7 @@ client.on("message", async message => {
  * @param {string} argument
  * @param {Message} msg
  */
-const reloadModules = async function (argument, msg) {
+const reloadModules = async function(argument, msg) {
     const commandDirectorys = fs
         .readdirSync("./commands").map(name => "./commands/" + name).filter(path => fs.lstatSync(path).isDirectory());
 

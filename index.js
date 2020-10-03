@@ -225,7 +225,7 @@ Reflect.defineProperty(item_cache, "getConfig", {
         id = "" + id + ""
         var item = item_cache.get({ IID: id });
         if (!item) item = await Items.findOne({ where: { IID: id } });
-        if (!item) console.log("No Results by searching for Item")
+        if (!item) console.log("No Results by searching for Item:  " + id)
         return item;
     }
 });

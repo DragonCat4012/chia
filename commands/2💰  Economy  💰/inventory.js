@@ -1,5 +1,5 @@
 const { Message } = require('discord.js');
-const { rawEmb, emotes } = require('../utilities');
+const { rawEmb, emotes, colors } = require('../utilities');
 
 module.exports = {
     name: 'inventory',
@@ -15,18 +15,23 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg, args) {
+        let emb = rawEmb(msg)
         let user;
         if (msg.mentions.users.first()) {
             user = msg.mentions.users.first();
         } else { user = msg.author; }
 
-        let S = "Normal"
-        if (args[1] == "full" || args[0] == "full") S = "Full"
-        if (args[1] == "rare" || args[0] == "rare") S = "Rare"
+        if (user.bot) {
+            emb.setDescription("Bots besitzen kein Inventar qwq")
+            return msg.channel.send(emb.setColor(colors.error))
+        }
 
+        let S = "Normal"
+        if (args[0] == "full" || args[0] == "Full") S = "full"
+        if (args[0] == "rare" || args[0] == "Rare") S = "rare"
+        if (args[0] == "value" || args[0] == "Value") S = "value"
 
         var player = await msg.client.database.player_cache.getConfig(user.id);
-        let emb = rawEmb(msg).setTitle("Inventar")
 
         let uid = user.id
         var order = await msg.client.database.order_cache.getInventory(uid)
@@ -40,6 +45,7 @@ module.exports = {
             switch (S) {
                 case ("Normal"):
                     {
+                        emb.setTitle("Inventar")
                         let Swords = 0;
                         let Shields = 0;
                         let Material = 0;
@@ -56,9 +62,11 @@ module.exports = {
                         if (Material > 1) text.push("🍃 **Material:** 🍃 " + Material)
                         emb.setDescription(text.join("\n"))
                         return msg.channel.send(emb)
+                        break
                     }
-                case ("Rare"):
+                case ("rare"):
                     {
+                        emb.setTitle("Inventar [Rare]")
                         let Eins = 0;
                         let Zwei = 0;
                         let Drei = 0;
@@ -83,9 +91,11 @@ module.exports = {
 
                         emb.setDescription(text.join("\n"))
                         return msg.channel.send(emb)
+                        break
                     }
-                case ("Full"):
+                case ("full"):
                     {
+                        emb.setTitle("Inventar [Full]")
                         for (let IID of order) {
                             var item = await msg.client.database.item_cache.getConfig(IID.IID);
                             arr.push(item)
@@ -98,7 +108,7 @@ module.exports = {
                             return 0;
                         });
 
-                        let size = arr.map(v => `[${v.ATK}/${v.DEV}] ¥${v.VALUE} ${v.NAME}`).join(" \n")
+                        let size = arr.map(v => `[${v.ATK}/${v.DEV}] ${v.NAME} [${v.Rare}]`).join(" \n")
                         page = Math.round(size.length / 2000)
                         console.log(page)
 
@@ -106,7 +116,7 @@ module.exports = {
                             for (let num = page; num > 1; num -= 1) {
                                 let B = arr.slice(0, 55)
                                 let shift = 55;
-                                B = B.map(v => "[" + v.ATK + "/" + v.DEV + "] " + v.VALUE + "¥  " + v.NAME).join(" \n")
+                                B = B.map(v => "[" + v.ATK + "/" + v.DEV + "] " + v.NAME + " [" + v.RARE + "]").join(" \n")
                                 if (shift > 0) {
                                     arr.shift()
                                     shift -= 1;
@@ -115,10 +125,48 @@ module.exports = {
                                 msg.channel.send(emb)
                             }
                         } else {
-                            emb.setDescription(arr.map(v => `[${v.ATK}/${v.DEV}] ¥${v.VALUE} ${v.NAME}`).join(" \n"))
+                            emb.setDescription(arr.map(v => `[${v.ATK}/${v.DEV}] ${v.NAME} [${v.RARE}]`).join(" \n"))
                             return msg.channel.send(emb)
                         }
                     }
+                    break
+                case ("value"):
+                    {
+                        emb.setTitle("Inventar [Value]")
+                        for (let IID of order) {
+                            var item = await msg.client.database.item_cache.getConfig(IID.IID);
+                            arr.push(item)
+                        }
+                        arr.sort(function(a, b) {
+                            var nameA = a.TYPE
+                            var nameB = b.TYPE
+                            if (nameA < nameB) { return -1; }
+                            if (nameA > nameB) { return 1; }
+                            return 0;
+                        });
+
+                        let size = arr.map(v => `${v.VALUE}¥ ${v.NAME}`).join(" \n")
+                        page = Math.round(size.length / 2000)
+                        console.log(page)
+
+                        if (page > 1) {
+                            for (let num = page; num > 1; num -= 1) {
+                                let B = arr.slice(0, 55)
+                                let shift = 55;
+                                B = B.map(v => v.VALUE + "¥  " + v.NAME).join(" \n")
+                                if (shift > 0) {
+                                    arr.shift()
+                                    shift -= 1;
+                                }
+                                emb.setDescription(B)
+                                msg.channel.send(emb)
+                            }
+                        } else {
+                            emb.setDescription(arr.map(v => `${v.VALUE}¥ ${v.NAME}`).join(" \n"))
+                            return msg.channel.send(emb)
+                        }
+                    }
+                    break
             }
 
 

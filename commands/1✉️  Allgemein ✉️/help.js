@@ -27,12 +27,11 @@ module.exports = {
             emb.setTitle(command.name)
                 .addField("**Syntax:**", command.syntax)
                 .setFooter("Trigger: " + command.commands.join(', '))
-            if (language == "DE") {
-                emb.addField("**Beschreibung:**", command.description ? command.description : emotes.false)
-                if (command.type) emb.addField("**Typ:**", command.type ? command.type : emotes.false)
-                emb.addField("**Berechtigung:(User)**", command.perm ? command.perm : emotes.false)
-                    .addField("**Berechtigung: (Bot)**", command.needed ? command.needed : emotes.false)
-            }
+            emb.addField("**Beschreibung:**", command.description ? command.description : emotes.false)
+            if (command.type) emb.addField("**Typ:**", command.type ? command.type : emotes.false)
+            emb.addField("**Berechtigung:(User)**", command.perm ? command.perm : emotes.false)
+                .addField("**Berechtigung: (Bot)**", command.needed ? command.needed : emotes.false)
+
             msg.channel.send(emb);
         } else {
             let a = 0;

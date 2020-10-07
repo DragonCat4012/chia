@@ -23,27 +23,28 @@ module.exports = {
         enemy_user = msg.mentions.members.first()
         if (!enemy_user) return msg.channel.send(emb.setDescription("Bitte erwähne einen Gegner").setColor(colors.error))
 
+        if (user.bot) {
+            emb.setDescription("Bots können nicht kämpfen qwq")
+            return msg.channel.send(emb.setColor(colors.error))
+        }
+
         var enemy = await msg.client.database.player_cache.getConfig(enemy_user.id);
         var player = await msg.client.database.player_cache.getConfig(user.id);
 
         ////////////////////////// -- Vorbereitung --/////////////////////////////
         let P_Lifes = player.HP + parseInt(calcLevel(player.XP));
         let E_Lifes = enemy.HP + parseInt(calcLevel(enemy.XP))
-        ///////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////
 
         let quest = "Möchtest du Kämpfen"
         let answer = await getAnswer(msg, quest + "?", 30, enemy_user)
         if (answer !== "yes" && answer !== "ja" && answer !== "Yes" && answer !== "Ja") return msg.channel.send(emb.setDescription("Kampf abgebrochen"))
 
-        if (player.WEAPON !== "0" && player.WEAPON !== 0) { var weapon = (await msg.client.database.item_cache.getConfig(player.WEAPON)).ATK }
-        else { weapon = 0 }
-        if (player.SHIELD !== "0" && player.SHIELD !== 0) { var shield = (await msg.client.database.item_cache.getConfig(player.SHIELD)).DEV }
-        else { shield = 0 }
+        if (player.WEAPON !== "0" && player.WEAPON !== 0) { var weapon = (await msg.client.database.item_cache.getConfig(player.WEAPON)).ATK } else { weapon = 0 }
+        if (player.SHIELD !== "0" && player.SHIELD !== 0) { var shield = (await msg.client.database.item_cache.getConfig(player.SHIELD)).DEV } else { shield = 0 }
 
-        if (enemy.WEAPON !== "0" && enemy.WEAPON !== 0) { var enemy_weapon = (await msg.client.database.item_cache.getConfig(enemy.WEAPON)).ATK }
-        else { enemy_weapon = 0 }
-        if (enemy.SHIELD !== "0" && enemy.SHIELD !== 0) { var enemy_shield = (await msg.client.database.item_cache.getConfig(enemy.SHIELD)).DEV }
-        else { enemy_shield = 0 }
+        if (enemy.WEAPON !== "0" && enemy.WEAPON !== 0) { var enemy_weapon = (await msg.client.database.item_cache.getConfig(enemy.WEAPON)).ATK } else { enemy_weapon = 0 }
+        if (enemy.SHIELD !== "0" && enemy.SHIELD !== 0) { var enemy_shield = (await msg.client.database.item_cache.getConfig(enemy.SHIELD)).DEV } else { enemy_shield = 0 }
 
         let r = 0;
         var Damage = enemy_weapon - shield;

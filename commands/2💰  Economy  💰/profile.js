@@ -12,18 +12,25 @@ module.exports = {
      *@document
      * @this
      * @param {Message} msg Nachricht in dem der Befehl geschickt wurde
-      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
+     * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg) {
         let user;
+        let emb = rawEmb(msg)
         if (msg.mentions.users.first()) {
             user = msg.mentions.users.first();
         } else { user = msg.author; }
 
+        if (user.bot) {
+            emb.setDescription("Bots haben kein Profil qwq")
+            return msg.channel.send(emb.setColor(colors.error))
+        }
+
+
         var player = await msg.client.database.player_cache.getConfig(user.id);
         var AK = 0;
         var DK = 0;
-        let emb = rawEmb(msg).setTitle("Profil")
+        emb.setTitle("Profil")
 
         if (player.WEAPON == "0") { a = emotes.false } else {
             let id = player.WEAPON
@@ -36,9 +43,7 @@ module.exports = {
                 if (item == undefined || item == null || !item) {
                     msg.channel.send("Schwert konnte nicht identifiziert werden")
                     a = emotes.false;
-                }
-                else if (item.TYPE !== "SWORD") { a = emotes.false }
-                else { a = item.NAME + "  [" + item.ATK + "/" + item.DEV + "]" }
+                } else if (item.TYPE !== "SWORD") { a = emotes.false } else { a = item.NAME + "  [" + item.ATK + "/" + item.DEV + "]" }
             }
 
             AK += parseInt(item.ATK)
@@ -58,10 +63,7 @@ module.exports = {
                 if (item == undefined || item == null || !item) {
                     msg.channel.send("Schild konnte nicht identifiziert werden")
                     b = emotes.false;
-                }
-
-                else if (item.TYPE !== "SHIELD") { b = emotes.false }
-                else { b = item.NAME + "  [" + item.ATK + "/" + item.DEV + "]" }
+                } else if (item.TYPE !== "SHIELD") { b = emotes.false } else { b = item.NAME + "  [" + item.ATK + "/" + item.DEV + "]" }
             }
             AK += parseInt(item.ATK)
             DK += parseInt(item.DEV)

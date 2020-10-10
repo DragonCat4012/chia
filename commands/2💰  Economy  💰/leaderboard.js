@@ -3,7 +3,7 @@ const { rawEmb, calcLevel } = require('../utilities');
 
 module.exports = {
     name: 'leaderboard',
-    syntax: 'leaderboard',
+    syntax: 'leaderboard [coins | rank]',
     args: false,
     description: 'Zeigt dir das Leaderboard nach ´rank´, `coins` oder XP',
     commands: ['leaderboard', 'lb', 'top'],
@@ -12,7 +12,7 @@ module.exports = {
      *@document
      * @this
      * @param {Message} msg Nachricht in dem der Befehl geschickt wurde
-      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
+     * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg, args) {
         let emb = rawEmb(msg).setTitle("Leaderboard")

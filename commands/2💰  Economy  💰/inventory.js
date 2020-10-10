@@ -3,7 +3,7 @@ const { rawEmb, emotes, colors } = require('../utilities');
 
 module.exports = {
     name: 'inventory',
-    syntax: 'inventory [@user] || inevntory [@user] full/rare',
+    syntax: 'inventory [@user] [full/rare]',
     args: false,
     description: 'Zeigt dir das Inventar eines Spielers. Nutze `full` um dein vollständioges Inventar angezeigt zu bekommen. Nach Seltenheit nutze `rare`.',
     commands: ['inventory', 'inv'],

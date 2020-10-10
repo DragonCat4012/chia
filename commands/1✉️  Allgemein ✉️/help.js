@@ -40,24 +40,16 @@ module.exports = {
                 .filter((mod, i, arr) => arr.indexOf(mod) == i)
                 .sort((a, b) => parseInt(a) - parseInt(b));
 
-            //C.map(v => `\`${v.commands[0]}\``)
-            //let C = msg.client.commands
-            // emb.setDescription(`**${command.name}**\n \`${command.syntax}\`\n\n`)
+            for (let mod of modules) {
+                let commands = msg.client.commands.filter(cmd => cmd.module == mod).map(cmdO => cmdO.command);
+                mod = mod.substr(1)
+                b += commands.length;
+                a += 1;
+                let prop = (mod.toString()).toLowerCase()
 
-            let A = []
-            console.log(msg.client.commands)
-            for (cmd of msg.client.commands) {
-                let command = cmd[1]
-                A.push(`**${command.name}**\n \`.${command.syntax}\`\n\n`)
+                emb.addField(`**${mod}** [${commands.length}]`, commands.map(v => `**-${v.name}** [ \`${v.syntax}\` ]`).join('\n') + "\n\u200b");
             }
-            emb.setDescription(A.join(" "))
-                /*
-                            for (let mod of modules) {
-                                let commands = msg.client.commands.filter(cmd => cmd.module == mod).map(cmdO => cmdO.command);
-                                b += commands.length;
-                                a += 1;
-                                emb.addField(`**${mod.substr(1)}** [${commands.length}]`, commands.map(v => `\`${v.commands[0]}\``).join(', ') + "\n\u200b");
-                            }*/
+
             msg.channel.send(emb.setFooter(`Nutze +help <command> für mehr || ${a} Module mit ${b} Commands`));
         }
     }

@@ -4,7 +4,7 @@ const { rawEmb, emotes } = require('../utilities');
 module.exports = {
     name: 'buy',
     syntax: 'buy <item>',
-    args: false,
+    args: true,
     description: 'Lässt dich Items verkaufen',
     commands: ['buy'],
 

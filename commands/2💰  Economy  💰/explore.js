@@ -15,6 +15,7 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg, args) {
+        //  return msg.channel.send("Dieser cmd ist egrade in arbeit qwq")
         let emb = rawEmb(msg)
         user = msg.author;
         var room = await msg.client.database.dungeon_cache.getRoom()
@@ -33,12 +34,13 @@ module.exports = {
         }
 
         let line = (room.LINE).split(/ +/);
-        console.log(line)
+        // console.log(line)
 
         let L = (room.LINE).replace(/H/i, "♻️").replace(/E/i, "🎁").replace(/[0-9]/g, "🔸")
-        msg.channel.send(L)
+        msg.channel.send(emb.setTitle(L))
 
         let i = true
+        let arr = []
         while (i) {
             let obj = line.shift()
             if (obj == "E") {
@@ -48,33 +50,41 @@ module.exports = {
                 player.HP += 20
                 msg.channel.send("Heal")
             } else {
-                fight(player, obj)
-                msg.channel.send("Monster")
+                //  console.log(await fight(msg, player, obj))
+                let R = await fight(msg, player, obj)
+                console.log(R)
+                return
+                if (!R.value) {
+                    i = false
+                    return msg.channel.send(emb.setColor(colors.error).setDescription("**Das Monster war wohl zu stark für dich qwq**"))
+                }
+                // console.log(res)
+                // arr.join(`Ergebnis${}: ` + +` Runden: ${}`)
+                //   msg.channel.send("Monster")
             }
         }
 
-        return
-
-        if (E_Lifes <= 0) {
-            let arr = [];
-            return msg.channel.send(emb.setTitle("Sieg").setDescription(arr.join("\n") + `${Dropped}`).setColor(colors.success))
-        }
-
-        if (P_Lifes <= 0) {
-            return msg.channel.send(emb.setTitle("Niederlage"))
-        }
+        return msg.channel.send(emb.setTitle("Dungeon closed"))
     }
 };
 
-async function fight(player, id) {
+async function fight(msg, player, id) {
     let monster = await msg.client.database.monster_cache.getEnemy(id);
     let enemy = {
         ATK: monster.ATK,
         DEF: monster.DEV,
         HP: monster.HP
     }
+    let res = {
+        runden: 0,
+        value: false
+    }
+
     let r = 0;
-    if (monster.DEV > player.ATK) return false // wenn dev zu hoch für dich
+    if (monster.DEV > player.ATK) {
+        res.value = false
+        return res
+    } // wenn dev zu hoch für dich
 
     var Damage = player.ATK - enemy.DEV;
     var PDamage = enemy.ATK - player.DEF;
@@ -85,7 +95,14 @@ async function fight(player, id) {
         player.HP -= PDamage;
         r = r + 1;
     }
-    emb.setFooter(r + (r > 1 ? " Runden" : "Runde"))
+    res.runden = r
 
-
+    if (enemy.HP <= 0) {
+        res.value = true
+        return res
+    }
+    if (player.HP <= 0) {
+        res.value = false
+        return res
+    }
 }

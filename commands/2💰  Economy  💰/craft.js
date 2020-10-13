@@ -2,7 +2,6 @@ const { Message } = require('discord.js');
 const { rawEmb, emotes } = require('../utilities');
 var crafting = require('./craftings.json');
 
-
 module.exports = {
     name: 'craft',
     syntax: 'craft <item>',
@@ -103,7 +102,7 @@ module.exports = {
 
 
         order = (await msg.client.database.order_cache.deleteOrder(item.IID, user.id))
-        //await order.save()
+            //await order.save()
 
         return msg.channel.send(emb)
 

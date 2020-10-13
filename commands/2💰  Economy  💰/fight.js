@@ -5,7 +5,7 @@ module.exports = {
     name: 'fight',
     syntax: 'fight <@user>',
     args: true,
-    description: 'Du möchtest gegen einen anderen Spieler kämpfen? Nutze `ranked` um das ergebnis in die wertung einfließen zu lassen',
+    description: 'Kämpf gegen andere Spieler. Nutze "ranked" um das Ergebnis zu werten',
     commands: ['fight'],
 
     /**

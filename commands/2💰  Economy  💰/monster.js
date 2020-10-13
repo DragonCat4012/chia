@@ -15,7 +15,7 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg) {
-        var dungeon = await msg.client.database.monster_cache.getDungeon();
+        var dungeon = await msg.client.database.monster_cache.getMonsters();
         let emb = rawEmb(msg).setTitle("[ATK/DEF] HP Monster ").setFooter(dungeon.length + " Monster insgesamt")
 
         text = ""

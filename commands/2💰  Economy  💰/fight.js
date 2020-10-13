@@ -23,6 +23,9 @@ module.exports = {
         enemy_user = msg.mentions.members.first()
         if (!enemy_user) return msg.channel.send(emb.setDescription("Bitte erwähne einen Gegner").setColor(colors.error))
 
+        if (enemy_user.id == msg.author.id) return msg.channel.send(emb.setDescription("Du kannst nicht gegen dich selbst kämpfen ;-;").setColor(colors.error))
+
+
         if (user.bot) {
             emb.setDescription("Bots können nicht kämpfen qwq")
             return msg.channel.send(emb.setColor(colors.error))
@@ -47,24 +50,24 @@ module.exports = {
         if (enemy.SHIELD !== "0" && enemy.SHIELD !== 0) { var enemy_shield = (await msg.client.database.item_cache.getConfig(enemy.SHIELD)).DEV } else { enemy_shield = 0 }
 
         let r = 0;
-        var Damage = enemy_weapon - shield;
+        var Damage = enemy_weapon - weapon;
         var EnemyDamage = enemy_shield - weapon;
 
-        if (Math.sign(Damage) == -1) Damage = 1
-        if (Math.sign(EnemyDamage) == -1) EnemyDamage = 1
+        //  if (Math.sign(Damage) == -1) Damage = 1
+        //if (Math.sign(EnemyDamage) == -1) EnemyDamage = 1
 
         while (P_Lifes > 0 && E_Lifes > 0) {
             E_Lifes -= EnemyDamage;
             P_Lifes -= Damage;
             r = r + 1;
         }
-        emb.setFooter(r + (r > 1 ? " Runden" : "Runde"))
+        emb.setFooter(r + (r > 1 ? " Runden" : " Runde"))
 
         if (E_Lifes <= 0) {
             if (ranked) {
                 player.RANK += 3;
-                enemy_user.RANK -= 3;
-                if (enemy_user.RANK <= 0) enemy_user.RANK = 0;
+                enemy.RANK -= 3;
+                if (enemy.RANK <= 0) enemy.RANK = 0;
 
                 await player.save()
                 emb.setDescription("Du gewinnst 3 Punkte")
@@ -74,13 +77,13 @@ module.exports = {
 
         if (P_Lifes <= 0) {
             if (ranked) {
-                enemy_user.RANK += 3;
+                enemy.RANK += 3;
                 player.RANK -= 3;
 
-                await enemy_user.save()
+                await enemy.save()
                 emb.setDescription("Du verlierst 3 Punkte")
             }
-            return msg.channel.send(emb.setTitle("Sieg für " + enemy_user.username).setColor(colors.error))
+            return msg.channel.send(emb.setTitle("Sieg für " + enemy_user.user.username).setColor(colors.error))
         }
     }
 };

@@ -18,9 +18,9 @@ module.exports = {
         user = msg.author;
         var player = await msg.client.database.player_cache.getConfig(user.id);
         let emb = rawEmb(msg)
-        ////////////////////////// -- ITEM BREAK --/////////////////////////////
+            ////////////////////////// -- ITEM BREAK --/////////////////////////////
         var inventory = await msg.client.database.order_cache.getInventory(user.id)
-        ///////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////
 
         var enemy = await msg.client.database.monster_cache.getEnemy()
 
@@ -42,10 +42,8 @@ module.exports = {
         let answer = await getAnswer(msg, quest + "?", 30)
         if (answer !== "yes" && answer !== "ja" && answer !== "Yes" && answer !== "Ja") return msg.channel.send(emb.setDescription("Kampf abgebrochen"))
 
-        if (player.WEAPON !== "0" && player.WEAPON !== 0) { var weapon = (await msg.client.database.item_cache.getConfig(player.WEAPON)).ATK }
-        else { weapon = 0 }
-        if (player.SHIELD !== "0" && player.SHIELD !== 0) { var shield = (await msg.client.database.item_cache.getConfig(player.SHIELD)).DEV }
-        else { shield = 0 }
+        if (player.WEAPON !== "0" && player.WEAPON !== 0) { var weapon = (await msg.client.database.item_cache.getConfig(player.WEAPON)).ATK } else { weapon = 0 }
+        if (player.SHIELD !== "0" && player.SHIELD !== 0) { var shield = (await msg.client.database.item_cache.getConfig(player.SHIELD)).DEV } else { shield = 0 }
 
         let r = 0;
 
@@ -60,6 +58,10 @@ module.exports = {
             r = r + 1;
         }
         emb.setFooter(r + (r > 1 ? " Runden" : "Runde"))
+
+
+        let Dropped = ""
+        let value = percent()
 
         if (E_Lifes <= 0) {
             let loot = enemy.DROPRATE;
@@ -80,17 +82,13 @@ module.exports = {
                 }
             }
 
-            let Dropped = ""
-            let value = percent()
-
-
             if (value == "drop") {
                 var drop = inventory[Math.floor(Math.random() * inventory.length)];
                 inventory = await msg.client.database.order_cache.deleteOrder(drop.IID, user.id)
                 drop = await msg.client.database.item_cache.getConfig(drop.IID)
                 drop = `${drop.NAME}`
                 Dropped = "\n \n**Dropped** " + drop
-            } else { }
+            }
             if (arr.length == 0) arr.push("Kein Loot qwq", "qwq")
             return msg.channel.send(emb.setTitle("Sieg").setDescription(arr.join("\n") + `${Dropped}`).setColor(colors.success))
         }
@@ -103,8 +101,7 @@ module.exports = {
                 drop = await msg.client.database.item_cache.getConfig(drop.IID)
                 drop = `${drop.NAME}`
                 Dropped = "\n \n**Dropped** " + drop
-            } else { }
-
+            }
             await player.save()
             return msg.channel.send(emb.setTitle("Niederlage").setDescription("Du verlierst 10 Coins (falls du so viele besitzt) " + `${Dropped}`).setColor(colors.error))
         }

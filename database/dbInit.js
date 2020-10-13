@@ -147,6 +147,34 @@ const Monster = monstersql.define('monster', {
     },
 
 });
+
+const Dungeons = monstersql.define('dungeons', {
+    DID: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
+    },
+    NAME: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
+    },
+    RARE: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
+    },
+    LINE: {
+        type: DataTypes.TEXT,
+        defaultValue: 0
+    },
+    DROPCOIN: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+    DROPRATE: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+});
+
 const Order = ordersql.define('order', {
     UID: {
         type: DataTypes.TEXT,
@@ -159,14 +187,14 @@ const Order = ordersql.define('order', {
 
 
 
-const syncDatabase = async () => {
+const syncDatabase = async() => {
     try {
         await spielersql.sync();
         console.log(' > 🗸 Player loaded');
         await itemsql.sync();
         console.log(' > 🗸 Items loaded');
         await monstersql.sync();
-        console.log(' > 🗸 Monster loaded');
+        console.log(' > 🗸 Monsters & Dungeons loaded');
         await ordersql.sync();
         console.log(' > 🗸 Syncronisation Loaded')
     } catch (e) {
@@ -175,4 +203,4 @@ const syncDatabase = async () => {
     }
 }
 
-module.exports = { Spieler, Monster, Items, Order, syncDatabase }
+module.exports = { Spieler, Monster, Items, Order, Dungeons, syncDatabase }

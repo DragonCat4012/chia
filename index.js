@@ -30,12 +30,13 @@ process.on("warning", console.warn);
 //==================================================================================================================================================
 //Currency and Levelingsystem
 //==================================================================================================================================================
-const { Spieler, Monster, Items, Order, syncDatabase } = require('./database/dbInit');
+const { Spieler, Monster, Items, Order, Dungeons, syncDatabase } = require('./database/dbInit');
 
 var monster_cache = new Collection();
 var item_cache = new Collection();
 var player_cache = new Collection();
 var order_cache = new Collection();
+var dungeon_cache = new Collection();
 
 Reflect.defineProperty(player_cache, "addXP", {
     /**
@@ -66,10 +67,6 @@ Reflect.defineProperty(player_cache, "addXP", {
         return user;
     }
 });
-
-
-
-
 Reflect.defineProperty(player_cache, "getConfig", {
     /**
      * @param {number} id User ID
@@ -85,9 +82,7 @@ Reflect.defineProperty(player_cache, "getConfig", {
         return spieler;
     }
 });
-
-
-
+//==================================================================================================================================================
 Reflect.defineProperty(order_cache, "getOrder", {
     /**
      * @param {number} id Guild ID
@@ -104,7 +99,6 @@ Reflect.defineProperty(order_cache, "getOrder", {
         return order;
     }
 });
-
 Reflect.defineProperty(order_cache, "setOrder", {
     /**
      * @param {number} id Guild ID
@@ -117,7 +111,6 @@ Reflect.defineProperty(order_cache, "setOrder", {
         return order;
     }
 });
-
 Reflect.defineProperty(order_cache, "deleteOrder", {
     /**
      * @param {number} id Guild ID
@@ -132,8 +125,7 @@ Reflect.defineProperty(order_cache, "deleteOrder", {
 
     }
 });
-
-
+//==================================================================================================================================================
 Reflect.defineProperty(order_cache, "getInventory", {
     /**
      *  @param {number} uid Channel ID
@@ -157,8 +149,49 @@ Reflect.defineProperty(item_cache, "getShop", {
         return shop;
     }
 });
+//==================================================================================================================================================
+Reflect.defineProperty(dungeon_cache, "getDungeons", {
+    /**
+     * @returns {Model} new User
+     */
+    value: async function() {
+        dungeons = await Dungeons.findAll({});
+        return dungeons;
+    }
+});
+Reflect.defineProperty(dungeon_cache, "findRoom", {
+    /**
+     * @param {number} id Dungeon ID
+     * @returns {Model} new User
+     */
+    value: async function(id) {
+        id = "" + id + ""
+        var dungeon = dungeon_cache.get({ DID: id });
+        if (!dungeon) dungeon = await Dungeons.findOne({ where: { DID: id } });
+        if (!dungeon) console.log("No Results by searching for dungeon")
+        return dungeon;
+    }
+});
 
-Reflect.defineProperty(monster_cache, "getDungeon", {
+Reflect.defineProperty(dungeon_cache, "getRoom", {
+    /**
+     * @returns {Model} new User
+     */
+    value: async function() {
+        let M = (await Dungeons.findAll({})).length;
+        var size = Math.floor(Math.floor(Math.random() * (M - 0 + 1) + 0))
+        if (size == 0) size = 1
+        size = "" + size + ""
+
+        var room = dungeon_cache.get({ DID: size })
+        if (!room) room = await Dungeons.findOne({ where: { DID: size } });
+
+        if (!room) console.log("No Results by searching for random Room")
+        return room;
+    }
+});
+//==================================================================================================================================================
+Reflect.defineProperty(monster_cache, "getMonsters", {
     /**
      * @returns {Model} new User
      */
@@ -180,7 +213,6 @@ Reflect.defineProperty(monster_cache, "getConfig", {
         return monster;
     }
 });
-
 Reflect.defineProperty(monster_cache, "getEnemy", {
     /**
      * @returns {Model} new User
@@ -199,7 +231,7 @@ Reflect.defineProperty(monster_cache, "getEnemy", {
         return monster;
     }
 });
-
+//==================================================================================================================================================
 Reflect.defineProperty(item_cache, "getItem", {
     /**
      * @returns {Model} new User
@@ -217,7 +249,6 @@ Reflect.defineProperty(item_cache, "getItem", {
         return item;
     }
 });
-
 Reflect.defineProperty(item_cache, "getConfig", {
     /**
      * @param {number} id Item ID
@@ -231,7 +262,7 @@ Reflect.defineProperty(item_cache, "getConfig", {
         return item;
     }
 });
-
+//==================================================================================================================================================
 //Sync
 const initDatabase = async() => {
     await syncDatabase();
@@ -241,6 +272,7 @@ const initDatabase = async() => {
         for (let entr of(await Items.findAll())) item_cache.set(entr.IID, entr);
         for (let entr of(await Order.findAll())) { order_cache.set(entr.IID, entr.UID); }
         for (let entr of(await Monster.findAll())) { monster_cache.set(entr.MID, entr); }
+        for (let entr of(await Dungeons.findAll())) { dungeon_cache.set(entr.DID, entr); }
 
         console.log(" > 🗸 Cached Database Entries");
     } catch (e) {
@@ -249,7 +281,7 @@ const initDatabase = async() => {
     }
 }
 
-client.database = { player_cache, monster_cache, item_cache, order_cache };
+client.database = { player_cache, monster_cache, item_cache, order_cache, dungeon_cache };
 
 //==================================================================================================================================================
 
@@ -391,11 +423,7 @@ client.on("message", async message => {
 
 
     //==================================================================================================================================================
-
-
     if (!message.content.startsWith(prefix)) return;
-
-
     const args = message.content.slice(prefix.length).split(/ +/);
     ////leeeeeel neues prefix yk
 
@@ -415,19 +443,11 @@ client.on("message", async message => {
         return message.channel.send(emb);
     }
 
-
     var emb = rawEmb(message);
     if (command.needed) {
-        if (command.needed == 'NSFW') {
-            if (guild_config.nsfw == 0) {
-                emb.setDescription(emotes.false + " **NSFW Commands sind auf diesem Server gesperrt qwq**").setColor(colors.nothing);
-                return message.channel.send(emb);
-            }
-        } else {
-            if (!(message.guild.me.hasPermission(command.needed))) {
-                emb.setDescription(emotes.false + " **Mir fehlt folgende Berechtigung:** `" + command.needed).setColor(colors.nothing);
-                return message.channel.send(emb);
-            }
+        if (!(message.guild.me.hasPermission(command.needed))) {
+            emb.setDescription(emotes.false + " **Mir fehlt folgende Berechtigung:** `" + command.needed).setColor(colors.nothing);
+            return message.channel.send(emb);
         }
     }
 
@@ -447,25 +467,18 @@ client.on("message", async message => {
     }
 
 
-
     if (command.args && !args.length) {
         emb.setDescription(`Du musst Argumente angeben, <@${message.member.id}>!`);
 
-
-
         if (command.syntax) {
             emb.addField(`Syntax`, `\`${prefix}${command.syntax}\``)
-
         }
-
         return message.channel.send(emb);
     }
-
 
     if (!cooldowns.has(command.name)) {
         cooldowns.set(command.name, new Discord.Collection());
     }
-
 
     const now = Date.now();
     const timestamps = cooldowns.get(command.name);

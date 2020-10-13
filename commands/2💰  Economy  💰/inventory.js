@@ -31,13 +31,11 @@ module.exports = {
         if (args[0] == "rare" || args[0] == "Rare") S = "rare"
         if (args[0] == "value" || args[0] == "Value") S = "value"
 
-        var player = await msg.client.database.player_cache.getConfig(user.id);
-
         let uid = user.id
         var order = await msg.client.database.order_cache.getInventory(uid)
 
-        if (!order || order == undefined) {
-            emb.setDescription("Du besitzt noch keine Items")
+        if (!order.length > 0) {
+            emb.setDescription(user.username + " besitzt noch keine Items!")
             return msg.channel.send(emb)
         } else {
             arr = []

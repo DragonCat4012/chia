@@ -28,9 +28,6 @@ module.exports = {
                 .addField("**Syntax:**", command.syntax)
                 .setFooter("Trigger: " + command.commands.join(', '))
             emb.addField("**Beschreibung:**", command.description ? command.description : emotes.false)
-            if (command.type) emb.addField("**Typ:**", command.type ? command.type : emotes.false)
-            emb.addField("**Berechtigung:(User)**", command.perm ? command.perm : emotes.false)
-                .addField("**Berechtigung: (Bot)**", command.needed ? command.needed : emotes.false)
 
             msg.channel.send(emb);
         } else {
@@ -47,9 +44,8 @@ module.exports = {
                 a += 1;
                 let prop = (mod.toString()).toLowerCase()
 
-                emb.addField(`**${mod}** [${commands.length}]`, commands.map(v => `**-${v.name}** [ \`${v.syntax}\` ]`).join('\n') + "\n\u200b");
+                emb.addField(`**${mod}** [${commands.length}]`, commands.map(v => `**-${v.name}** [ \`${v.description}\` ]`).join('\n') + "\n\u200b");
             }
-
             msg.channel.send(emb.setFooter(`Nutze +help <command> für mehr || ${a} Module mit ${b} Commands`));
         }
     }

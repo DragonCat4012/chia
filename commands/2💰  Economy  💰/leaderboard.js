@@ -15,7 +15,7 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg, args) {
-        let emb = rawEmb(msg).setTitle("Leaderboard")
+        let emb = rawEmb(msg).setTitle("Leaderboard [Level]")
         var users = msg.client.database.player_cache.array();
 
         if (args[0] == "coins") {

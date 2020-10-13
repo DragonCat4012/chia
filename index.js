@@ -12,7 +12,9 @@ client.config = config;
 const cooldowns = new Collection();
 
 var error_channel;
+var report_channel;
 error_channel = 714557180757409942;
+report_channel = 753474865104683110;
 
 //Error Handling
 //==================================================================================================================================================
@@ -322,26 +324,49 @@ client.on("ready", async() => {
     error_channel = client.guilds.cache
         .find(g => g.id == 553942677117337600)
         .channels.cache.find(c => c.id == error_channel && c.type == "text");
+    report_channel = client.guilds.cache
+        .find(g => g.id == 553942677117337600)
+        .channels.cache.find(c => c.id == report_channel && c.type == "text");
 });
 
-
-
-//Message
 //==================================================================================================================================================
+//Guild Added
+//==================================================================================================================================================
+client.on("guildCreate", async guild => {
+        let emb = rawEmb().setTitle("New Guild Joined").setDescription(`\`${guild.memberCount}\`: **${guild.name}** [${guild.id}]`)
+        report_channel.send(emb.setColor(colors.success))
+
+        let defaultChannel = "";
+        guild.channels.cache.forEach((channel) => {
+            if (channel.type == "text" && defaultChannel == "") {
+                if (channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
+                    defaultChannel = channel;
+                }
+            }
+        })
+        emb.setTitle("Hi I´m Chia").setColor(colors.red)
+        defaultChannel.send(emb.setDescription("**Thanks for adding me to your server UwU** \n Type -help to see my cmds \n\ni am still very new and will therefore make a few mistakes, please forgive me"))
+    })
+    //==================================================================================================================================================
+    //Guild Removed
+    //==================================================================================================================================================
+client.on("guildDelete", async guild => {
+        let emb = rawEmb().setTitle("Removed Guild").setDescription(`\`${guild.memberCount}\`: **${guild.name}** [${guild.id}]`)
+        report_channel.send(emb.setColor(colors.error))
+    })
+    //Message
+    //==================================================================================================================================================
 client.on("message", async message => {
     ///////////////////////////////////////////////////
     if (message.content === "!join") {
-        client.emit("guildMemberAdd", message.member);
+        //  client.emit("guildCreate")
+        client.emit("guildCreate", message.guild);
     }
     /////////////////
     var emb = newEmb(message)
         .setColor(colors.nothing);
 
-
     let prefix = config.prefix;
-
-
-
     if (message.author.bot) return;
 
     //Levelsystem

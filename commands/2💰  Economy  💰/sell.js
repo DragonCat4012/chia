@@ -16,7 +16,6 @@ module.exports = {
      */
     async execute(msg, args) {
         user = msg.author;
-
         var player = await msg.client.database.player_cache.getConfig(user.id);
         let emb = rawEmb(msg).setTitle("Item Verkauf")
 
@@ -29,10 +28,8 @@ module.exports = {
                 arr.push(item)
         }
 
-
         item = arr[0];
         if (arr.length < 1) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq"))
-
 
         item = await msg.client.database.item_cache.getConfig(item.IID)
         let value = item.VALUE;
@@ -44,11 +41,7 @@ module.exports = {
             .addField("**Item:**", item.NAME)
         await player.save()
         order = (await msg.client.database.order_cache.deleteOrder(item.IID, user.id))
-        //await order.save()
 
         return msg.channel.send(emb)
-
-
-
     }
 };

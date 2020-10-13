@@ -15,9 +15,8 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg) {
-
         var shop = await msg.client.database.item_cache.getShop();
-        let emb = rawEmb(msg).setTitle("Shop")
+        let emb = rawEmb(msg).setTitle("Shop").setFooter(shop.lenth + " Items insgesamt")
 
         text = ""
         for (let IID of shop) {
@@ -28,32 +27,27 @@ module.exports = {
                 if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
                 if (item.TYPE == "MATERIAL") t = "[🍃]"
                 text = (text + `**${item.VALUE}¥** ⭐ ${item.NAME} ${t}\n`)
-            }
-            else if (item.RARE == "2") {
+            } else if (item.RARE == "2") {
                 if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
                 if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
                 if (item.TYPE == "MATERIAL") t = "[🍃]"
                 text = (text + `**${item.VALUE}¥** ⭐⭐ ${item.NAME} ${t}\n`)
-            }
-            else if (item.RARE == "3") {
+            } else if (item.RARE == "3") {
                 if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
                 if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
                 if (item.TYPE == "MATERIAL") t = "[🍃]"
                 text = (text + `**${item.VALUE}¥** ⭐⭐⭐ ${item.NAME} ${t}\n`)
-            }
-            else if (item.RARE == "4") {
+            } else if (item.RARE == "4") {
                 if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
                 if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
                 if (item.TYPE == "MATERIAL") t = "[🍃]"
                 text = (text + `**${item.VALUE}¥** 🌟 ${item.NAME} ${t}\n`)
-            }
-            else if (item.RARE == "5") {
+            } else if (item.RARE == "5") {
                 if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
                 if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
                 if (item.TYPE == "MATERIAL") t = "[🍃]"
                 text = (text + `**${item.VALUE}¥** 🌟🌟 ${item.NAME} ${t}\n`)
-            }
-            else {
+            } else {
                 if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
                 if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
                 if (item.TYPE == "MATERIAL") t = "[🍃]"

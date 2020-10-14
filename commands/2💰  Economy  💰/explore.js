@@ -43,6 +43,7 @@ module.exports = {
             console.log(progress)
             let obj = line.shift()
             progress = progress.shift()
+            console.log(progress)
 
             if (obj == "E") {
                 i = false
@@ -52,6 +53,9 @@ module.exports = {
                 msg.channel.send("Heal")
                 progress.unshift("➕")
             } else {
+                let monster = await msg.client.database.monster_cache.getConfig(obj);
+                if (!monster) monster = await msg.client.database.monster_cache.getConfig(parseInt(obj))
+
                 let R = await fight(msg, player, obj)
                 console.log(R)
                 if (!R.value) {
@@ -59,8 +63,9 @@ module.exports = {
                     emb.setFooter(R.runden == 1 ? `${R.runden} Runde` : `${R.runden} Runden`)
                     return msg.channel.send(emb.setColor(colors.error).setDescription("**Das Monster war wohl zu stark für dich qwq**"))
                 }
-                progress.unshift("▪️")
-                emb.setTitle(progress)
+
+                var ö = progress.unshift("▪️")
+                emb.setTitle(progress).setDescription(monster.ATK + " - " + monster.DEV + " - " + monster.HP)
                 msg.channel.send(emb)
             }
         }
@@ -76,7 +81,6 @@ module.exports = {
 async function fight(msg, player, id) {
     let monster = await msg.client.database.monster_cache.getConfig(id);
     if (!monster) monster = await msg.client.database.monster_cache.getConfig(parseInt(id));
-    console.log(monster.ATK + " - " + monster.DEV + " - " + monster.HP)
 
     var enemy = {
         ATK: parseInt(monster.ATK),
@@ -111,5 +115,5 @@ async function fight(msg, player, id) {
     if (enemy.HP <= 0) { res.value = true }
 
     if (player.HP <= 0) { res.value = false }
-    return (res, enemy)
+    return res
 }

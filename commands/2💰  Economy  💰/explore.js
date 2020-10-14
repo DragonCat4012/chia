@@ -35,13 +35,14 @@ module.exports = {
 
         let line = (room.LINE).split(/ +/);
         let L = (room.LINE).replace(/H/i, "♻️").replace(/E/i, "🎁").replace(/[0-9]/g, "🔸")
+        let progress = L.split(/ +/)
         emb.setTitle(L)
         let i = true
 
         while (i) {
-            let progress = (line).replace(/H/i, "♻️").replace(/E/i, "🎁").replace(/[0-9]/g, "🔸")
             console.log(progress)
             let obj = line.shift()
+            progress = progress.shift()
 
             if (obj == "E") {
                 i = false
@@ -52,6 +53,7 @@ module.exports = {
                 progress.unshift("➕")
             } else {
                 let R = await fight(msg, player, obj)
+                console.log(R)
                 if (!R.value) {
                     i = false
                     emb.setFooter(R.runden == 1 ? `${R.runden} Runde` : `${R.runden} Runden`)
@@ -72,7 +74,6 @@ module.exports = {
  * @returns {object}  User
  */
 async function fight(msg, player, id) {
-    console.log(id)
     let monster = await msg.client.database.monster_cache.getConfig(id);
     if (!monster) monster = await msg.client.database.monster_cache.getConfig(parseInt(id));
     console.log(monster.ATK + " - " + monster.DEV + " - " + monster.HP)
@@ -96,9 +97,9 @@ async function fight(msg, player, id) {
 
     var Damage = player.ATK - enemy.DEF;
     var PDamage = enemy.ATK - player.DEF;
-    console.log(player)
-    console.log(enemy)
-        // if (Math.sign(Damage) == -1) Damage = 1
+    //console.log(player)
+    //console.log(enemy)
+    // if (Math.sign(Damage) == -1) Damage = 1
 
     while (player.HP > 0 && enemy.HP > 0) {
         enemy.HP -= Damage;
@@ -110,5 +111,5 @@ async function fight(msg, player, id) {
     if (enemy.HP <= 0) { res.value = true }
 
     if (player.HP <= 0) { res.value = false }
-    return res
+    return (res, enemy)
 }

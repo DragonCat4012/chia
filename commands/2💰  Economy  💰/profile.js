@@ -47,8 +47,6 @@ module.exports = {
             }
 
             AK += parseInt(item.ATK)
-            DK += parseInt(item.DEV)
-
         }
 
         if (player.SHIELD == "0") { b = emotes.false } else {
@@ -65,7 +63,6 @@ module.exports = {
                     b = emotes.false;
                 } else if (item.TYPE !== "SHIELD") { b = emotes.false } else { b = item.NAME + "  [" + item.ATK + "/" + item.DEV + "]" }
             }
-            AK += parseInt(item.ATK)
             DK += parseInt(item.DEV)
         }
 

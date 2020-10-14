@@ -21,10 +21,10 @@ module.exports = {
         var room = await msg.client.database.dungeon_cache.getRoom()
         var A = await msg.client.database.player_cache.getConfig(user.id);
 
-        let CacheSword = await msg.client.database.item_cache.getItem(A.SWORD);
+        let CacheSword = (await msg.client.database.item_cache.getConfig(A.WEAPON)).ATK;
         if (!CacheSword) CacheSword = 0;
         let CacheHP = A.HP + parseInt(calcLevel(A.XP));
-        let CacheShield = await msg.client.database.item_cache.getItem(A.SHIELD);
+        let CacheShield = (await msg.client.database.item_cache.getConfig(A.SHIELD)).DEV;
         if (!CacheShield) CacheShield = 0;
 
         let player = {
@@ -34,33 +34,31 @@ module.exports = {
         }
 
         let line = (room.LINE).split(/ +/);
-        // console.log(line)
-
         let L = (room.LINE).replace(/H/i, "♻️").replace(/E/i, "🎁").replace(/[0-9]/g, "🔸")
-        msg.channel.send(emb.setTitle(L))
-
+        emb.setTitle(L)
         let i = true
-        let arr = []
+
         while (i) {
+            let progress = line;
             let obj = line.shift()
+
             if (obj == "E") {
-                return msg.channel.send("End")
                 i = false
+                return msg.channel.send("End")
             } else if (obj == "H") {
                 player.HP += 20
                 msg.channel.send("Heal")
+                line.unshift("➕")
             } else {
-                //  console.log(await fight(msg, player, obj))
                 let R = await fight(msg, player, obj)
                 console.log(R)
-                return
                 if (!R.value) {
                     i = false
+                    emb.setFooter(R.runden == 1 ? `${R.runden} Runde` : `${R.runden} Runden`)
                     return msg.channel.send(emb.setColor(colors.error).setDescription("**Das Monster war wohl zu stark für dich qwq**"))
                 }
-                // console.log(res)
-                // arr.join(`Ergebnis${}: ` + +` Runden: ${}`)
-                //   msg.channel.send("Monster")
+                line.unshift("▪️")
+                emb.setTitle(line)
             }
         }
 
@@ -69,7 +67,9 @@ module.exports = {
 };
 
 async function fight(msg, player, id) {
-    let monster = await msg.client.database.monster_cache.getEnemy(id);
+    let monster = await msg.client.database.monster_cache.getConfig(id);
+    if (!monster) await msg.client.database.monster_cache.getConfig(parseInt(id));
+    console.log(monster)
     let enemy = {
         ATK: monster.ATK,
         DEF: monster.DEV,
@@ -83,12 +83,15 @@ async function fight(msg, player, id) {
     let r = 0;
     if (monster.DEV > player.ATK) {
         res.value = false
+        console.log("DEf")
         return res
     } // wenn dev zu hoch für dich
 
-    var Damage = player.ATK - enemy.DEV;
+    var Damage = player.ATK - enemy.DEF;
     var PDamage = enemy.ATK - player.DEF;
-    // if (Math.sign(Damage) == -1) Damage = 1
+    console.log(player)
+    console.log(enemy)
+        // if (Math.sign(Damage) == -1) Damage = 1
 
     while (player.HP > 0 && enemy.HP > 0) {
         enemy.HP -= Damage;
@@ -97,12 +100,8 @@ async function fight(msg, player, id) {
     }
     res.runden = r
 
-    if (enemy.HP <= 0) {
-        res.value = true
-        return res
-    }
-    if (player.HP <= 0) {
-        res.value = false
-        return res
-    }
+    if (enemy.HP <= 0) { res.value = true }
+
+    if (player.HP <= 0) { res.value = false }
+    return res
 }

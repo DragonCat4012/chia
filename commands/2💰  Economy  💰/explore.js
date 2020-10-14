@@ -19,7 +19,7 @@ module.exports = {
         let emb = rawEmb(msg)
         user = msg.author;
         var room = await msg.client.database.dungeon_cache.getRoom()
-        emb.setFooter(room.NAME)
+        emb.setFooter("Dungeon: " + room.NAME)
         var A = await msg.client.database.player_cache.getConfig(user.id);
 
         let CacheSword = (await msg.client.database.item_cache.getConfig(A.WEAPON)).ATK;
@@ -41,15 +41,17 @@ module.exports = {
         let i = true
         let text = ""
 
+        const m = await msg.channel.send(emb)
         while (i) {
             let obj = line.shift()
 
             if (obj == "E") {
                 i = false
-                return msg.channel.send(emb.setDescription("**Dungeon beendet** \n **Belohnung:** /").setColor(colors.success))
+                text += "\n**Dungeon beendet**"
+                return msg.channel.send(emb.setDescription(text).setColor(colors.success))
             } else if (obj == "H") {
                 player.HP += 20
-                msg.channel.send("Heal")
+                text += "---- Heal **+20** ---- \n"
                 progress.shift()
                 progress.push("➕")
             } else {
@@ -59,19 +61,18 @@ module.exports = {
                 let R = await fight(msg, player, obj)
                 if (!R.value) {
                     i = false
-                    emb.setFooter(R.runden == 1 ? `${R.runden} Runde` : `${R.runden} Runden`)
+                    emb.setAuthor(R.runden == 1 ? `${R.runden} Runde` : `${R.runden} Runden`)
                     return msg.channel.send(emb.setColor(colors.error).setDescription("**Das Monster war wohl zu stark für dich qwq**"))
                 }
                 progress.shift()
                 progress.push("▪️")
-                text += progress.length + `. **Monster:** ${monster.ATK} - ${monster.DEV} - ${monster.HP}`
+                text += line.length + `. **Monster:** ${monster.ATK} - ${monster.DEV} - ${monster.HP} \n`
                 emb.setTitle(progress.join(" "))
                     .setDescription(text)
                     .setColor(colors.success)
-                msg.channel.send(emb)
+                m.edit(emb)
             }
         }
-        return msg.channel.send(emb.setTitle("Dungeon closed"))
     }
 };
 /**
@@ -90,20 +91,32 @@ async function fight(msg, player, id) {
     }
     var res = {
         runden: 0,
+        HP: player.HP,
         value: false
     }
 
     let r = 0;
     if (monster.DEV > player.ATK) {
         res.value = false
-        console.log("DEf")
         return res
     } // wenn dev zu hoch für dich
 
+    if (player.DEF > enemy.ATK) {
+        res.value = true
+        return res
+    } // wenn dev zu hoch für das monster
+
     var Damage = player.ATK - enemy.DEF;
+    if (Damage > enemy.HP) {
+        r = true
+        return r
+    }
     var PDamage = enemy.ATK - player.DEF;
-    //console.log(player)
-    //console.log(enemy)
+    if (PDamage > player.HP) {
+        r = false
+        return r
+    }
+
     // if (Math.sign(Damage) == -1) Damage = 1
 
     while (player.HP > 0 && enemy.HP > 0) {

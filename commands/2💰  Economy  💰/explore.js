@@ -19,6 +19,7 @@ module.exports = {
         let emb = rawEmb(msg)
         user = msg.author;
         var room = await msg.client.database.dungeon_cache.getRoom()
+        emb.setFooter(room.NAME)
         var A = await msg.client.database.player_cache.getConfig(user.id);
 
         let CacheSword = (await msg.client.database.item_cache.getConfig(A.WEAPON)).ATK;
@@ -38,38 +39,38 @@ module.exports = {
         let progress = L.split(/ +/)
         emb.setTitle(L)
         let i = true
+        let text = ""
 
         while (i) {
-            console.log(progress)
             let obj = line.shift()
-            progress = progress.shift()
-            console.log(progress)
 
             if (obj == "E") {
                 i = false
-                return msg.channel.send("End")
+                return msg.channel.send(emb.setDescription("**Dungeon beendet** \n **Belohnung:** /").setColor(colors.success))
             } else if (obj == "H") {
                 player.HP += 20
                 msg.channel.send("Heal")
-                progress.unshift("➕")
+                progress.shift()
+                progress.push("➕")
             } else {
                 let monster = await msg.client.database.monster_cache.getConfig(obj);
                 if (!monster) monster = await msg.client.database.monster_cache.getConfig(parseInt(obj))
 
                 let R = await fight(msg, player, obj)
-                console.log(R)
                 if (!R.value) {
                     i = false
                     emb.setFooter(R.runden == 1 ? `${R.runden} Runde` : `${R.runden} Runden`)
                     return msg.channel.send(emb.setColor(colors.error).setDescription("**Das Monster war wohl zu stark für dich qwq**"))
                 }
-
-                var ö = progress.unshift("▪️")
-                emb.setTitle(progress).setDescription(monster.ATK + " - " + monster.DEV + " - " + monster.HP)
+                progress.shift()
+                progress.push("▪️")
+                text += progress.length + `. **Monster:** ${monster.ATK} - ${monster.DEV} - ${monster.HP}`
+                emb.setTitle(progress.join(" "))
+                    .setDescription(text)
+                    .setColor(colors.success)
                 msg.channel.send(emb)
             }
         }
-
         return msg.channel.send(emb.setTitle("Dungeon closed"))
     }
 };

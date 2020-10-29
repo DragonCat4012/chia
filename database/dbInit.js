@@ -63,9 +63,9 @@ const Spieler = spielersql.define('spieler', {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
-    ARROWS: {
+    DUNGEON: {
         type: DataTypes.TEXT,
-        defaultValue: 0
+        defaultValue: 1
     },
 
 });

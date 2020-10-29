@@ -21,7 +21,8 @@ const emotes = {
     bot: "<:Clyde:741225707203592232>",
     desktop: "<:desktop:741225709351206993>",
     coin: "<:coin:743414375255113739>",
-    shield: "<:shield:753309572055171173>"
+    shield: "<:shield:753309572055171173>",
+    location: "<:location:771483527169966090>"
 
 }
 

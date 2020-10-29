@@ -16,7 +16,6 @@ module.exports = {
      */
     async execute(msg) {
         let link = "https://discord.com/oauth2/authorize?client_id=" + msg.client.user.id + "&scope=bot&permissions=289856"
-        //  let link = "https://discord.com/api/oauth2/authorize?client_id=" + msg.client.user.id + "&permissions=8&scope=bot",
         neko = "https://discord.gg/2AGVgNM"
         invite = "https://discord.gg/KJjZnxZ";
         let emb = rawEmb(msg)

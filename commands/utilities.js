@@ -36,7 +36,7 @@ const money = {
  * @callback MessageAction
  * @param {Message} m the Message from the Confirmation Embed
  * @returns {void}
-*/
+ */
 
 /**
  * A simple Framework for a Action Confirm
@@ -56,7 +56,7 @@ const confirmAction = (msg, text, confim, cancel) => {
 
         const filter = (reaction, user) => {
             return (reaction.emoji.name == '✅' ||
-                reaction.emoji.name === '❌') &&
+                    reaction.emoji.name === '❌') &&
                 user.id == msg.author.id;
         };
         const collector = message.createReactionCollector(filter, { time: 5000 });
@@ -185,14 +185,13 @@ function getStats() {
  * @param {string} question Question?
  * @param {number} time Time in seconds
  */
-const getAnswer = async (msg, question, time, user) => {
-    return new Promise(async (resolve, reject) => {
+const getAnswer = async(msg, question, time, user) => {
+    return new Promise(async(resolve, reject) => {
         const channel = msg.channel;
         let emb = rawEmb(msg);
 
         await msg.channel.send(emb.setTitle(question).setColor(colors.info).setFooter("cancel, to abort | " + time + " Seconds to answer"));
         emb = rawEmb(msg);
-
         if (!user) user = msg.author
         const collector = channel.createMessageCollector(m => m.author.id === user.id, {
             max: 1,
@@ -207,9 +206,13 @@ const getAnswer = async (msg, question, time, user) => {
 
                 if (cont === "" || !cont) {
                     msg.channel.send(emb.setTitle("Empty Message").setColor(colors.error)).then(() => {
+                        console.log('C')
                         reject("Empty Message Send");
+
                     }).catch((e) => {
+                        console.log('D')
                         reject("Couldnt Send Message\n" + e);
+
                     });
                 } else if (cont.toLowerCase().includes("cancel")) {
                     msg.channel.send(emb.setTitle("Canceld").setColor(colors.error)).then(() => {
@@ -239,7 +242,7 @@ const getAnswer = async (msg, question, time, user) => {
  * @param {number} xp
  * @returns {number}
  */
-const calcLevel = function (xp) {
+const calcLevel = function(xp) {
     return Math.floor(((1 * xp) ^ (3 / 5)) / 750);
 };
 

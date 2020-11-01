@@ -349,10 +349,10 @@ client.on("ready", async() => {
     const activities_list = [
         "Monster suchen",
         "Shop aufräumen",
+        "Dungeons ordnen . . .",
         `${config.prefix}help`
     ];
 
-    //Channel Um Fehler zu loggen
     error_channel = client.guilds.cache
         .find(g => g.id == 553942677117337600)
         .channels.cache.find(c => c.id == error_channel && c.type == "text");
@@ -376,8 +376,8 @@ client.on("guildCreate", async guild => {
                 }
             }
         })
-        emb.setTitle("Hi I´m Chia").setColor(colors.red)
-        defaultChannel.send(emb.setDescription("**Danke das du mich auf deinen Server geholt hast** \n Type -help to see my cmds \n\ni am still very new and will therefore make a few mistakes, please forgive me"))
+        emb.setTitle("Hii mein Name lautet Chia").setColor(colors.red)
+        defaultChannel.send(emb.setDescription("**Danke das du mich auf deinen Server geholt hast** \n Nutze -help um meine Befehle zu sehen \n\nIch bin noch in der Testphase wodurch Fehler entstehen könnten qwq"))
     })
     //==================================================================================================================================================
     //Guild Removed
@@ -419,11 +419,14 @@ client.on("message", async message => {
 
         }
     }, 1000); //Waiting for Database sync
-
     //==================================================================================================================================================
+    let test = message.mentions.members.first()
+    if (test && test.id == client.user.id && !message.content.startsWith(prefix)) {
+        message.channel.send("Mein Prefix ist " + "\`" + prefix + "\`")
+    }
+
     if (!message.content.startsWith(prefix)) return;
     const args = message.content.slice(prefix.length).split(/ +/);
-    ////leeeeeel neues prefix yk
 
     const commandName = args.shift().toLowerCase();
 

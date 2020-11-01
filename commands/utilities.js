@@ -171,11 +171,9 @@ const getAnswer = async(msg, question, time, user) => {
 
                 if (cont === "" || !cont) {
                     msg.channel.send(emb.setTitle("Empty Message").setColor(colors.error)).then(() => {
-                        console.log('C')
                         reject("Empty Message Send");
 
                     }).catch((e) => {
-                        console.log('D')
                         reject("Couldnt Send Message\n" + e);
 
                     });

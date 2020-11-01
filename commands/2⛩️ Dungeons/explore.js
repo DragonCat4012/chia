@@ -1,5 +1,5 @@
 const { Message } = require('discord.js');
-const { rawEmb, emotes, getAnswer, calcLevel, colors } = require('../utilities');
+const { rawEmb, emotes, calcLevel, colors } = require('../utilities');
 
 module.exports = {
     name: 'explore',
@@ -15,7 +15,6 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg, args) {
-        //  return msg.channel.send("Dieser cmd ist egrade in arbeit qwq")
         let emb = rawEmb(msg)
         user = msg.author;
         var room = await msg.client.database.dungeon_cache.getRoom()
@@ -24,14 +23,14 @@ module.exports = {
 
         let CacheSword = (await msg.client.database.item_cache.getConfig(A.WEAPON)).ATK;
         if (!CacheSword) CacheSword = 0;
-        let CacheHP = A.HP + parseInt(calcLevel(A.XP));
+        let CacheHP = parseInt(A.HP) + parseInt(calcLevel(A.XP));
         let CacheShield = (await msg.client.database.item_cache.getConfig(A.SHIELD)).DEV;
         if (!CacheShield) CacheShield = 0;
 
         let player = {
-            ATK: CacheSword,
-            DEF: CacheShield,
-            HP: CacheHP
+            ATK: parseInt(CacheSword),
+            DEF: parseInt(CacheShield),
+            HP: parseInt(CacheHP)
         }
 
         let line = (room.LINE).split(/ +/);

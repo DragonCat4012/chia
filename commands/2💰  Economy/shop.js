@@ -16,42 +16,44 @@ module.exports = {
      */
     async execute(msg) {
         var shop = await msg.client.database.item_cache.getShop();
-        let emb = rawEmb(msg).setTitle("Shop").setFooter(shop.lenth + " Items insgesamt")
+        let emb = rawEmb(msg).setTitle("Shop").setFooter(shop.length + " Items insgesamt")
 
         text = ""
         for (let IID of shop) {
             var item = await msg.client.database.item_cache.getConfig(IID.IID);
             if (!item) console.log("Failure by detecting Item")
-            if (item.RARE == "1") {
-                if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
-                if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
-                if (item.TYPE == "MATERIAL") t = "[🍃]"
-                text = (text + `**${item.VALUE}¥** ⭐ ${item.NAME} ${t}\n`)
-            } else if (item.RARE == "2") {
-                if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
-                if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
-                if (item.TYPE == "MATERIAL") t = "[🍃]"
-                text = (text + `**${item.VALUE}¥** ⭐⭐ ${item.NAME} ${t}\n`)
-            } else if (item.RARE == "3") {
-                if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
-                if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
-                if (item.TYPE == "MATERIAL") t = "[🍃]"
-                text = (text + `**${item.VALUE}¥** ⭐⭐⭐ ${item.NAME} ${t}\n`)
-            } else if (item.RARE == "4") {
-                if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
-                if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
-                if (item.TYPE == "MATERIAL") t = "[🍃]"
-                text = (text + `**${item.VALUE}¥** 🌟 ${item.NAME} ${t}\n`)
-            } else if (item.RARE == "5") {
-                if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
-                if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
-                if (item.TYPE == "MATERIAL") t = "[🍃]"
-                text = (text + `**${item.VALUE}¥** 🌟🌟 ${item.NAME} ${t}\n`)
-            } else {
-                if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
-                if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
-                if (item.TYPE == "MATERIAL") t = "[🍃]"
-                text = (text + `**${item.VALUE}¥** ${item.NAME} ${t}\n`)
+            if (item.BUYABLE) {
+                if (item.RARE == "1") {
+                    if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
+                    if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
+                    if (item.TYPE == "MATERIAL") t = "[🍃]"
+                    text = (text + `**${item.VALUE}¥** ⭐ ${item.NAME} ${t}\n`)
+                } else if (item.RARE == "2") {
+                    if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
+                    if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
+                    if (item.TYPE == "MATERIAL") t = "[🍃]"
+                    text = (text + `**${item.VALUE}¥** ⭐⭐ ${item.NAME} ${t}\n`)
+                } else if (item.RARE == "3") {
+                    if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
+                    if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
+                    if (item.TYPE == "MATERIAL") t = "[🍃]"
+                    text = (text + `**${item.VALUE}¥** ⭐⭐⭐ ${item.NAME} ${t}\n`)
+                } else if (item.RARE == "4") {
+                    if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
+                    if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
+                    if (item.TYPE == "MATERIAL") t = "[🍃]"
+                    text = (text + `**${item.VALUE}¥** 🌟 ${item.NAME} ${t}\n`)
+                } else if (item.RARE == "5") {
+                    if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
+                    if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
+                    if (item.TYPE == "MATERIAL") t = "[🍃]"
+                    text = (text + `**${item.VALUE}¥** 🌟🌟 ${item.NAME} ${t}\n`)
+                } else {
+                    if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
+                    if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
+                    if (item.TYPE == "MATERIAL") t = "[🍃]"
+                    text = (text + `**${item.VALUE}¥** ${item.NAME} ${t}\n`)
+                }
             }
         }
         emb.setDescription(text)

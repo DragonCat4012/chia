@@ -108,7 +108,6 @@ module.exports = {
 
                         let size = arr.map(v => `[${v.ATK}/${v.DEV}] ${v.NAME} [${v.Rare}]`).join(" \n")
                         page = Math.round(size.length / 2000)
-                        console.log(page)
 
                         if (page > 1) {
                             for (let num = page; num > 1; num -= 1) {
@@ -145,7 +144,6 @@ module.exports = {
 
                         let size = arr.map(v => `${v.VALUE}¥ ${v.NAME}`).join(" \n")
                         page = Math.round(size.length / 2000)
-                        console.log(page)
 
                         if (page > 1) {
                             for (let num = page; num > 1; num -= 1) {

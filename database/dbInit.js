@@ -108,6 +108,10 @@ const Items = itemsql.define('items', {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
+    BUYABLE: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    }
 
 });
 

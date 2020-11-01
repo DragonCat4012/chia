@@ -343,8 +343,7 @@ client.on("ready", async() => {
     setInterval(() => {
         const index = Math.floor(Math.random() * (activities_list.length - 1) + 1);
         client.user.setActivity(activities_list[index]);
-    }, 30000);
-
+    }, 60000);
 
     const activities_list = [
         "Monster suchen",

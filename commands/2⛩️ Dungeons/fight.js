@@ -55,6 +55,7 @@ module.exports = {
             }
         }).catch(() => {
             emb.setDescription('**Zeit abgelaufen, du hast zu lang gebraucht** ' + emotes.wus).setColor(colors.error)
+            skip = true;
             return msg.channel.send(emb)
         })
 

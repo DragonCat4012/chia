@@ -17,9 +17,9 @@ module.exports = {
     async execute(msg, args) {
         let emb = rawEmb(msg)
         user = msg.author;
-        var room = await msg.client.database.dungeon_cache.getRoom()
-        emb.setFooter("Dungeon: " + room.NAME)
         var A = await msg.client.database.player_cache.getConfig(user.id);
+        var room = await msg.client.database.dungeon_cache.findRoom(A.DUNGEON)
+        emb.setFooter("Dungeon: " + room.NAME)
 
         let CacheSword = (await msg.client.database.item_cache.getConfig(A.WEAPON)).ATK;
         if (!CacheSword) CacheSword = 0;
@@ -39,15 +39,19 @@ module.exports = {
         emb.setTitle(L)
         let i = true
         let text = ""
-
-        const m = await msg.channel.send(emb)
+        const m = await msg.channel.send(emb).catch()
+        setTimeout(() => {}, 2000)
         while (i) {
             let obj = line.shift()
 
             if (obj == "E") {
                 i = false
                 text += "\n**Dungeon beendet**"
-                return msg.channel.send(emb.setDescription(text).setColor(colors.success))
+                let newroom = await msg.client.database.dungeon_cache.findRoom(parseInt(A.DUNGEON) + 1)
+                if (newroom) A.DUNGEON = parseInt(A.DUNGEON) + 1
+                await A.save()
+
+                return msg.channel.send(emb.setDescription(text).setColor(colors.success)).catch()
             } else if (obj == "H") {
                 player.HP += 20
                 text += "---- Heal **+20** ---- \n"
@@ -61,7 +65,7 @@ module.exports = {
                 if (!R.value) {
                     i = false
                     emb.setAuthor(R.runden == 1 ? `${R.runden} Runde` : `${R.runden} Runden`)
-                    return msg.channel.send(emb.setColor(colors.error).setDescription("**Das Monster war wohl zu stark für dich qwq**"))
+                    return msg.channel.send(emb.setColor(colors.error).setDescription("**Das Monster war wohl zu stark für dich qwq**")).catch()
                 }
                 progress.shift()
                 progress.push("▪️")
@@ -69,7 +73,7 @@ module.exports = {
                 emb.setTitle(progress.join(" "))
                     .setDescription(text)
                     .setColor(colors.success)
-                m.edit(emb)
+                m.edit(emb).catch()
             }
         }
     }
@@ -116,7 +120,7 @@ async function fight(msg, player, id) {
         return r
     }
 
-    // if (Math.sign(Damage) == -1) Damage = 1
+    if (Math.sign(Damage) == -1) Damage = Damage = 1
 
     while (player.HP > 0 && enemy.HP > 0) {
         enemy.HP -= Damage;

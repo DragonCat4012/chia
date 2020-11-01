@@ -78,6 +78,7 @@ module.exports = {
             .addField("**Level: **", calcLevel(player.XP))
             .addField("**Kampfstärke gesamt:**", `[${AK}/${DK}]`)
             .addField("**Rank:**", `${player.RANK} [${rank}]`)
+            .addField('**Dungeon**', player.DUNGEON)
 
         msg.channel.send(emb)
     }

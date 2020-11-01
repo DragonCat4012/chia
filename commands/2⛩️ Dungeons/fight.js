@@ -1,5 +1,5 @@
 const { Message } = require('discord.js');
-const { rawEmb, emotes, getAnswer, calcLevel, colors } = require('../utilities');
+const { rawEmb, emotes, calcLevel, colors } = require('../utilities');
 
 module.exports = {
     name: 'fight',
@@ -33,12 +33,27 @@ module.exports = {
 
         var enemy = await msg.client.database.player_cache.getConfig(enemy_user.id);
         var player = await msg.client.database.player_cache.getConfig(user.id);
+        let quest = "**Möchtest du Kämpfen?** " + enemy_user.user.tag
 
-        let quest = "Möchtest du Kämpfen? " + enemy_user.user.tag
-        let answer = await getAnswer(msg, quest + "?", 30, enemy_user)
+        const filter = m => m.author.id === enemy_user.id;
         answercahce = ["yes", "ja", "oui", "Yes", "Ja"]
-        if (answercahce.includes((answer))) console.log("Answered")
-        if (!answercahce.includes((answer))) return msg.channel.send(emb.setDescription("Kampf abgebrochen"))
+        msg.channel.send(emb.setDescription(quest))
+
+        let test = await msg.channel.awaitMessages(filter, {
+            max: 1,
+            time: 20000,
+            errors: ['time']
+        }).then(async(collected) => {
+            let answer = collected.first().content.toLowerCase()
+            if (!answercahce.includes((answer)) || answer == 'cancel') {
+                emb.setDescription('**Kampf abgebrochen qwq** ' + emotes.threatening).setColor(colors.error)
+                return msg.channel.send(emb)
+            }
+            console.log('B')
+        }).catch(() => {
+            emb.setDescription('**Zeit abgelaufen, du hast zu lang gebraucht** ' + emotes.wus).setColor(colors.error)
+            return msg.channel.send(emb)
+        })
 
         ////////////////////////// -- Vorbereitung --/////////////////////////////
         let P_Lifes = player.HP + parseInt(calcLevel(player.XP));
@@ -61,10 +76,6 @@ module.exports = {
                 DEF: shield
             }
             ///////////////////////////////////////////////////////////////////////
-
-        console.log(fighter)
-        console.log(enemy)
-
         var Damage = fighter.DEF - enemy.ATK;
         var EnemyDamage = enemy.DEF - fighter.ATK;
 
@@ -77,7 +88,6 @@ module.exports = {
             r = r + 1;
         }
         emb.setFooter(r + (r > 1 ? " Runden" : " Runde"))
-        console.log('D')
 
         if (E_Lifes <= 0) {
             if (ranked) {
@@ -86,9 +96,9 @@ module.exports = {
                 if (enemy.RANK <= 0) enemy.RANK = 0;
 
                 await player.save()
-                emb.setDescription("Du gewinnst 3 Punkte")
+                emb.setDescription("Du gewinnst 3 Punkte " + emotes.cool)
             }
-            return msg.channel.send(emb.setTitle("Sieg für " + user.username).setColor(colors.success))
+            return msg.channel.send(emb.setTitle("Sieg für " + user.username + emotes.cool).setColor(colors.success))
         }
 
         if (P_Lifes <= 0) {
@@ -99,7 +109,7 @@ module.exports = {
                 await enemy.save()
                 emb.setDescription("Du verlierst 3 Punkte")
             }
-            return msg.channel.send(emb.setTitle("Sieg für " + enemy_user.user.username).setColor(colors.error))
+            return msg.channel.send(emb.setTitle("Sieg für " + enemy_user.user.username + emotes.oha).setColor(colors.error))
         }
     }
 };

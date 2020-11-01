@@ -377,7 +377,7 @@ client.on("guildCreate", async guild => {
             }
         })
         emb.setTitle("Hi I´m Chia").setColor(colors.red)
-        defaultChannel.send(emb.setDescription("**Thanks for adding me to your server UwU** \n Type -help to see my cmds \n\ni am still very new and will therefore make a few mistakes, please forgive me"))
+        defaultChannel.send(emb.setDescription("**Danke das du mich auf deinen Server geholt hast** \n Type -help to see my cmds \n\ni am still very new and will therefore make a few mistakes, please forgive me"))
     })
     //==================================================================================================================================================
     //Guild Removed
@@ -419,8 +419,6 @@ client.on("message", async message => {
 
         }
     }, 1000); //Waiting for Database sync
-
-
 
     //==================================================================================================================================================
     if (!message.content.startsWith(prefix)) return;
@@ -497,8 +495,6 @@ client.on("message", async message => {
 
     timestamps.set(message.author.id, now);
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-
-
 
 
     try {

@@ -1,12 +1,11 @@
 const { Message } = require('discord.js');
-const { colors, rawEmb } = require('../utilities');
+const { colors, rawEmb, emotes } = require('../utilities');
 
 module.exports = {
     name: 'up',
     syntax: 'up',
     args: false,
     description: 'Bin ich online.....?',
-    perm: 'DEVELOPER',
     commands: ['up'],
 
     /**
@@ -18,7 +17,7 @@ module.exports = {
     async execute(msg, args) {
         let emb = rawEmb(msg)
         emb.setColor(colors.nothing)
-        emb.setTitle("Online")
+        emb.setTitle("Ja ich bin Online " + emotes.yeah)
 
         msg.channel.send(emb);
     }

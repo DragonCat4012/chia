@@ -5,7 +5,7 @@ module.exports = {
     name: 'inventory',
     syntax: 'inventory [@user] [full/rare]',
     args: false,
-    description: 'Zeigt dir das Inventar eines Spielers. Nutze "full" um dein vollständiges Inventar angezeigt zu bekommen. Nach Seltenheit nutze "rare"',
+    description: 'Zeigt dir das Inventar eines Spielers, nutze "full" oder "rare" für genauere Auskunft darüber.',
     commands: ['inventory', 'inv'],
 
     /**

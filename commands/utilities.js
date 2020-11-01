@@ -1,9 +1,6 @@
 const { Message, MessageEmbed } = require("discord.js");
 const fs = require("fs")
 
-const fetch = require("node-fetch");
-const api_tenor = 'https://api.tenor.com/v1/search?q=' + 'SEARCH' + '&key=' + 'LIVDSRZULELA' + '&limit=20';
-
 const colors = {
     error: 0xF91A3C,
     blue: 0x93a7cf,
@@ -22,8 +19,12 @@ const emotes = {
     desktop: "<:desktop:741225709351206993>",
     coin: "<:coin:743414375255113739>",
     shield: "<:shield:753309572055171173>",
-    location: "<:location:771483527169966090>"
-
+    location: "<:location:771483527169966090>",
+    wus: '<:wus:761274129583964201>',
+    threatening: '<:threatening:750711786256203777>',
+    cool: '<:gilgacool:754654249773957134>',
+    oha: '<:0000:761274355841499207>',
+    yeah: '<:yeah:768747358937808926>'
 }
 
 const money = {
@@ -31,13 +32,6 @@ const money = {
     weekly: 1200,
     monthly: 3600,
 }
-
-
-/**
- * @callback MessageAction
- * @param {Message} m the Message from the Confirmation Embed
- * @returns {void}
- */
 
 /**
  * A simple Framework for a Action Confirm
@@ -121,36 +115,6 @@ const rawEmb = (msg) => {
         .setColor(colors.blue);
 }
 
-/**
- * @param {Message} msg 
- * @returns {MessageEmbed} a clean Embed
- */
-const emptyEmb = (msg) => {
-    return new MessageEmbed()
-        .setColor(colors.nothing);
-
-}
-
-/**
- * @param {string} search Wonach du suchen willst
- * @returns {string|null}
- */
-async function getTenor(search) {
-    const body = await (fetch(api_tenor.replace('SEARCH', search.replace(/ +/, '+'))).then(res => res.json()));
-    if (!body.results) return null;
-    if (!body.results[0]) return null;
-
-    let { results } = body;
-
-    var rnd_gif_obj = results[Math.floor(Math.random() * results.length)];
-
-    if (!rnd_gif_obj.media) return null;
-    if (!rnd_gif_obj.media[0]) return null;
-
-    let url = rnd_gif_obj.media[0].gif.url;
-
-    return url;
-}
 
 function getStats() {
     var project_stats = {
@@ -248,4 +212,4 @@ const calcLevel = function(xp) {
 };
 
 
-module.exports = { colors, confirmAction, newEmb, rawEmb, getTenor, emotes, getStats, calcLevel, getAnswer, money };
+module.exports = { colors, confirmAction, newEmb, rawEmb, emotes, getStats, calcLevel, getAnswer, money };

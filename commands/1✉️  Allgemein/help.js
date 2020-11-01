@@ -44,7 +44,7 @@ module.exports = {
                 a += 1;
                 let prop = (mod.toString()).toLowerCase()
 
-                emb.addField(`**${mod}** [${commands.length}]`, commands.map(v => `**-${v.name}** [ \`${v.description}\` ]`).join('\n') + "\n\u200b");
+                emb.addField(`**${mod}** [${commands.length}]`, commands.map(v => `**-${v.syntax}** [\`${v.description}\`]`).join('\n') + "\n\u200b");
             }
             msg.channel.send(emb.setFooter(`Nutze +help <command> für mehr || ${a} Module mit ${b} Commands`));
         }

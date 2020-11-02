@@ -20,16 +20,9 @@ module.exports = {
         let emb = rawEmb(msg)
             ////////////////////////// -- ITEM BREAK --/////////////////////////////
         var inventory = await msg.client.database.order_cache.getInventory(user.id)
-            ///////////////////////////////////////////////////////////////////////
-
-        var enemy = await msg.client.database.monster_cache.getEnemy()
-
-        let P_Lifes = player.HP + parseInt(calcLevel(player.XP));
-        console.log(P_Lifes)
-        let E_Lifes = enemy.HP,
+        var enemy = await msg.client.database.monster_cache.getEnemy(),
             rare = ""
-
-        ////////////////////////// -- Vorbereitung --/////////////////////////////
+            ////////////////////////// -- Vorbereitung --/////////////////////////////
         if (enemy.RARE == 1) rare = "⭐"
         if (enemy.RARE == 2) rare = "⭐⭐"
         if (enemy.RARE == 3) rare = "⭐⭐⭐"
@@ -47,23 +40,34 @@ module.exports = {
 
         let r = 0;
 
-        if (enemy.DEV > player.WEAPON) emb.setFooter("Die Defensive des Gegners war stärker du")
-        var Damage = player.WEAPON - enemy.DEV;
-        var PDamage = enemy.ATK - shield;
-        if (Math.sign(Damage) == -1) Damage = 1
+        var monster = {
+            ATK: parseInt(enemy.ATK),
+            DEF: parseInt(enemy.DEV),
+            HP: parseInt(enemy.HP)
+        }
+        var fighter = {
+            HP: parseInt(player.HP) + parseInt(calcLevel(player.XP)),
+            ATK: parseInt(weapon),
+            DEF: parseInt(shield),
+        }
 
-        while (P_Lifes > 0 && E_Lifes > 0) {
-            E_Lifes -= Damage;
-            P_Lifes -= PDamage;
+        if (monster.DEV > fighter.ATK) emb.setFooter("Die Defensive des Gegners war stärker du")
+        var Damage = fighter.ATK - monster.DEV;
+        var PDamage = monster.ATK - fighter.ATK;
+        if (Math.sign(Damage) == -1) Damage = Damage * -1
+        if (Math.sign(PDamage) == -1) PDamage = PDamage * -1
+
+        while (fighter.HP > 0 && monster.HP > 0) {
+            monster.HP -= Damage;
+            fighter.HP -= PDamage;
             r = r + 1;
         }
         emb.setFooter(r + (r > 1 ? " Runden" : "Runde"))
 
-
         let Dropped = ""
         let value = percent()
 
-        if (E_Lifes <= 0) {
+        if (monster.HP <= 0) {
             let loot = enemy.DROPRATE;
             if (enemy.DROPRATE < 2) loot = 1;
             let arr = [];
@@ -93,7 +97,7 @@ module.exports = {
             return msg.channel.send(emb.setTitle("Sieg").setDescription(arr.join("\n") + `${Dropped}`).setColor(colors.success))
         }
 
-        if (P_Lifes <= 0) {
+        if (fighter.HP <= 0) {
             if (player.COINS > 10) player.COINS -= 10;
             if (value == "drop") {
                 var drop = inventory[Math.floor(Math.random() * inventory.length)];

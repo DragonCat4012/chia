@@ -25,6 +25,7 @@ module.exports = {
             let ti;
             if (player.DUNGEON == D.DID) { ti = emotes.location + "**" + D.NAME + "**" } else {
                 ti = "**" + D.NAME + "**"
+                ti = `**${D.NAME}** [${D.DID}]`
             }
             let obj = {
                 title: ti,

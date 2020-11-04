@@ -17,7 +17,7 @@ module.exports = {
     async execute(msg) {
         let link = "https://discord.com/oauth2/authorize?client_id=" + msg.client.user.id + "&scope=bot&permissions=289856"
         neko = "https://discord.gg/2AGVgNM"
-        invite = "https://discord.gg/KJjZnxZ";
+        invite = "https://discord.gg/Emk2udJ";
         let emb = rawEmb(msg)
             .setTitle("Invite Links")
             .addField("**Bot-Invite**", `[Klick](${link})`)

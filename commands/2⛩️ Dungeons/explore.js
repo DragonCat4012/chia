@@ -19,7 +19,7 @@ module.exports = {
         user = msg.author;
         var A = await msg.client.database.player_cache.getConfig(user.id);
         var room = await msg.client.database.dungeon_cache.findRoom(A.DUNGEON)
-        emb.setFooter("Dungeon: " + room.NAME)
+        emb.setFooter(`Dungeon: ${room.NAME} || ID: ${room.DID}`)
 
         let CacheSword = (await msg.client.database.item_cache.getConfig(A.WEAPON)).ATK;
         if (!CacheSword) CacheSword = 0;
@@ -69,7 +69,7 @@ module.exports = {
                 }
                 progress.shift()
                 progress.push("▪️")
-                text += line.length + `. **Monster:** ${monster.ATK} - ${monster.DEV} - ${monster.HP} \n`
+                text += line.length + `. **Monster:** [${monster.ATK}/${monster.DEV}] :heart_exclamation:${monster.HP}\n`
                 emb.setTitle(progress.join(" "))
                     .setDescription(text)
                     .setColor(colors.success)

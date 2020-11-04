@@ -6,7 +6,7 @@ module.exports = {
     syntax: 'shop',
     args: false,
     description: 'Zeigt dir alle verfügbaren Items',
-    commands: ['items', 'shop'],
+    commands: ['shop'],
 
     /**
      *@document

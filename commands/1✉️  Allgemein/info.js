@@ -18,9 +18,9 @@ module.exports = {
 
         let emb = rawEmb(msg)
             .setTitle("Meine Infos")
-            .addField("**Sever**", (msg.client.guilds.cache.size).toLocaleString(), true)
-            .addField("**User**", (msg.client.users.cache.size).toLocaleString(), true)
-            .addField("**Channel**", (msg.client.channels.cache.size).toLocaleString(), true)
+            .addField("**Sever**", (msg.client.guilds.cache.size).toLocaleString())
+            .addField("**User**", (msg.client.users.cache.size).toLocaleString())
+            .addField("**Channel**", (msg.client.channels.cache.size).toLocaleString())
         msg.channel.send(emb);
     }
 };

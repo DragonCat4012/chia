@@ -20,27 +20,26 @@ module.exports = {
 
         if (args[0] == "coins") {
             users = users
-                .filter((v, i, arr) => i < 10)
                 .sort((a, b) => (parseInt(b.COINS) + parseInt(b.COINS)) - (parseInt(a.COINS) + parseInt(a.COINS)))
+                .filter((v, i, arr) => i < 10)
                 .map((user, index) =>
                     `\`${index + 1}.\` ${msg.client.users.cache.get(user.UID)} **[ ${user.COINS.toLocaleString()} ]¥**`
                 );
         } else if (args[0] == "rank") {
             users = users
-                .filter((v, i, arr) => i < 10)
                 .sort((a, b) => (parseInt(b.RANK) + parseInt(b.RANK)) - (parseInt(a.RANK) + parseInt(a.RANK)))
+                .filter((v, i, arr) => i < 10)
                 .map((user, index) =>
                     `\`${index + 1}.\` ${msg.client.users.cache.get(user.UID)} **[ ${user.RANK.toLocaleString()} ]**`
                 );
         } else {
             users = users
-                .filter((v, i, arr) => i < 10)
                 .sort((a, b) => (parseInt(b.XP) + parseInt(b.XP)) - (parseInt(a.XP) + parseInt(a.XP)))
+                .filter((v, i, arr) => i < 10)
                 .map((user, index) =>
                     `\`${index + 1}.\` ${msg.client.users.cache.get(user.UID)} **[ ${calcLevel(user.XP).toLocaleString()} ]**`
                 );
         }
-
         return msg.channel.send(
             emb.setDescription(users.join("\n"))
         );

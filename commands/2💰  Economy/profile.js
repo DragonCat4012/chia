@@ -26,11 +26,10 @@ module.exports = {
             return msg.channel.send(emb.setColor(colors.error))
         }
 
-
         var player = await msg.client.database.player_cache.getConfig(user.id);
         var AK = 0;
         var DK = 0;
-        emb.setTitle("Profil")
+        emb.setTitle(`Profil von ${user.username}`)
 
         if (player.WEAPON == "0") { a = emotes.false } else {
             let id = player.WEAPON
@@ -72,14 +71,16 @@ module.exports = {
         let A = cache.find(user => user.UID == query)
         let rank = cache.indexOf(A) + 1
 
-        emb.addField("⚔️", a)
-            .addField(emotes.shield, b)
-            .addField("**Münzen: **", (player.COINS).toLocaleString() + "¥")
-            .addField("**Level: **", calcLevel(player.XP))
-            .addField("**Kampfstärke gesamt:**", `[${AK}/${DK}]`)
-            .addField("**Rank:**", `${player.RANK} [${rank}]`)
-            .addField('**Dungeon**', player.DUNGEON)
+        let text = ''
+        text += `⚔️ \`${a}\` \n ${emotes.shield} \`${b}\`\n`
+        text += `**Münzen:** \`${(player.COINS).toLocaleString()} ¥\` \n`
+        text += `**Level:** \`${calcLevel(player.XP)}\` \n`
+        text += `**Rank:** \`${player.RANK} [${rank}]\` \n`
+        text += `**Ausdauer:** \`${player.STAMINA} /40\` \n`
+        text += `**Dungeon** \`${player.DUNGEON}\``
 
+        emb.setFooter("Kampfstärke gesamt: " + `[${AK}/${DK}]`)
+            .setDescription(text)
         msg.channel.send(emb)
     }
 };

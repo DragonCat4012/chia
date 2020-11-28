@@ -7,6 +7,7 @@ module.exports = {
     syntax: 'craft <item>',
     args: true,
     description: 'Lässt dich Items verkaufen',
+    cooldown: 5,
     commands: ['craft'],
 
     /**

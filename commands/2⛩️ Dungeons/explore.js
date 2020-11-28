@@ -6,6 +6,7 @@ module.exports = {
     syntax: 'explore',
     args: false,
     description: 'Kämpfe in Dungeons',
+    cooldwon: 20,
     commands: ['explore', 'e'],
 
     /**
@@ -20,18 +21,39 @@ module.exports = {
         var A = await msg.client.database.player_cache.getConfig(user.id);
         var room = await msg.client.database.dungeon_cache.findRoom(A.DUNGEON)
         emb.setFooter(`Dungeon: ${room.NAME} || ID: ${room.DID}`)
+        let CacheSword = 0;
+        let CacheShield = 0;
 
-        let CacheSword = (await msg.client.database.item_cache.getConfig(A.WEAPON)).ATK;
-        if (!CacheSword) CacheSword = 0;
+
+        if (A.STAMINA <= 5) {
+            emb.setDescription('**Du benötigst 5 Ausdauer zum kämpfen. Diese werden jeden Tag zurück gesetzt, bitte warte bis deine Ausdauer wieder aufgefüllt ist**')
+            return msg.channel.send(emb.setColor(colors.error))
+        }
+
+        if (parseInt(A.WEAPON) !== 0) {
+            let Item = await msg.client.database.item_cache.getConfig(A.WEAPON)
+            if (Item) CacheSword = Item.ATK
+        }
+        if (parseInt(A.SHIELD) !== 0) {
+            Item = await msg.client.database.item_cache.getConfig(A.SHIELD)
+            if (Item) CacheShield = Item.DEV
+        }
         let CacheHP = parseInt(A.HP) + parseInt(calcLevel(A.XP));
-        let CacheShield = (await msg.client.database.item_cache.getConfig(A.SHIELD)).DEV;
-        if (!CacheShield) CacheShield = 0;
 
         let player = {
             ATK: parseInt(CacheSword),
             DEF: parseInt(CacheShield),
             HP: parseInt(CacheHP)
         }
+
+        if (player.ATK < 7 || player.DEF < 7) {
+            emb.setDescription('**Trainiere lieber noch ein bisschen, die Monster hier sind sonst zu stark für dich**')
+                .setFooter('Nutze dafür z.B. -hunt und jage schwächere monster')
+            return msg.channel.send(emb.setColor(colors.error))
+        }
+
+        player.STAMINA -= 5;
+        await player.save()
 
         let line = (room.LINE).split(/ +/);
         let L = (room.LINE).replace(/H/i, "♻️").replace(/E/i, "🎁").replace(/[0-9]/g, "🔸")
@@ -40,7 +62,8 @@ module.exports = {
         let i = true
         let text = ""
         const m = await msg.channel.send(emb).catch()
-        setTimeout(() => {}, 2000)
+        setTimeout(() => {}, 4000)
+
         while (i) {
             let obj = line.shift()
 
@@ -50,7 +73,6 @@ module.exports = {
                 let newroom = await msg.client.database.dungeon_cache.findRoom(parseInt(A.DUNGEON) + 1)
                 if (newroom) A.DUNGEON = parseInt(A.DUNGEON) + 1
                 await A.save()
-
                 return msg.channel.send(emb.setDescription(text).setColor(colors.success)).catch()
             } else if (obj == "H") {
                 player.HP += 20

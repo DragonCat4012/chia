@@ -6,6 +6,7 @@ module.exports = {
     syntax: 'inventory [@user] [full/rare]',
     args: false,
     description: 'Zeigt dir das Inventar eines Spielers, nutze "full" oder "rare" für genauere Auskunft darüber.',
+    cooldown: 10,
     commands: ['inventory', 'inv'],
 
     /**

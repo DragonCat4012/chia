@@ -9,7 +9,7 @@ Sie basiert auf Discord.JS, Sqlite3 und Sequelize
 * info [Zeigt dir Inos über mich ^^]
 * invite [Gibt den Linki mit dem du mich zu deinem server hinzufügen kannst UwU]
 * up [Bin ich online.....?]
-
+* update [Zeigt dir meien neusten Änderungen]
 
 ### :shinto_shrine: Dungeons [4]
 * dungeon <id> [Zeigt dir informationen über einen Dungeon]

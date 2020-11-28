@@ -6,6 +6,7 @@ module.exports = {
     syntax: 'fight <@user>',
     args: true,
     description: 'Kämpf gegen andere Spieler. Nutze "ranked" um das Ergebnis zu werten',
+    cooldown: 30,
     commands: ['fight'],
 
     /**

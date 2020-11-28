@@ -82,6 +82,26 @@ Reflect.defineProperty(player_cache, "getConfig", {
         return spieler;
     }
 });
+
+Reflect.defineProperty(player_cache, "refillStamina", {
+    /**
+     * @param {number} id User ID
+     * @returns {Model} new User
+     */
+    value: async function() {
+        let i = 0;
+        let cache = await Spieler.findAll({})
+
+        cache.forEach(p => {
+            if (p.STAMINA !== 40) {
+                i++
+                p.STAMINA = 40
+                p.save()
+            }
+        })
+        return i;
+    }
+});
 //==================================================================================================================================================
 Reflect.defineProperty(order_cache, "getOrder", {
     /**
@@ -359,6 +379,7 @@ client.on("ready", async() => {
         .channels.cache.find(c => c.id == report_channel && c.type == "text");
 });
 
+
 //==================================================================================================================================================
 //Guild Added
 //==================================================================================================================================================
@@ -388,9 +409,17 @@ client.on("guildDelete", async guild => {
     //==================================================================================================================================================
 client.on("message", async message => {
     ///////////////////////////////////////////////////
-    if (message.content === "!join") {
+    if (message.content === "!join" && config.owner.includes(message.author.id)) {
         //  client.emit("guildCreate")
         client.emit("guildCreate", message.guild);
+    }
+    if (message.content === '!refill' && config.owner.includes(message.author.id)) {
+        let A = await client.database.player_cache.refillStamina()
+        message.channel.send(A + ' wurden ernuert')
+        setInterval(() => {
+
+            client.database.refillStamina()
+        }, 60000 * 60 * 24);
     }
     /////////////////
     var emb = newEmb(message)
@@ -398,6 +427,11 @@ client.on("message", async message => {
 
     let prefix = config.prefix;
     if (message.author.bot) return;
+
+    if (message.channel.type == 'dm') {
+        emb.setDescription("Ich führe keine Befehle in DMs aus qwq");
+        return message.channel.send(emb);
+    }
 
     //Levelsystem
     //==================================================================================================================================================
@@ -435,11 +469,6 @@ client.on("message", async message => {
 
     if (command.commands.includes("reload") && owner.includes(message.author.id)) {
         return reloadModules(args[0].toLowerCase(), message);
-    }
-
-    if (message.channel.type !== "text") {
-        emb.setDescription("Ich führe keine Befehle in DMs aus qwq");
-        return message.channel.send(emb);
     }
 
     var emb = rawEmb(message);

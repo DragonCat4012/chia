@@ -6,6 +6,7 @@ module.exports = {
     syntax: 'buy <item>',
     args: true,
     description: 'Lässt dich Items kaufen',
+    cooldown: 10,
     commands: ['buy'],
 
     /**

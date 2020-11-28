@@ -35,6 +35,10 @@ const Spieler = spielersql.define('spieler', {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
+    STAMINA: {
+        type: DataTypes.INTEGER,
+        defaultValue: 40
+    },
     XP: {
         type: DataTypes.INTEGER,
         defaultValue: 0

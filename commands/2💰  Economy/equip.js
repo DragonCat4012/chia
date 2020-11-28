@@ -6,6 +6,7 @@ module.exports = {
     syntax: 'equip <item>',
     args: true,
     description: 'Lässt dich Items ausrüsten',
+    cooldown: 5,
     commands: ['equip'],
 
     /**

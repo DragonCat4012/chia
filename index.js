@@ -16,6 +16,13 @@ var report_channel;
 error_channel = 714557180757409942;
 report_channel = 753474865104683110;
 
+
+const TopGG = require("dblapi.js");
+const NeuClient = client;
+NeuClient.token = '/'
+const ChiaTopGG = new TopGG(config.ChiaTOPGGToken, NeuClient)
+
+
 //Error Handling
 //==================================================================================================================================================
 client.on("shardError", error => {

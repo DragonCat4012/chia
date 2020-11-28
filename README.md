@@ -30,3 +30,14 @@ Sie basiert auf Discord.JS, Sqlite3 und Sequelize
 * sell <item> [Lässt dich Items verkaufen]
 * shop [Zeigt dir alle verfügbaren Items]
 * transfer <@user> <amount> [Transferiert deine Coins OvO]
+
+## Installation
+npm i
+
+## Dependencies
+* "discord.js": "^12.2.0"
+* "sequelize": "5.21.13"    
+* "sqlite3": "^5.0.0"
+
+## Start
+```node index.js```

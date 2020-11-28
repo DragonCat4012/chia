@@ -16,13 +16,13 @@ module.exports = {
      */
     async execute(msg) {
         let link = "https://discord.com/oauth2/authorize?client_id=" + msg.client.user.id + "&scope=bot&permissions=289856"
-        neko = "https://discord.gg/2AGVgNM"
+        vote = "https://top.gg/bot/744883074508259329/vote"
         invite = "https://discord.gg/Emk2udJ";
         let emb = rawEmb(msg)
             .setTitle("Invite Links")
             .addField("**Bot-Invite**", `[Klick](${link})`)
             .addField("**Support Server**", `[Klick](${invite})`)
-            .addField("**Neko Dev Hood**", `[Klick](${neko})`)
+            .addField("**Vote**", `[Klick](${vote})`)
         msg.channel.send(emb);
     }
 };

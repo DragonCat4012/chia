@@ -5,7 +5,7 @@ module.exports = {
     name: 'info',
     syntax: 'info',
     args: false,
-    description: 'Gibt den Linki mit dem du mich zu deinem server hinzufügen kannst UwU',
+    description: 'Zeigt dir Inos über mich ^^',
     commands: ['info', 'botinfo'],
 
     /**

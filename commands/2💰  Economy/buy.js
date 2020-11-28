@@ -5,7 +5,7 @@ module.exports = {
     name: 'buy',
     syntax: 'buy <item>',
     args: true,
-    description: 'Lässt dich Items verkaufen',
+    description: 'Lässt dich Items kaufen',
     commands: ['buy'],
 
     /**

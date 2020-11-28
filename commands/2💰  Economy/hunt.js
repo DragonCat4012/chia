@@ -15,10 +15,18 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg, args) {
+        //    return msg.channel.send('Dieser Cmd ist zurzeit in Wartung qwq')
         user = msg.author;
+        msg.client.guilds.cache.size
         var player = await msg.client.database.player_cache.getConfig(user.id);
         let emb = rawEmb(msg)
-            ////////////////////////// -- ITEM BREAK --/////////////////////////////
+
+        ////////////////////////// -- Stamina BREAK --/////////////////////////////
+        if (player.STAMINA <= 5) {
+            emb.setDescription('**Du benötigst 5 Ausdauer zum kämpfen. Diese werden jeden Tag zurück gesetzt, bitte warte bis deine Ausdauer wieder aufgefüllt ist**')
+            return msg.channel.send(emb.setColor(colors.error))
+        }
+        ////////////////////////// -- ITEM BREAK --/////////////////////////////
         var inventory = await msg.client.database.order_cache.getInventory(user.id)
         var enemy = await msg.client.database.monster_cache.getEnemy(),
             rare = ""
@@ -30,7 +38,7 @@ module.exports = {
         if (enemy.RARE == 5) rare = "🌟🌟"
 
         msg.channel.send(emb.setDescription("**" + enemy.NAME + `** ${rare}
-        \n ⚔️ [${enemy.ATK}]  ${emotes.shield} [${enemy.DEV}]  ❤️ [${E_Lifes}]`).setColor(colors.warning))
+        \n ⚔️ [${enemy.ATK}]  ${emotes.shield} [${enemy.DEV}]  ❤️ [${enemy.HP}]`).setColor(colors.warning))
         let quest = "Möchtest du Kämpfen"
         let answer = await getAnswer(msg, quest + "?", 30)
         if (answer !== "yes" && answer !== "ja" && answer !== "Yes" && answer !== "Ja") return msg.channel.send(emb.setDescription("Kampf abgebrochen"))
@@ -39,6 +47,8 @@ module.exports = {
         if (player.SHIELD !== "0" && player.SHIELD !== 0) { var shield = (await msg.client.database.item_cache.getConfig(player.SHIELD)).DEV } else { shield = 0 }
 
         let r = 0;
+        player.STAMINA -= 5;
+        await player.save()
 
         var monster = {
             ATK: parseInt(enemy.ATK),
@@ -50,10 +60,11 @@ module.exports = {
             ATK: parseInt(weapon),
             DEF: parseInt(shield),
         }
-
         if (monster.DEV > fighter.ATK) emb.setFooter("Die Defensive des Gegners war stärker du")
-        var Damage = fighter.ATK - monster.DEV;
-        var PDamage = monster.ATK - fighter.ATK;
+
+        var Damage = (fighter.ATK) - (monster.DEF);
+        var PDamage = (monster.ATK) - (fighter.DEF);
+
         if (Math.sign(Damage) == -1) Damage = Damage * -1
         if (Math.sign(PDamage) == -1) PDamage = PDamage * -1
 
@@ -62,7 +73,7 @@ module.exports = {
             fighter.HP -= PDamage;
             r = r + 1;
         }
-        emb.setFooter(r + (r > 1 ? " Runden" : "Runde"))
+        emb.setFooter(r + (r > 1 ? " Runden" : " Runde"))
 
         let Dropped = ""
         let value = percent()
@@ -107,8 +118,9 @@ module.exports = {
                 Dropped = "\n \n**Dropped** " + drop
             }
             await player.save()
-            return msg.channel.send(emb.setTitle("Niederlage").setDescription("Du verlierst 10 Coins (falls du so viele besitzt) " + `${Dropped}`).setColor(colors.error))
+            return msg.channel.send(emb.setTitle("Niederlage").setDescription("Du verlierst 10 Coins.").setColor(colors.error))
         }
+        msg.channel.send('Nuuuuuuuuuu')
     }
 };
 

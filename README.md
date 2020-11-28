@@ -3,24 +3,21 @@
 Chia ist ein kleiner RPG Bot der sich auf die lange Reise des Lebens begab. Ihr Lebenssinn besteht darin anderen Freuden zu bereiten^^ 
 Sie basiert auf Discord.JS, Sqlite3 und Sequelize
 
-##second
-###third
-
-:envelope:  Allgemein [4]
-<div>
+## Commands
+### :envelope:  Allgemein [4]
 * help [Zeigt dir alle Befehle]
 * info [Zeigt dir Inos über mich ^^]
 * invite [Gibt den Linki mit dem du mich zu deinem server hinzufügen kannst UwU]
 * up [Bin ich online.....?]
-   </div>
 
-:shinto_shrine: Dungeons [4]
+
+### :shinto_shrine: Dungeons [4]
 -dungeon <id> [Zeigt dir informationen über einen Dungeon]
 -dungeons [Zeigt dir alle verfügbaren Dungeons]
 -explore [Kämpfe in Dungeons]
 -fight <@user> [Kämpf gegen andere Spieler. Nutze "ranked" um das Ergebnis zu werten]
 
-:moneybag:  Economy [12]
+### :moneybag:  Economy [12]
 -buy <item> [Lässt dich Items kaufen]
 -craft <item> [Lässt dich Items verkaufen]
 -equip <item> [Lässt dich Items ausrüsten]

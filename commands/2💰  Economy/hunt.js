@@ -6,6 +6,7 @@ module.exports = {
     syntax: 'hunt',
     args: false,
     description: 'Lässt dich Monster jagen',
+    cooldown: 15,
     commands: ['hunt'],
 
     /**

@@ -6,6 +6,7 @@ module.exports = {
     syntax: 'monster',
     args: false,
     description: 'Zeigt dir alle Monster',
+    cooldown: 10,
     commands: ['monster', 'm'],
 
     /**

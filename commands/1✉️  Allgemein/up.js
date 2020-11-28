@@ -30,20 +30,6 @@ module.exports = {
         if (seconds > 0) segments.push(seconds + ' Sekunde' + ((seconds == 1) ? '' : 'n'));
         const timeString = segments.join(', ');
 
-        /*    let text;
-            text = `${emotes.staff} **Fixed** ${emotes.staff}\n` +
-                "• explore\n • fight\n • inventory\n\n" +
-                `${emotes.plus} **Added** ${emotes.plus} \n` +
-                "• dungeons\n • dungeon\n\n"
-                //   `:warning:  **Removed** :warning: \n` +
-                // "• Ticket System\n• 20 nsfw cmds"
-            emb.setDescription(text)
-    
-            msg.channel.send(emb.setTitle("Update 1.2 [02.10]"))
-            msg.delete().catch();
-            msg.channel.send("||<@everyone>||").catch()
-    */
-
         emb.setColor(colors.nothing)
         emb.setTitle(`Ja ich bin Online ${emotes.yeah} \n${timeString}`)
 

@@ -8,6 +8,7 @@ module.exports = {
     args: true,
     description: 'Lässt dich Items verkaufen',
     cooldown: 5,
+    type: 'ECONEMY',
     commands: ['craft'],
 
     /**

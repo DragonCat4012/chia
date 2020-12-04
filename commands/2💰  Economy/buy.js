@@ -7,6 +7,7 @@ module.exports = {
     args: true,
     description: 'Lässt dich Items kaufen',
     cooldown: 10,
+    type: 'ECONEMY',
     commands: ['buy'],
 
     /**

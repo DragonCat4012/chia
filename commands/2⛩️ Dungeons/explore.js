@@ -6,7 +6,8 @@ module.exports = {
     syntax: 'explore',
     args: false,
     description: 'Kämpfe in Dungeons',
-    cooldwon: 20,
+    cooldwon: 30,
+    type: 'DUNGEONS',
     commands: ['explore', 'e'],
 
     /**
@@ -24,6 +25,11 @@ module.exports = {
         let CacheSword = 0;
         let CacheShield = 0;
 
+        if (!room) {
+            emb.setFooter(`Dungeon: Not Found || ID: ${A.DUNGEON}`)
+            emb.setDescription('🔒 **Dieser Dungeon ist noch nicht verfügbar**')
+            return msg.channel.send(emb.setColor(colors.error))
+        }
 
         if (A.STAMINA <= 5) {
             emb.setDescription('**Du benötigst 5 Ausdauer zum kämpfen. Diese werden jeden Tag zurück gesetzt, bitte warte bis deine Ausdauer wieder aufgefüllt ist**')
@@ -53,7 +59,7 @@ module.exports = {
         }
 
         player.STAMINA -= 5;
-        await player.save()
+        await A.save()
 
         let line = (room.LINE).split(/ +/);
         let L = (room.LINE).replace(/H/i, "♻️").replace(/E/i, "🎁").replace(/[0-9]/g, "🔸")
@@ -71,7 +77,7 @@ module.exports = {
                 i = false
                 text += "\n**Dungeon beendet**"
                 let newroom = await msg.client.database.dungeon_cache.findRoom(parseInt(A.DUNGEON) + 1)
-                if (newroom) A.DUNGEON = parseInt(A.DUNGEON) + 1
+                A.DUNGEON = parseInt(A.DUNGEON) + 1
                 await A.save()
                 return msg.channel.send(emb.setDescription(text).setColor(colors.success)).catch()
             } else if (obj == "H") {

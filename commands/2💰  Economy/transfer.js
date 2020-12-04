@@ -7,6 +7,7 @@ module.exports = {
     args: true,
     description: 'Transferiert deine Coins OvO',
     type: 'Economy',
+    type: 'ECONEMY',
     commands: ['transfer'],
 
     /**

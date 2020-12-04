@@ -6,6 +6,7 @@ module.exports = {
     syntax: 'update',
     args: false,
     description: 'Zeigt dir meien neusten Änderungen',
+    type: 'ALLGEMEIN',
     commands: ['update'],
 
     /**
@@ -21,11 +22,13 @@ module.exports = {
         text = `${emotes.staff} **Fixed** ${emotes.staff}\n` +
             "• explore\n• fight\n• inventory\n\n" +
             `${emotes.plus} **Added** ${emotes.plus} \n` +
-            "• dungeons\n• dungeon\n• update\n• Ausdauer System\n\n"
+            "• dungeons\n• weekly\n• daily\n• dungeon\n• update\n• Ausdauer System\n• start cmd\n• prefix\• level\n\n"
             //   `:warning:  **Removed** :warning: \n` +
             // "• Ticket System\n• 20 nsfw cmds"
         emb.setDescription(text)
+            .addField('**Start Cmd**', 'Über den start-cmd kann nun ein Profil erstellt werden. Ohne Profil sind Econemy und Dungeon cmds nciht verfügbar')
+            .addField('**Einstellungen**', 'für jeden Server kann nun ein eigenes Prefix eingetsellt und die Levelup Nachricht muss explizit aktiviert werden')
 
-        msg.channel.send(emb.setTitle("Update 1.3 [28.11]"))
+        msg.channel.send(emb.setTitle("Update 2.1 [01.12]"))
     }
 };

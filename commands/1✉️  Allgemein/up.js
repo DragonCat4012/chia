@@ -6,6 +6,7 @@ module.exports = {
     syntax: 'up',
     args: false,
     description: 'Bin ich online.....?',
+    type: 'ALLGEMEIN',
     commands: ['up'],
 
     /**

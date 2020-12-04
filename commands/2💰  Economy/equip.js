@@ -7,6 +7,7 @@ module.exports = {
     args: true,
     description: 'Lässt dich Items ausrüsten',
     cooldown: 5,
+    type: 'ECONEMY',
     commands: ['equip'],
 
     /**

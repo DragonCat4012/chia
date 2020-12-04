@@ -28,7 +28,20 @@ const ordersql = new Sequelize('order', 'user', 'password', {
     storage: 'order.sqlite',
 });
 
-
+const Settings = spielersql.define('settings', {
+    GID: {
+        type: DataTypes.TEXT,
+        unique: true,
+    },
+    PREFIX: {
+        type: DataTypes.TEXT,
+        defaultValue: '-'
+    },
+    LEVEL: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
+})
 
 const Spieler = spielersql.define('spieler', {
     UID: {
@@ -71,6 +84,13 @@ const Spieler = spielersql.define('spieler', {
         type: DataTypes.TEXT,
         defaultValue: 1
     },
+    DAILY: {
+        type: DataTypes.TEXT,
+    },
+    WEEKLY: {
+        type: DataTypes.TEXT,
+    },
+
 
 });
 
@@ -211,4 +231,4 @@ const syncDatabase = async() => {
     }
 }
 
-module.exports = { Spieler, Monster, Items, Order, Dungeons, syncDatabase }
+module.exports = { Spieler, Monster, Items, Order, Dungeons, Settings, syncDatabase }

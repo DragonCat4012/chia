@@ -6,6 +6,7 @@ module.exports = {
     syntax: 'help',
     args: false,
     description: 'Zeigt dir alle Befehle',
+    type: 'ALLGEMEIN',
     commands: ['help'],
 
     /**

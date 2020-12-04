@@ -6,6 +6,7 @@ module.exports = {
     syntax: 'invite',
     args: false,
     description: 'Gibt den Linki mit dem du mich zu deinem server hinzufügen kannst UwU',
+    type: 'ALLGEMEIN',
     commands: ['invite', 'link'],
 
     /**

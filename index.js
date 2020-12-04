@@ -16,11 +16,26 @@ var report_channel;
 error_channel = 714557180757409942;
 report_channel = 753474865104683110;
 
-
 const TopGG = require("dblapi.js");
 const NeuClient = client;
 NeuClient.token = '/'
 const ChiaTopGG = new TopGG(config.ChiaTOPGGToken, NeuClient)
+
+var now = new Date(),
+    planed = new Date();
+
+planed.setHours(21);
+planed.setMinutes(38);
+planed.setSeconds(20)
+
+if (planed.getTime() < now.getTime())
+    planed.setTime(planed.getTime() + 1000 * 60 * 60 * 24);
+
+setTimeout(() => {
+    setInterval(() => {
+        client.database.player_cache.refillStamina()
+    }, 1000 * 60 * 60 * 24);
+}, planed - now)
 
 
 //Error Handling
@@ -37,13 +52,30 @@ process.on("warning", console.warn);
 //==================================================================================================================================================
 //Currency and Levelingsystem
 //==================================================================================================================================================
-const { Spieler, Monster, Items, Order, Dungeons, syncDatabase } = require('./database/dbInit');
+const { Spieler, Monster, Items, Order, Settings, Dungeons, syncDatabase } = require('./database/dbInit');
 
 var monster_cache = new Collection();
 var item_cache = new Collection();
 var player_cache = new Collection();
 var order_cache = new Collection();
 var dungeon_cache = new Collection();
+var settings_cache = new Collection();
+
+Reflect.defineProperty(settings_cache, "getConfig", {
+    /**
+     * @param {number} id User ID
+     * @returns {Model} new User
+     */
+    value: async function(id) {
+        var server = settings_cache.get({ GID: id });
+        if (!server) server = await Settings.findOne({ where: { GID: id } });
+        if (!server) {
+            server = await Settings.create({ GID: id });
+            settings_cache.set({ GID: id }, server);
+        }
+        return server;
+    }
+});
 
 Reflect.defineProperty(player_cache, "addXP", {
     /**
@@ -82,10 +114,22 @@ Reflect.defineProperty(player_cache, "getConfig", {
     value: async function(id) {
         var spieler = player_cache.get({ UID: id });
         if (!spieler) spieler = await Spieler.findOne({ where: { UID: id } });
-        if (!spieler) {
-            spieler = await Spieler.create({ UID: id });
-            player_cache.set({ UID: id }, spieler);
-        }
+        /*   if (!spieler) {
+               spieler = await Spieler.create({ UID: id });
+               player_cache.set({ UID: id }, spieler);
+           }*/
+        return spieler;
+    }
+});
+
+Reflect.defineProperty(player_cache, "addProfile", {
+    /**
+     * @param {number} id User ID
+     * @returns {Model} new User
+     */
+    value: async function(id) {
+        spieler = await Spieler.create({ UID: id });
+        player_cache.set({ UID: id }, spieler);
         return spieler;
     }
 });
@@ -192,11 +236,14 @@ Reflect.defineProperty(dungeon_cache, "findRoom", {
      * @returns {Model} new User
      */
     value: async function(id) {
-        id = "" + id + ""
         var dungeon = dungeon_cache.get({ DID: id });
         if (!dungeon) dungeon = await Dungeons.findOne({ where: { DID: id } });
-        if (!dungeon) console.log("No Results by searching for dungeon")
-        return dungeon;
+        if (!dungeon) {
+            console.log("No Results by searching for dungeon")
+            return false
+        } else {
+            return dungeon;
+        }
     }
 });
 
@@ -308,7 +355,7 @@ const initDatabase = async() => {
     }
 }
 
-client.database = { player_cache, monster_cache, item_cache, order_cache, dungeon_cache };
+client.database = { player_cache, monster_cache, item_cache, order_cache, dungeon_cache, settings_cache };
 
 //==================================================================================================================================================
 
@@ -442,22 +489,26 @@ client.on("message", async message => {
 
     //Levelsystem
     //==================================================================================================================================================
-    let old = (await player_cache.getConfig(message.author.id)).XP; //Siehe 100 Zeilen Tiefer
+    let CachedPlayer = await player_cache.getConfig(message.author.id)
+    if (CachedPlayer) {
+        let old = CachedPlayer.XP; //Siehe 100 Zeilen Tiefer
+        await player_cache.addXP(message.author.id, message.content.length);
 
-    await player_cache.addXP(message.author.id, message.content.length);
+        let GuildLevelupMessage = await client.database.settings_cache.getConfig(message.guild.id)
+        if (GuildLevelupMessage) {
+            setTimeout(async() => {
+                let neu = CachedPlayer.XP;
 
-    setTimeout(async() => {
-        let neu = (await player_cache.getConfig(message.author.id)).XP;
-
-        if (calcLevel(neu) > calcLevel(old)) {
-            let channel = message.channel;
-            if (!channel) return;
-            me = message.member.toString() + " ist nun ein Level höher " + calcLevel(neu)
-            let emb = new MessageEmbed().setTitle(message.guild.name).setDescription(me).setColor(colors.nothing).setFooter(message.member.displayName).setTimestamp()
-            channel.send(emb).catch(console.log)
-
+                if (calcLevel(neu) > calcLevel(old)) {
+                    let channel = message.channel;
+                    if (!channel) return;
+                    me = message.member.toString() + " ist nun ein Level höher " + calcLevel(neu)
+                    let emb = new MessageEmbed().setTitle(message.guild.name).setDescription(me).setColor(colors.nothing).setFooter(message.member.displayName).setTimestamp()
+                    channel.send(emb).catch(console.log)
+                }
+            }, 1000); //Waiting for Database sync
         }
-    }, 1000); //Waiting for Database sync
+    }
     //==================================================================================================================================================
     let test = message.mentions.members.first()
     if (test && test.id == client.user.id && !message.content.startsWith(prefix)) {
@@ -533,6 +584,13 @@ client.on("message", async message => {
     timestamps.set(message.author.id, now);
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
+    if (command.type !== 'ALLGEMEIN' && command.type !== 'EINSTELLUNGEN') {
+        let B = await client.database.player_cache.getConfig(message.author.id)
+        if (!B) {
+            let emb = rawEmb(message).setColor(colors.error).setDescription(`${message.author}**Du musst** \`-start\` **eingeben um dein Abenteuer mit mir zu starten ;-;**`)
+            return message.channel.send(emb)
+        }
+    }
 
     try {
         command.execute(message, args);

@@ -30,9 +30,8 @@ const emotes = {
 }
 
 const money = {
-    daily: 200,
-    weekly: 1200,
-    monthly: 3600,
+    daily: 40,
+    weekly: 100,
 }
 
 /**
@@ -208,8 +207,12 @@ const getAnswer = async(msg, question, time, user) => {
  * @returns {number}
  */
 const calcLevel = function(xp) {
-    return Math.floor(((1 * xp) ^ (3 / 5)) / 750);
+    return Math.floor(0.07 * Math.sqrt(xp));
 };
 
 
-module.exports = { colors, confirmAction, newEmb, rawEmb, emotes, getStats, calcLevel, getAnswer, money };
+const levelToXP = function(level) {
+    return (level * level / 0.0049)
+};
+
+module.exports = { colors, confirmAction, newEmb, rawEmb, emotes, getStats, calcLevel, getAnswer, levelToXP, money };

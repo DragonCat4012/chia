@@ -7,6 +7,7 @@ module.exports = {
     args: true,
     description: 'Kämpf gegen andere Spieler. Nutze "ranked" um das Ergebnis zu werten',
     cooldown: 30,
+    type: 'DUNGEONS',
     commands: ['fight'],
 
     /**

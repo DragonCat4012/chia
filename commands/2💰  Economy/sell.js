@@ -6,6 +6,7 @@ module.exports = {
     syntax: 'sell <item>',
     args: true,
     description: 'Lässt dich Items verkaufen',
+    type: 'ECONEMY',
     commands: ['sell'],
 
     /**

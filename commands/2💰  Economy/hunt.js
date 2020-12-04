@@ -7,6 +7,7 @@ module.exports = {
     args: false,
     description: 'Lässt dich Monster jagen',
     cooldown: 15,
+    type: 'ECONEMY',
     commands: ['hunt'],
 
     /**

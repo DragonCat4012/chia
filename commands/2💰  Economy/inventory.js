@@ -7,6 +7,7 @@ module.exports = {
     args: false,
     description: 'Zeigt dir das Inventar eines Spielers, nutze "full" oder "rare" für genauere Auskunft darüber.',
     cooldown: 10,
+    type: 'ECONEMY',
     commands: ['inventory', 'inv'],
 
     /**

@@ -6,6 +6,7 @@ module.exports = {
     syntax: 'profile [@user]',
     args: false,
     description: 'Zeigt dir die Spieler Karte eines Spielers',
+    type: 'ECONEMY',
     commands: ['profile', 'bal', 'money'],
 
     /**

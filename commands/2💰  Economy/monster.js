@@ -7,6 +7,7 @@ module.exports = {
     args: false,
     description: 'Zeigt dir alle Monster',
     cooldown: 10,
+    type: 'ECONEMY',
     commands: ['monster', 'm'],
 
     /**

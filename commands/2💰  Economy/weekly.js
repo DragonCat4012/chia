@@ -7,7 +7,7 @@ module.exports = {
     syntax: 'weekly',
     args: false,
     type: 'ECONEMY',
-    beschreibung: 'Gibt dir dein wöchentliches vermögen aus OvO',
+    description: 'Gibt dir dein wöchentliches vermögen aus OvO',
     commands: ['weekly'],
 
     /**

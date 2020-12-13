@@ -3,7 +3,6 @@ const Discord = require("discord.js");
 const { Message, Collection, Client, MessageEmbed } = require("discord.js");
 
 const { colors, newEmb, rawEmb, calcLevel, emotes } = require("./commands/utilities");
-
 const config = require("./config.json");
 var { prefix, token, owner } = config;
 
@@ -11,15 +10,8 @@ const client = new Client();
 client.config = config;
 const cooldowns = new Collection();
 
-var error_channel;
 var report_channel;
-error_channel = 714557180757409942;
 report_channel = 753474865104683110;
-
-const TopGG = require("dblapi.js");
-const NeuClient = client;
-NeuClient.token = '/'
-const ChiaTopGG = new TopGG(config.ChiaTOPGGToken, NeuClient)
 
 var now = new Date(),
     planed = new Date();
@@ -36,17 +28,6 @@ setTimeout(() => {
         client.database.player_cache.refillStamina()
     }, 1000 * 60 * 60 * 24);
 }, planed - now)
-
-
-//Error Handling
-//==================================================================================================================================================
-client.on("shardError", error => {
-    console.error("A websocket connection encountered an error:", error);
-});
-
-process.on("unhandledRejection", error => {
-    console.error("Unhandled promise rejection:", error);
-});
 
 process.on("warning", console.warn);
 //==================================================================================================================================================
@@ -425,9 +406,6 @@ client.on("ready", async() => {
         `${config.prefix}help`
     ];
 
-    error_channel = client.guilds.cache
-        .find(g => g.id == 553942677117337600)
-        .channels.cache.find(c => c.id == error_channel && c.type == "text");
     report_channel = client.guilds.cache
         .find(g => g.id == 553942677117337600)
         .channels.cache.find(c => c.id == report_channel && c.type == "text");
@@ -599,103 +577,6 @@ client.on("message", async message => {
         emb.setDescription(
             `Es gibt wohl noch etwas Technische Probleme mit diesem Befehl :0`
         );
-        message.channel.send(emb);
-
-        emb = new Discord.MessageEmbed()
-            .setAuthor(message.author.tag, message.author.displayAvatarURL())
-            .setFooter(client.user.tag, client.user.displayAvatarURL())
-            .setColor(colors.nothing)
-            .setTimestamp();
-
-        emb
-            .setTitle("Fehler")
-            .addField("Auf:", `\`${message.guild.name}\``, true)
-            .addField("In:", `\`${message.channel.name}\``, true)
-            .addField("Von:", `<@${message.author.id}>`, true)
-            .addField("Befehl:", `\`${message.content}\``, false)
-            .addField("Fehler:", `\`${error}\``, false);
-
-        error_channel.send(emb);
+        message.channel.send(emb)
     }
 });
-
-
-//==================================================================================================================================================
-/**
- * @param {string} argument
- * @param {Message} msg
- */
-const reloadModules = async function(argument, msg) {
-    const commandDirectorys = fs
-        .readdirSync("./commands").map(name => "./commands/" + name).filter(path => fs.lstatSync(path).isDirectory());
-
-    let text = "**LOAD MODULES**";
-    msg = await msg.channel.send(text);
-    var module_count = 0;
-
-    if (argument.includes('/')) {
-        let dir = './commands/' + argument.split('/')[0];
-        let module_name = argument.split('/')[0];
-        let file = argument.split('/')[1];
-
-        if (!commandDirectorys.includes(dir)) return msg.channel.send('Modul nicht gefunden ;-;');
-
-        let files = fs.readdirSync(dir).filter(file => file.endsWith('.js'));
-        if (!files.map(name => name.split('.')[0]).includes(file)) return msg.channel.send('Befehl nicht gefunden ;-;');
-
-        let path = `${dir}/${file}`;
-
-        try {
-            delete require.cache[require.resolve(path)];
-            const newCommand = require(path);
-
-            client.commands.set(newCommand.name, {
-                command: newCommand,
-                module: module_name
-            });
-
-            module_count++;
-            text += `\n **>** \`${module_name}/${newCommand.name}\``;
-            return msg.edit(text);
-        } catch (error) {
-            console.log(error);
-            return msg.channel.send(`Beim neuladen von \`${newCommand.name}\` ist ein Fehler aufgetreten:\n\`${error.message}\``);
-        }
-    } else if (commandDirectorys.includes('./commands/' + argument)) {
-        let dir = './commands/' + argument.split('/')[0];
-        let file = argument.split('/')[1];
-
-        if (!commandDirectorys.includes(dir)) return msg.channel.send('Modul nicht gefunden ;-;');
-
-        commandDirectorys = new Array();
-        commandDirectorys[0] = dir;
-    }
-
-    for (const dir of commandDirectorys) {
-        const module_name = dir.split('/').reverse()[0];
-        const commandFiles = fs.readdirSync(dir).filter(file => file.endsWith('.js'));
-
-        for (let file of commandFiles) {
-            let path = `${dir}/${file}`;
-
-            try {
-                delete require.cache[require.resolve(path)];
-                const newCommand = require(path);
-
-                client.commands.set(newCommand.name, {
-                    command: newCommand,
-                    module: module_name
-                });
-
-                module_count++;
-                text += `\n **>** \`${module_name}/${newCommand.name}\``;
-                //msg.edit(text);
-            } catch (error) {
-                console.log(error);
-                msg.channel.send(`Beim neuladen von \`${newCommand.name}\` ist ein Fehler aufgetreten:\n\`${error.message}\``);
-            }
-        }
-    }
-
-    msg.edit("Es wurden `" + module_count + "` Module neu geladen uwu");
-}

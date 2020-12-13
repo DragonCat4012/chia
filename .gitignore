@@ -3,6 +3,7 @@
 /.vscode
 /config.json
 /package-lock.json
+/indexNonGit.js
 
 # Node Modules
 /node_modules

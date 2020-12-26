@@ -47,6 +47,11 @@ module.exports = {
 
                 emb.addField(`**${mod}** [${commands.length}]`, commands.map(v => `**-${v.syntax}** [\`${v.description}\`]`).join('\n') + "\n\u200b");
             }
+            let voteLink = 'https://top.gg/bot/744883074508259329/vote'
+            let githubLink = 'https://github.com/DragonCat4012/chia'
+            let supportInvite = 'https://discord.gg/Emk2udJ'
+            let inviteLink = 'https://discord.com/oauth2/authorize?client_id=744883074508259329&scope=bot&permissions=289856'
+            emb.addField('Links', `[Vote](${voteLink}) • [Github](${githubLink}) • [Support](${supportInvite}) • [invite](${inviteLink})`)
             msg.channel.send(emb.setFooter(`Nutze +help <command> für mehr || ${a} Module mit ${b} Commands`));
         }
     }

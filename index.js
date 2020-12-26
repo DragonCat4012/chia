@@ -9,9 +9,7 @@ var { prefix, token, owner } = config;
 const client = new Client();
 client.config = config;
 const cooldowns = new Collection();
-
 var report_channel;
-report_channel = 753474865104683110;
 
 var now = new Date(),
     planed = new Date();
@@ -319,6 +317,7 @@ Reflect.defineProperty(item_cache, "getConfig", {
 });
 //==================================================================================================================================================
 //Sync
+//==================================================================================================================================================
 const initDatabase = async() => {
     await syncDatabase();
 
@@ -339,8 +338,8 @@ const initDatabase = async() => {
 client.database = { player_cache, monster_cache, item_cache, order_cache, dungeon_cache, settings_cache };
 
 //==================================================================================================================================================
-
 //Initialize the Commands
+//==================================================================================================================================================
 client.commands = new Discord.Collection();
 
 const commandDirectorys = fs
@@ -387,11 +386,11 @@ const start = async() => {
 }
 start();
 
+//==================================================================================================================================================
 //Ready
 //==================================================================================================================================================
 client.on("ready", async() => {
     console.log(" >  Logged in as: " + client.user.tag);
-
     client.user.setStatus("idle");
 
     setInterval(() => {
@@ -408,7 +407,7 @@ client.on("ready", async() => {
 
     report_channel = client.guilds.cache
         .find(g => g.id == 553942677117337600)
-        .channels.cache.find(c => c.id == report_channel && c.type == "text");
+        .channels.cache.find(c => c.id == '753474865104683110' && c.type == "text");
 });
 
 
@@ -442,19 +441,16 @@ client.on("guildDelete", async guild => {
 client.on("message", async message => {
     if (message.author.bot) return;
     if (message.channel.type == 'dm') return
-        ///////////////////////////////////////////////////
-        /////////////////
+
     var emb = rawEmb()
     let settings = await client.database.settings_cache.getConfig(message.guild.id)
-    let { prefix } = settings
-
-
+    let prefix = settings.PREFIX
 
     //Levelsystem
     //==================================================================================================================================================
     let CachedPlayer = await player_cache.getConfig(message.author.id)
     if (CachedPlayer) {
-        let old = CachedPlayer.XP; //Siehe 100 Zeilen Tiefer
+        let old = CachedPlayer.XP
         await player_cache.addXP(message.author.id, message.content.length);
 
         let GuildLevelupMessage = await client.database.settings_cache.getConfig(message.guild.id)
@@ -473,51 +469,45 @@ client.on("message", async message => {
         }
     }
     //==================================================================================================================================================
-    let test = message.mentions.members.first()
-    if (test && test.id == client.user.id && !message.content.startsWith(prefix)) {
-        message.channel.send("Mein Prefix ist " + "\`" + prefix + "\`")
+    let mentionedFirst = message.mentions.members.first()
+    if (mentionedFirst) {
+        if (mentionedFirst.id == client.user.id && !message.content.startsWith(prefix)) {
+            message.channel.send("Mein Prefix ist \`" + prefix + "\`")
+        }
     }
-
     if (!message.content.startsWith(prefix)) return;
     const args = message.content.slice(prefix.length).split(/ +/);
 
     const commandName = args.shift().toLowerCase();
-
     const commandObj = client.commands.find(cmd => cmd.command.commands.includes(commandName));
     if (!commandObj) return;
-
     const { command, module } = commandObj;
 
-    if (command.commands.includes("reload") && owner.includes(message.author.id)) {
-        return reloadModules(args[0].toLowerCase(), message);
-    }
-
-    var emb = rawEmb(message);
+    var emb = rawEmb();
     if (command.needed) {
         if (!(message.guild.me.hasPermission(command.needed))) {
-            emb.setDescription(emotes.false + " **Mir fehlt folgende Berechtigung:** `" + command.needed).setColor(colors.nothing);
+            emb.setDescription("⚠️ **Mir fehlt folgende Berechtigung:** `" + command.needed).setColor(colors.error);
             return message.channel.send(emb);
         }
     }
 
-    var emb = rawEmb(message);
+    var emb = rawEmb();
     if (command.perm) {
         if (command.perm == 'DEVELOPER') {
             if (!config.owner.includes(message.author.id)) {
-                emb.setDescription("**Du bist leider kein `Developer` qwq** ").setColor(colors.nothing);
+                emb.setDescription("⚠️ **Du bist leider kein `Developer` qwq** ").setColor(colors.error);
                 return message.channel.send(emb);
             }
         } else {
             if (!(message.member.hasPermission(command.perm))) {
-                emb.setDescription("**Dir fehltfolgende Berechtigung:,** `" + command.perm).setColor(colors.nothing);
+                emb.setDescription("⚠️ **Dir fehltfolgende Berechtigung:,** `" + command.perm).setColor(colors.error);
                 return message.channel.send(emb);
             }
         }
     }
 
-
     if (command.args && !args.length) {
-        emb.setDescription(`Du musst Argumente angeben, <@${message.member.id}>!`);
+        emb.setDescription(`⚠️ Du musst Argumente angeben, <@${message.member.id}>!`).setColor(colors.error)
 
         if (command.syntax) {
             emb.addField(`Syntax`, `\`${prefix}${command.syntax}\``)
@@ -560,7 +550,7 @@ client.on("message", async message => {
     } catch (error) {
         console.error(error);
         emb.setDescription(
-            `Es gibt wohl noch etwas Technische Probleme mit diesem Befehl :0`
+            `⚠️ Es gibt wohl noch etwas Technische Probleme mit diesem Befehl :0`
         );
         message.channel.send(emb)
     }

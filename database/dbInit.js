@@ -213,8 +213,6 @@ const Order = ordersql.define('order', {
 });
 
 
-
-
 const syncDatabase = async() => {
     try {
         await spielersql.sync();

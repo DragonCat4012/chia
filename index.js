@@ -440,30 +440,15 @@ client.on("guildDelete", async guild => {
     //Message
     //==================================================================================================================================================
 client.on("message", async message => {
-    ///////////////////////////////////////////////////
-    if (message.content === "!join" && config.owner.includes(message.author.id)) {
-        //  client.emit("guildCreate")
-        client.emit("guildCreate", message.guild);
-    }
-    if (message.content === '!refill' && config.owner.includes(message.author.id)) {
-        let A = await client.database.player_cache.refillStamina()
-        message.channel.send(A + ' wurden ernuert')
-        setInterval(() => {
-
-            client.database.refillStamina()
-        }, 60000 * 60 * 24);
-    }
-    /////////////////
-    var emb = newEmb(message)
-        .setColor(colors.nothing);
-
-    let prefix = config.prefix;
     if (message.author.bot) return;
+    if (message.channel.type == 'dm') return
+        ///////////////////////////////////////////////////
+        /////////////////
+    var emb = rawEmb()
+    let settings = await client.database.settings_cache.getConfig(message.guild.id)
+    let { prefix } = settings
 
-    if (message.channel.type == 'dm') {
-        emb.setDescription("Ich führe keine Befehle in DMs aus qwq");
-        return message.channel.send(emb);
-    }
+
 
     //Levelsystem
     //==================================================================================================================================================

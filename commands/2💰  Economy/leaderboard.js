@@ -20,29 +20,68 @@ module.exports = {
         var users = msg.client.database.player_cache.array();
 
         if (args[0] == "coins") {
+            emb.setTitle("Leaderboard [Coins]")
             users = users
-                .sort((a, b) => (parseInt(b.COINS) + parseInt(b.COINS)) - (parseInt(a.COINS) + parseInt(a.COINS)))
+                .sort((a, b) => b.COINS - a.COINS)
                 .filter((v, i, arr) => i < 10)
-                .map((user, index) =>
-                    `\`${index + 1}.\` ${msg.client.users.cache.get(user.UID)} **[ ${user.COINS.toLocaleString()} ]¥**`
-                );
+                .map((user, index) => {
+                    let u = msg.client.users.resolve(user.UID);
+                    if (!u) {
+                        entry = {
+                            a: `**${index + 1}. | Not Found**`,
+                            b: `**¥.** \`${(user.COINS).toLocaleString()}\``
+                        }
+                    } else {
+                        entry = {
+                            a: `**${index + 1}. | ${u.tag}**`,
+                            b: `**¥.** \`${(user.COINS).toLocaleString()}\``
+                        }
+                    }
+                    return entry
+                });
         } else if (args[0] == "rank") {
+            emb.setTitle("Leaderboard [Rank]")
             users = users
-                .sort((a, b) => (parseInt(b.RANK) + parseInt(b.RANK)) - (parseInt(a.RANK) + parseInt(a.RANK)))
+                .sort((a, b) => (b.RANK - a.RANK))
                 .filter((v, i, arr) => i < 10)
-                .map((user, index) =>
-                    `\`${index + 1}.\` ${msg.client.users.cache.get(user.UID)} **[ ${user.RANK.toLocaleString()} ]**`
-                );
+                .map((user, index) => {
+                    let u = msg.client.users.resolve(user.UID);
+                    if (!u) {
+                        entry = {
+                            a: `**${index + 1}. | Not Found**`,
+                            b: ` \`${(user.RANK).toLocaleString()}\``
+                        }
+                    } else {
+                        entry = {
+                            a: `**${index + 1}. | ${u.tag}**`,
+                            b: ` \`${(user.RANK).toLocaleString()}\``
+                        }
+                    }
+                    return entry
+                });
         } else {
             users = users
-                .sort((a, b) => (parseInt(b.XP) + parseInt(b.XP)) - (parseInt(a.XP) + parseInt(a.XP)))
+                .sort((a, b) => b.XP - a.XP)
                 .filter((v, i, arr) => i < 10)
-                .map((user, index) =>
-                    `\`${index + 1}.\` ${msg.client.users.cache.get(user.UID)} **[ ${calcLevel(user.XP).toLocaleString()} ]**`
-                );
+                .map((user, index) => {
+                    let u = msg.client.users.resolve(user.UID);
+                    if (!u) {
+                        entry = {
+                            a: `**${index + 1}. | Not Found**`,
+                            b: `Lvl. **${calcLevel(user.XP)}** - \`[${(user.XP).toLocaleString()}]\``
+                        }
+                    } else {
+                        entry = {
+                            a: `**${index + 1}. | ${u.tag}**`,
+                            b: `Lvl. **${calcLevel(user.XP)}** \`[${(user.XP).toLocaleString()}]\``
+                        }
+                    }
+                    return entry
+                });
         }
-        return msg.channel.send(
-            emb.setDescription(users.join("\n"))
-        );
+        users.forEach(entry => {
+            emb.addField(entry.a, entry.b)
+        });
+        return msg.channel.send(emb)
     }
 };

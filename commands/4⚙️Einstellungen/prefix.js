@@ -25,9 +25,7 @@ module.exports = {
         settings.PREFIX = neu
         await settings.save()
 
-        emb.setTitle(`Prefix geändert`)
-            .setDescription(`\`${old}\` zu \`${neu}\``)
-
+        emb.setDescription(`\`${old}\`, Prefix geändert zu \`${neu}\``)
         msg.channel.send(emb)
     }
 };

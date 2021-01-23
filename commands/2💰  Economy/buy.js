@@ -34,7 +34,6 @@ module.exports = {
         item = arr[0];
         if (arr.length < 1) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq"))
 
-
         item = await msg.client.database.item_cache.getConfig(item.IID)
 
         if (item.SALE == "0") { msg.channel.send(emb.setDescription("Dieses Item steht nicht zum Verkauf")) } else {

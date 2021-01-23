@@ -73,10 +73,7 @@ module.exports = {
 
         return msg.channel.send("User Item hinzufügen: \n" + item.NAME)
 
-
         //  }
-
-
 
         return
         for (let IID of shop) {
@@ -102,13 +99,10 @@ module.exports = {
 
         item = await msg.client.database.item_cache.getConfig(item.IID)
 
-
         order = (await msg.client.database.order_cache.deleteOrder(item.IID, user.id))
-            //await order.save()
+        //await order.save()
 
         return msg.channel.send(emb)
-
-
 
     }
 };

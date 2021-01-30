@@ -48,7 +48,7 @@ const Spieler = spielersql.define('spieler', {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
-    STAMINA: {
+    stamina: {
         type: DataTypes.INTEGER,
         defaultValue: 40
     },
@@ -56,7 +56,7 @@ const Spieler = spielersql.define('spieler', {
         type: DataTypes.INTEGER,
         defaultValue: 0
     },
-    HP: {
+    healthPoints: {
         type: DataTypes.INTEGER,
         defaultValue: 25
     },
@@ -169,7 +169,7 @@ const Monster = monstersql.define('monster', {
         type: DataTypes.INTEGER,
         defaultValue: 0
     },
-    HP: {
+    healthPoints: {
         type: DataTypes.INTEGER,
         defaultValue: 10
     },

@@ -21,7 +21,7 @@ module.exports = {
         user = msg.author;
         var A = await msg.client.database.UserConfigCache.getConfig(user.id);
         var room = await msg.client.database.dungeon_cache.findRoom(A.DUNGEON)
-        emb.setFooter(`Dungeon: ${room.NAME} || ID: ${room.DID}`)
+        emb.setFooter(`Dungeon: ${room.name} || ID: ${room.DID}`)
         let CacheSword = 0;
         let CacheShield = 0;
 
@@ -31,25 +31,25 @@ module.exports = {
             return msg.channel.send(emb.setColor(colors.error))
         }
 
-        if (A.STAMINA <= 5) {
+        if (A.stamina <= 5) {
             emb.setDescription('**Du benötigst 5 Ausdauer zum kämpfen. Diese werden jeden Tag zurück gesetzt, bitte warte bis deine Ausdauer wieder aufgefüllt ist**')
             return msg.channel.send(emb.setColor(colors.error))
         }
 
-        if (parseInt(A.WEAPON) !== 0) {
-            let Item = await msg.client.database.item_cache.getConfig(A.WEAPON)
+        if (parseInt(A.weapon) !== 0) {
+            let Item = await msg.client.database.item_cache.getConfig(A.weapon)
             if (Item) CacheSword = Item.ATK
         }
-        if (parseInt(A.SHIELD) !== 0) {
-            Item = await msg.client.database.item_cache.getConfig(A.SHIELD)
+        if (parseInt(A.shield) !== 0) {
+            Item = await msg.client.database.item_cache.getConfig(A.shield)
             if (Item) CacheShield = Item.DEF
         }
-        let CacheHP = parseInt(A.HP) + parseInt(calcLevel(A.XP));
+        let CacheHP = parseInt(A.healthPoints) + parseInt(calcLevel(A.XP));
 
         let player = {
             ATK: parseInt(CacheSword),
             DEF: parseInt(CacheShield),
-            HP: parseInt(CacheHP)
+            healthPoints: parseInt(CacheHP)
         }
 
         if (player.ATK < 7 || player.DEF < 7) {
@@ -58,7 +58,7 @@ module.exports = {
             return msg.channel.send(emb.setColor(colors.error))
         }
 
-        player.STAMINA -= 5;
+        player.stamina -= 5;
         await A.save()
 
         let line = (room.LINE).split(/ +/);
@@ -81,7 +81,7 @@ module.exports = {
                 await A.save()
                 return msg.channel.send(emb.setDescription(text).setColor(colors.success)).catch()
             } else if (obj == "H") {
-                player.HP += 20
+                player.healthPoints += 20
                 text += "---- Heal **+20** ---- \n"
                 progress.shift()
                 progress.push("➕")
@@ -97,7 +97,7 @@ module.exports = {
                 }
                 progress.shift()
                 progress.push("▪️")
-                text += line.length + `. **Monster:** [${monster.ATK}/${monster.DEF}] :heart_exclamation:${monster.HP}\n`
+                text += line.length + `. **Monster:** [${monster.ATK}/${monster.DEF}] :heart_exclamation:${monster.healthPoints}\n`
                 emb.setTitle(progress.join(" "))
                     .setDescription(text)
                     .setColor(colors.success)
@@ -118,11 +118,11 @@ async function fight(msg, player, id) {
     var enemy = {
         ATK: parseInt(monster.ATK),
         DEF: parseInt(monster.DEF),
-        HP: parseInt(monster.HP)
+        healthPoints: parseInt(monster.healthPoints)
     }
     var res = {
         runden: 0,
-        HP: player.HP,
+        healthPoints: player.healthPoints,
         value: false
     }
 
@@ -138,27 +138,27 @@ async function fight(msg, player, id) {
     } // wenn dev zu hoch für das monster
 
     var Damage = player.ATK - enemy.DEF;
-    if (Damage > enemy.HP) {
+    if (Damage > enemy.healthPoints) {
         r = true
         return r
     }
     var PDamage = enemy.ATK - player.DEF;
-    if (PDamage > player.HP) {
+    if (PDamage > player.healthPoints) {
         r = false
         return r
     }
 
     if (Math.sign(Damage) == -1) Damage = Damage = 1
 
-    while (player.HP > 0 && enemy.HP > 0) {
-        enemy.HP -= Damage;
-        player.HP -= PDamage;
+    while (player.healthPoints > 0 && enemy.healthPoints > 0) {
+        enemy.healthPoints -= Damage;
+        player.healthPoints -= PDamage;
         r = r + 1;
     }
     res.runden = r
 
-    if (enemy.HP <= 0) { res.value = true }
+    if (enemy.healthPoints <= 0) { res.value = true }
 
-    if (player.HP <= 0) { res.value = false }
+    if (player.healthPoints <= 0) { res.value = false }
     return res
 }

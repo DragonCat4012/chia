@@ -63,23 +63,23 @@ module.exports = {
 
         if (skip) return
             ////////////////////////// -- Vorbereitung --/////////////////////////////
-        let P_Lifes = parseInt(player.HP) + parseInt(calcLevel(player.XP));
-        let E_Lifes = parseInt(enemyconfig.HP) + parseInt(calcLevel(enemyconfig.XP))
+        let P_Lifes = parseInt(player.healthPoints) + parseInt(calcLevel(player.XP));
+        let E_Lifes = parseInt(enemyconfig.healthPoints) + parseInt(calcLevel(enemyconfig.XP))
 
-        if (player.WEAPON !== "0" && player.WEAPON !== 0) { var weapon = (await msg.client.database.item_cache.getConfig(player.WEAPON)).ATK } else { weapon = 0 }
-        if (player.SHIELD !== "0" && player.SHIELD !== 0) { var shield = (await msg.client.database.item_cache.getConfig(player.SHIELD)).DEF } else { shield = 0 }
+        if (player.weapon !== "0" && player.weapon !== 0) { var weapon = (await msg.client.database.item_cache.getConfig(player.weapon)).ATK } else { weapon = 0 }
+        if (player.shield !== "0" && player.shield !== 0) { var shield = (await msg.client.database.item_cache.getConfig(player.shield)).DEF } else { shield = 0 }
 
-        if (enemyconfig.WEAPON !== "0" && enemyconfig.WEAPON !== 0) { var enemy_weapon = (await msg.client.database.item_cache.getConfig(enemyconfig.WEAPON)).ATK } else { enemy_weapon = 0 }
-        if (enemyconfig.SHIELD !== "0" && enemyconfig.SHIELD !== 0) { var enemy_shield = (await msg.client.database.item_cache.getConfig(enemyconfig.SHIELD)).DEF } else { enemy_shield = 0 }
+        if (enemyconfig.weapon !== "0" && enemyconfig.weapon !== 0) { var enemy_weapon = (await msg.client.database.item_cache.getConfig(enemyconfig.weapon)).ATK } else { enemy_weapon = 0 }
+        if (enemyconfig.shield !== "0" && enemyconfig.shield !== 0) { var enemy_shield = (await msg.client.database.item_cache.getConfig(enemyconfig.shield)).DEF } else { enemy_shield = 0 }
         let r = 0;
 
         var enemy = {
-            HP: parseInt(E_Lifes),
+            healthPoints: parseInt(E_Lifes),
             ATK: parseInt(enemy_weapon),
             DEF: parseInt(enemy_shield)
         }
         var fighter = {
-            HP: parseInt(P_Lifes),
+            healthPoints: parseInt(P_Lifes),
             ATK: parseInt(weapon) + 1,
             DEF: parseInt(shield)
         }
@@ -101,14 +101,14 @@ module.exports = {
         if (Math.sign(Damage) == -1) Damage = Damage * -1
         if (Math.sign(EnemyDamage) == -1) EnemyDamage = EnemyDamage * -1
 
-        while (fighter.HP > 0 && enemy.HP > 0 && r < 35) {
-            enemy.HP = enemy.HP - EnemyDamage;
-            fighter.HP = fighter.HP - Damage;
+        while (fighter.healthPoints > 0 && enemy.healthPoints > 0 && r < 35) {
+            enemy.healthPoints = enemy.healthPoints - EnemyDamage;
+            fighter.healthPoints = fighter.healthPoints - Damage;
             r = r + 1;
         }
         emb.setFooter(r + (r > 1 ? " Runden" : " Runde"))
 
-        if (enemy.HP <= 0) {
+        if (enemy.healthPoints <= 0) {
             if (ranked) {
                 player.RANK += 3;
                 enemy.RANK -= 3;
@@ -118,7 +118,7 @@ module.exports = {
                 emb.setDescription("Du gewinnst 3 Punkte " + emotes.cool)
             }
             return msg.channel.send(emb.setTitle("Sieg für " + user.username + emotes.cool).setColor(colors.success))
-        } else if (fighter.HP <= 0) {
+        } else if (fighter.healthPoints <= 0) {
             if (ranked) {
                 enemy.RANK += 3;
                 player.RANK -= 3;

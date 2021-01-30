@@ -25,9 +25,9 @@ module.exports = {
         for (let D of dungeons) {
             let line = (D.LINE).replace(/H/i, "♻️").replace(/E/i, "🎁").replace(/[0-9]/g, "🔸")
             let ti;
-            if (player.DUNGEON == D.DID) { ti = emotes.location + "**" + D.NAME + "**" } else {
-                ti = "**" + D.NAME + "**"
-                ti = `**${D.NAME}** [${D.DID}]`
+            if (player.DUNGEON == D.DID) { ti = emotes.location + "**" + D.name + "**" } else {
+                ti = "**" + D.name + "**"
+                ti = `**${D.name}** [${D.DID}]`
             }
             let obj = {
                 title: ti,

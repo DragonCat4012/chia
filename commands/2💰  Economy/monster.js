@@ -18,7 +18,7 @@ module.exports = {
      */
     async execute(msg) {
         var dungeon = await msg.client.database.monster_cache.getMonsters();
-        let emb = rawEmb(msg).setTitle("[ATK/DEF] HP Monster ").setFooter(dungeon.length + " Monster insgesamt")
+        let emb = rawEmb(msg).setTitle("[ATK/DEF] healthPoints Monster ").setFooter(dungeon.length + " Monster insgesamt")
 
         text = ""
         let arr = []
@@ -26,15 +26,15 @@ module.exports = {
             var monster = await msg.client.database.monster_cache.getConfig(MID.MID);
             if (!monster) console.log("Failure by detecting monster")
             if (monster.rare == "1") {
-                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEF}] ❤️${monster.HP} ⭐ **${monster.NAME}**`)
+                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEF}] ❤️${monster.healthPoints} ⭐ **${monster.name}**`)
             } else if (monster.rare == "2") {
-                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEF}] ❤️${monster.HP} ⭐⭐ **${monster.NAME}**`)
+                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEF}] ❤️${monster.healthPoints} ⭐⭐ **${monster.name}**`)
             } else if (monster.rare == "3") {
-                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEF}] ❤️${monster.HP} ⭐⭐⭐ **${monster.NAME}**`)
+                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEF}] ❤️${monster.healthPoints} ⭐⭐⭐ **${monster.name}**`)
             } else if (monster.rare == "4") {
-                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEF}] ❤️${monster.HP} 🌟 **${monster.NAME}**`)
+                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEF}] ❤️${monster.healthPoints} 🌟 **${monster.name}**`)
             } else {
-                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEF}] ❤️${monster.HP} 🌟🌟 **${monster.NAME}**`)
+                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEF}] ❤️${monster.healthPoints} 🌟🌟 **${monster.name}**`)
             }
         }
         let page = Math.round(arr.length / 200)
@@ -42,7 +42,7 @@ module.exports = {
             for (let num = page; num > 1; num -= 1) {
                 let B = arr.slice(0, 55)
                 let shift = 55;
-                B = B.map(v => "[" + v.ATK + "/" + v.DEF + "] " + v.NAME + " [" + v.rare + "]").join(" \n")
+                B = B.map(v => "[" + v.ATK + "/" + v.DEF + "] " + v.name + " [" + v.rare + "]").join(" \n")
                 if (shift > 0) {
                     arr.shift()
                     shift -= 1;

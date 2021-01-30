@@ -1,5 +1,6 @@
 const { Message } = require('discord.js');
 const { rawEmb, emotes } = require('../utilities');
+const shopItems = require('../../items.json')
 
 module.exports = {
     name: 'equip',
@@ -17,51 +18,32 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg, args) {
-        user = msg.author;
-
-        var player = await msg.client.database.UserConfigCache.getConfig(user.id);
+        var player = await msg.client.database.UserConfigCache.getConfig(msg.author.id);
         let emb = rawEmb(msg).setTitle("Equip")
+        var inventory = player.items.toObject()
 
-        var order = await msg.client.database.order_cache.getInventory(user.id)
-        let arr = [];
+        let item = (inventory.filter(e => e.name.toLowerCase() == args[0].toLowerCase())).shift()
+        if (!item) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq"))
+        if (item.type !== "sword" && item.type !== "shield") return msg.channel.send(emb.setTitle("Du kannst nur Schilder oder Schwerter ausrüsten"))
 
-        for (let IID of order) {
-            var item = await msg.client.database.item_cache.getConfig(IID.IID);
-            if (msg.content.toLowerCase().includes(item.NAME.toLowerCase()))
-                arr.push(item)
+        if (item.type == "sword") {
+            if (player.weapon) {
+                let oldWeapon = (shopItems.filter(e => e.name.toLowerCase() == player.weapon.toLowerCase())).shift()
+                emb.addField("Voherige Waffe", (oldWeapon.name + " [" + oldWeapon.ATK + "/" + oldWeapon.DEF + "]"))
+            }
+            player.weapon = item.name;
+            emb.addField("**Jetzige Waffe:**", (item.name + " [" + item.ATK + "/" + item.DEF + "]"))
+            return player.save().then(() => msg.channel.send(emb));
+
+        } else if (item.type == "shield") {
+            if (player.shield) {
+                let oldShield = (shopItems.filter(e => e.name.toLowerCase() == player.shield.toLowerCase())).shift()
+                emb.addField("Voheriges Schild", (oldShield.name + " [" + oldShield.ATK + "/" + oldShield.DEF + "]"))
+            }
+            player.shield = item.name
+            emb.addField("**Jetziges Schild:**", (item.name + " [" + item.ATK + "/" + item.DEF + "]"))
+            return player.save().then(() => msg.channel.send(emb));
         }
-
-        item = arr[0];
-
-        if (arr.length < 1) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq"))
-
-        if (item.type !== "SWORD" && item.type !== "SHIELD") return msg.channel.send(emb.setTitle("Du kannst nur Schilder oder Schwerter ausrüsten"))
-
-        if (item.type == "SWORD") {
-
-            var old = await msg.client.database.item_cache.getConfig(player.WEAPON);
-            if (!old) { player.WEAPON = "0"; } else { emb.addField("Voherige Waffe", (old.NAME + " [" + old.ATK + "/" + old.DEF + "]")) }
-
-
-            player.WEAPON = item.IID;
-            var item = await msg.client.database.item_cache.getConfig(player.WEAPON);
-            emb.addField("**Jetzige Waffe:**", (item.NAME + " [" + item.ATK + "/" + item.DEF + "]"))
-            return player.save().then(() => msg.channel.send(emb));
-
-        } else if (item.type == "SHIELD") {
-
-            var old = await msg.client.database.item_cache.getConfig(player.SHIELD);
-            if (!old) { player.SHIELD = "0"; } else { emb.addField("Voheriges Schild", (old.NAME + " [" + old.ATK + "/" + old.DEF + "]")) }
-
-            player.SHIELD = item.IID;
-            var item = await msg.client.database.item_cache.getConfig(player.SHIELD);
-            emb.addField("**Jetziges Schild:**", (item.NAME + " [" + item.ATK + "/" + item.DEF + "]"))
-            return player.save().then(() => msg.channel.send(emb));
-        } else { return msg.channel.send(emb.setTitle("Ein Fehler ist aufgetreten")) }
-
         return msg.channel.send(emb)
-
-
-
     }
 };

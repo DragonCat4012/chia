@@ -27,7 +27,7 @@ module.exports = {
             return msg.channel.send(emb.setColor(colors.error))
         }
 
-        var player = await msg.client.database.player_cache.getConfig(user.id);
+        var player = await msg.client.database.UserConfigCache.getConfig(user.id);
         var AK = 0;
         var DK = 0;
         emb.setTitle(`Profil von ${user.username}`)
@@ -67,7 +67,7 @@ module.exports = {
         }
 
         let query = parseInt(user.id)
-        var cache = msg.client.database.player_cache.array();
+        var cache = msg.client.database.UserConfigCache.array();
         cache = cache.sort((a, b) => (parseInt(b.RANK) + parseInt(b.RANK)) - (parseInt(a.RANK) + parseInt(a.RANK)))
         let A = cache.find(user => user.UID == query)
         let rank = cache.indexOf(A) + 1

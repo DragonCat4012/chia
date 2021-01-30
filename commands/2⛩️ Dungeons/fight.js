@@ -33,8 +33,8 @@ module.exports = {
             return msg.channel.send(emb.setColor(colors.error))
         }
 
-        var enemyconfig = await msg.client.database.player_cache.getConfig(enemy_user.id);
-        var player = await msg.client.database.player_cache.getConfig(user.id);
+        var enemyconfig = await msg.client.database.UserConfigCache.getConfig(enemy_user.id);
+        var player = await msg.client.database.UserConfigCache.getConfig(user.id);
         let quest = "**Möchtest du Kämpfen?** " + enemy_user.user.tag
 
         const filter = m => m.author.id === enemy_user.id;

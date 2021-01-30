@@ -17,7 +17,7 @@ module.exports = {
      */
     async execute(msg, args) {
         let emb = rawEmb(msg).setTitle("Leaderboard [Level]")
-        var users = msg.client.database.player_cache.array();
+        var users = msg.client.database.UserConfigCache.array();
 
         if (args[0] == "coins") {
             emb.setTitle("Leaderboard [Coins]")

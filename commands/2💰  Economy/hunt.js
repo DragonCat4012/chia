@@ -20,7 +20,7 @@ module.exports = {
         //    return msg.channel.send('Dieser Cmd ist zurzeit in Wartung qwq')
         user = msg.author;
         msg.client.guilds.cache.size
-        var player = await msg.client.database.player_cache.getConfig(user.id);
+        var player = await msg.client.database.UserConfigCache.getConfig(user.id);
         let emb = rawEmb(msg)
 
         ////////////////////////// -- Stamina BREAK --/////////////////////////////

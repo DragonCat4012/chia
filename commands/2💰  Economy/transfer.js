@@ -23,8 +23,8 @@ module.exports = {
 
         if (user.bot) return msg.channel.send(emb.setTitle("Bots können keine Coins haben qwq").setColor(colors.nothing))
 
-        let Kunde = await msg.client.database.player_cache.getConfig(user.id)
-        let Verkäufer = await msg.client.database.player_cache.getConfig(msg.author.id)
+        let Kunde = await msg.client.database.UserConfigCache.getConfig(user.id)
+        let Verkäufer = await msg.client.database.UserConfigCache.getConfig(msg.author.id)
 
         let amount = parseInt(args[1])
         if (Math.sign(amount) == -1) amount = amount * -1

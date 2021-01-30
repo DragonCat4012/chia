@@ -19,7 +19,7 @@ module.exports = {
     async execute(msg, args) {
         user = msg.author;
 
-        var player = await msg.client.database.player_cache.getConfig(user.id);
+        var player = await msg.client.database.UserConfigCache.getConfig(user.id);
         let emb = rawEmb(msg).setTitle("Equip")
 
         var order = await msg.client.database.order_cache.getInventory(user.id)

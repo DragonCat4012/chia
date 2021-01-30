@@ -20,7 +20,7 @@ module.exports = {
         let emb = rawEmb(msg)
         let now = Date.now();
 
-        let profile = await msg.client.database.player_cache.getConfig(msg.author.id)
+        let profile = await msg.client.database.UserConfigCache.getConfig(msg.author.id)
         let lastDaily = profile.DAILY;
 
         let cooldown = 8.64e+7;

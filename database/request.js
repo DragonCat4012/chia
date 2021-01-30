@@ -1,5 +1,5 @@
 const client = require('../index')
-const { Collection } = require('discord.js')
+const { Collection, User } = require('discord.js')
 
 const GuildConfigShema = require('./GuildShema')
 const UserConfigShema = require('./UserShema')
@@ -23,7 +23,21 @@ Reflect.defineProperty(GuildConfigCache, "getConfig", {
     }
 });
 
+Reflect.defineProperty(UserConfigCache, "getConfig", {
+    /**
+     * @param {number} id User ID
+     * @returns {Model} new User
+     */
+    value: async function(id) {
+        var user = UserConfigCache.get(id);
+        if (!user) user = await UserConfigShema.findOne({ where: { userID: id } });
+        if (!user) {
+            user = await UserConfigShema.create({ userID: id });
+            UserConfigCache.set(id, user);
+        }
+        return user;
+    }
+});
 
-
-client.database = { GuildSettingsCache, UserConfigCache }
+client.database = { GuildConfigCache, UserConfigCache }
 module.exports = () => console.log('Database Cache setted')

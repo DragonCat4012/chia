@@ -19,7 +19,7 @@ module.exports = {
     async execute(msg, args) {
         let emb = rawEmb(msg)
         user = msg.author;
-        var A = await msg.client.database.player_cache.getConfig(user.id);
+        var A = await msg.client.database.UserConfigCache.getConfig(user.id);
         var room = await msg.client.database.dungeon_cache.findRoom(A.DUNGEON)
         emb.setFooter(`Dungeon: ${room.NAME} || ID: ${room.DID}`)
         let CacheSword = 0;

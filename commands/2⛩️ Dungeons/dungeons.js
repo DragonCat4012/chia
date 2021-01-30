@@ -18,7 +18,7 @@ module.exports = {
      */
     async execute(msg, args) {
         let emb = rawEmb(msg).setTitle("Dungeons")
-        let player = await msg.client.database.player_cache.getConfig(msg.author.id)
+        let player = await msg.client.database.UserConfigCache.getConfig(msg.author.id)
         var dungeons = await msg.client.database.dungeon_cache.getDungeons();
         arr = []
 

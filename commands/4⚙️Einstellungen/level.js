@@ -18,7 +18,7 @@ module.exports = {
      */
     async execute(msg) {
         let emb = rawEmb(msg)
-        var settings = await msg.client.database.settings_cache.getConfig(msg.guild.id);
+        var settings = await msg.client.database.GuildConfigCache.getConfig(msg.guild.id);
         let old = settings.LEVEL
 
         if (settings.LEVEL) {

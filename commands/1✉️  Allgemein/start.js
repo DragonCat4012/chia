@@ -19,12 +19,12 @@ module.exports = {
         let user = msg.author;
         let emb = rawEmb(msg)
 
-        let alreadyCreated = await msg.client.database.player_cache.getConfig(user.id)
+        let alreadyCreated = await msg.client.database.UserConfigCache.getConfig(user.id)
         if (alreadyCreated) {
             emb.setDescription('**Du hast bereits ein Profil O.o**')
             return msg.channel.send(emb.setColor(colors.error))
         }
-        var player = await msg.client.database.player_cache.addProfile(user.id);
+        var player = await msg.client.database.UserConfigCache.addProfile(user.id);
 
         emb.setTitle(`${msg.author.username}`).setDescription('**startete sein Abenteuer, wünscht ihm/ihr/es Glück!**')
 

@@ -14,6 +14,10 @@ const UserShema = new mongoose.Schema({
         type: mongoose.SchemaTypes.Number,
         default: 0
     },
+    coins: {
+        type: mongoose.SchemaTypes.Number,
+        default: 0
+    },
     healthPoints: {
         type: mongoose.SchemaTypes.Number,
         default: 25

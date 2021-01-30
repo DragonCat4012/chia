@@ -67,10 +67,10 @@ module.exports = {
         let E_Lifes = parseInt(enemyconfig.HP) + parseInt(calcLevel(enemyconfig.XP))
 
         if (player.WEAPON !== "0" && player.WEAPON !== 0) { var weapon = (await msg.client.database.item_cache.getConfig(player.WEAPON)).ATK } else { weapon = 0 }
-        if (player.SHIELD !== "0" && player.SHIELD !== 0) { var shield = (await msg.client.database.item_cache.getConfig(player.SHIELD)).DEV } else { shield = 0 }
+        if (player.SHIELD !== "0" && player.SHIELD !== 0) { var shield = (await msg.client.database.item_cache.getConfig(player.SHIELD)).DEF } else { shield = 0 }
 
         if (enemyconfig.WEAPON !== "0" && enemyconfig.WEAPON !== 0) { var enemy_weapon = (await msg.client.database.item_cache.getConfig(enemyconfig.WEAPON)).ATK } else { enemy_weapon = 0 }
-        if (enemyconfig.SHIELD !== "0" && enemyconfig.SHIELD !== 0) { var enemy_shield = (await msg.client.database.item_cache.getConfig(enemyconfig.SHIELD)).DEV } else { enemy_shield = 0 }
+        if (enemyconfig.SHIELD !== "0" && enemyconfig.SHIELD !== 0) { var enemy_shield = (await msg.client.database.item_cache.getConfig(enemyconfig.SHIELD)).DEF } else { enemy_shield = 0 }
         let r = 0;
 
         var enemy = {

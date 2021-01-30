@@ -104,11 +104,11 @@ const Items = itemsql.define('items', {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
-    TYPE: {
+    type: {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
-    RARE: {
+    rare: {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
@@ -120,7 +120,7 @@ const Items = itemsql.define('items', {
         type: DataTypes.INTEGER,
         defaultValue: 0
     },
-    DEV: {
+    DEF: {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
@@ -148,11 +148,11 @@ const Monster = monstersql.define('monster', {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
-    RARE: {
+    rare: {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
-    DEV: {
+    DEF: {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
@@ -185,7 +185,7 @@ const Dungeons = monstersql.define('dungeons', {
         type: DataTypes.TEXT,
         defaultValue: 0
     },
-    RARE: {
+    rare: {
         type: DataTypes.TEXT,
         defaultValue: 0
     },

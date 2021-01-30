@@ -26,59 +26,45 @@ module.exports = {
             emb.setDescription("Bots haben kein Profil qwq")
             return msg.channel.send(emb.setColor(colors.error))
         }
-
         var player = await msg.client.database.UserConfigCache.getConfig(user.id);
+        let inventory = player.items.toObject()
         var AK = 0;
         var DK = 0;
         emb.setTitle(`Profil von ${user.username}`)
 
-        if (player.WEAPON == "0") { a = emotes.false } else {
-            let id = player.WEAPON
-            let uid = user.id
-            var order = await msg.client.database.order_cache.getOrder(id, uid)
-            if (!order || order == undefined) {
+        if (player.weapon) { a = emotes.false } else {
+            var item = await inventory.filter(e => e.name == player.weapon)
+            if (!item) {
                 a = emotes.false
             } else {
-                var item = await msg.client.database.item_cache.getConfig(order.IID);
-                if (item == undefined || item == null || !item) {
-                    msg.channel.send("Schwert konnte nicht identifiziert werden")
-                    a = emotes.false;
-                } else if (item.TYPE !== "SWORD") { a = emotes.false } else { a = item.NAME + "  [" + item.ATK + "/" + item.DEV + "]" }
+                if (item.type !== "sword") { a = emotes.false } else { a = item.name + "  [" + item.ATK + "/" + item.DEF + "]" }
             }
-
-            AK += parseInt(item.ATK)
+            AK += item.ATK
         }
 
-        if (player.SHIELD == "0") { b = emotes.false } else {
-            let id = player.SHIELD
-            let uid = user.id
-            var order = await msg.client.database.order_cache.getOrder(id, uid)
-            if (!order || order == undefined) {
+        if (player.shield) { b = emotes.false } else {
+            var item = await inventory.filter(e => e.name == player.weapon)
+            if (!item) {
                 b = emotes.false
             } else {
-                item = await msg.client.database.item_cache.getConfig(order.IID);
-
-                if (item == undefined || item == null || !item) {
-                    msg.channel.send("Schild konnte nicht identifiziert werden")
-                    b = emotes.false;
-                } else if (item.TYPE !== "SHIELD") { b = emotes.false } else { b = item.NAME + "  [" + item.ATK + "/" + item.DEV + "]" }
+                if (item.type !== "shield") { b = emotes.false } else { b = item.name + "  [" + item.ATK + "/" + item.DEF + "]" }
             }
-            DK += parseInt(item.DEV)
+            DK += item.DEF
         }
 
         let query = parseInt(user.id)
         var cache = msg.client.database.UserConfigCache.array();
-        cache = cache.sort((a, b) => (parseInt(b.RANK) + parseInt(b.RANK)) - (parseInt(a.RANK) + parseInt(a.RANK)))
-        let A = cache.find(user => user.UID == query)
+        cache = cache.sort((a, b) => (parseInt(b.rank) + parseInt(b.rank)) - (parseInt(a.rank) + parseInt(a.rank)))
+        let A = cache.find(user => user.userID == query)
         let rank = cache.indexOf(A) + 1
 
         let text = ''
-        text += `⚔️ \`${a}\` \n ${emotes.shield} \`${b}\`\n`
-        text += `**Münzen:** \`${(player.COINS).toLocaleString()} ¥\` \n`
-        text += `**Level:** \`${calcLevel(player.XP)}\` \n`
-        text += `**Rank:** \`${player.RANK} [${rank}]\` \n`
-        text += `**Ausdauer:** \`${player.STAMINA} /40\` \n`
-        text += `**Dungeon** \`${player.DUNGEON}\``
+        text += `⚔️ ${a} \n ${emotes.shield} ${b}\n`
+        text += `**Münzen:** \`${player.coins} ¥\` \n`
+        text += `**Level:** \`${calcLevel(player.xp)}\` \n`
+        text += `**Rank:** \`${player.rank} [${rank}]\` \n`
+        text += `**Ausdauer:** \`${player.stamina} /40\` \n`
+        text += `**Dungeon** \`${player.dungeon}\``
 
         emb.setFooter("Kampfstärke gesamt: " + `[${AK}/${DK}]`)
             .setDescription(text)

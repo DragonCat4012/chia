@@ -22,7 +22,7 @@ module.exports = {
         var dungeon = await msg.client.database.dungeon_cache.findRoom(args[0]);
         if (!dungeon) return msg.channel.send(emb.setDescription('**Kein Raum mit dieser ID gefunden**').setColor(colors.error))
 
-        emb.setTitle("Dungeon: " + dungeon.NAME).setFooter(`ID: ${dungeon.DID}`)
+        emb.setTitle("Dungeon: " + dungeon.name).setFooter(`ID: ${dungeon.DID}`)
         let line = (dungeon.LINE).split(/ +/);
         let i = true;
         let progress = []
@@ -39,7 +39,7 @@ module.exports = {
             } else {
                 let monster = await msg.client.database.monster_cache.getConfig(obj);
                 if (!monster) monster = await msg.client.database.monster_cache.getConfig(parseInt(obj))
-                progress.push(`🔸 ${monster.NAME} [${monster.ATK}/${monster.DEV}]`)
+                progress.push(`🔸 ${monster.name} [${monster.ATK}/${monster.DEF}]`)
             }
         }
     }

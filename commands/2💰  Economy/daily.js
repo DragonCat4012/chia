@@ -21,13 +21,13 @@ module.exports = {
         let now = Date.now();
 
         let profile = await msg.client.database.UserConfigCache.getConfig(msg.author.id)
-        let lastDaily = profile.DAILY;
+        let lastDaily = profile.daily;
 
         let cooldown = 8.64e+7;
         let time = ms(cooldown - (now - lastDaily))
 
         if (lastDaily == "0") {
-            profile.DAILY = now;
+            profile.daily = now;
             await profile.save()
         }
 
@@ -46,8 +46,8 @@ module.exports = {
             return msg.channel.send(emb).catch()
 
         } else {
-            profile.DAILY = now;
-            profile.COINS += money.daily;
+            profile.daily = now;
+            profile.coins += money.daily;
             await profile.save()
 
             emb.setDescription("Tägliche **" + money.daily + "¥** wurden dir ausgezahlt")

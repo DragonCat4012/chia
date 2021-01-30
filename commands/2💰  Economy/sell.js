@@ -1,5 +1,6 @@
 const { Message } = require('discord.js');
 const { rawEmb, emotes } = require('../utilities');
+const shopItems = require('../../items.json')
 
 module.exports = {
     name: 'sell',
@@ -16,33 +17,24 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg, args) {
-        user = msg.author;
-        var player = await msg.client.database.UserConfigCache.getConfig(user.id);
+        var player = await msg.client.database.UserConfigCache.getConfig(msg.author.id);
         let emb = rawEmb(msg).setTitle("Item Verkauf")
 
-        var order = await msg.client.database.order_cache.getInventory(user.id)
+        var inventory = player.items.toObject()
         let arr = [];
 
-        for (let IID of order) {
-            var item = await msg.client.database.item_cache.getConfig(IID.IID);
-            if (msg.content.toLowerCase().includes(item.NAME.toLowerCase()))
-                arr.push(item)
-        }
+        let itemTosell = (inventory.filter(e => e.name.toLowerCase() == args[0].toLowerCase())).shift()
+        if (!itemTosell) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq"))
 
-        item = arr[0];
-        if (arr.length < 1) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq"))
+        player.coins += itemTosell.value;
+        emb.addField("**Preis:**", itemTosell.value + " ¥[55%]")
+            .addField("**Item:**", itemTosell.name)
 
-        item = await msg.client.database.item_cache.getConfig(item.IID)
-        let value = item.VALUE;
-
-        value = Math.floor(value * 0.45)
-        player.COINS += value;
-
-        emb.addField("**Preis:**", item.VALUE + " ¥[55%]")
-            .addField("**Item:**", item.NAME)
+        let needItem = (inventory.filter(item => item.name == itemTosell.name)).shift()
+        let itemIndex = inventory.indexOf(needItem)
+        itemIndex > -1 ? inventory.splice(itemIndex, 1) : false
+        player.items = inventory
         await player.save()
-        order = (await msg.client.database.order_cache.deleteOrder(item.IID, user.id))
-
         return msg.channel.send(emb)
     }
 };

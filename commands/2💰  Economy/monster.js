@@ -25,16 +25,16 @@ module.exports = {
         for (let MID of dungeon) {
             var monster = await msg.client.database.monster_cache.getConfig(MID.MID);
             if (!monster) console.log("Failure by detecting monster")
-            if (monster.RARE == "1") {
-                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEV}] ❤️${monster.HP} ⭐ **${monster.NAME}**`)
-            } else if (monster.RARE == "2") {
-                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEV}] ❤️${monster.HP} ⭐⭐ **${monster.NAME}**`)
-            } else if (monster.RARE == "3") {
-                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEV}] ❤️${monster.HP} ⭐⭐⭐ **${monster.NAME}**`)
-            } else if (monster.RARE == "4") {
-                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEV}] ❤️${monster.HP} 🌟 **${monster.NAME}**`)
+            if (monster.rare == "1") {
+                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEF}] ❤️${monster.HP} ⭐ **${monster.NAME}**`)
+            } else if (monster.rare == "2") {
+                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEF}] ❤️${monster.HP} ⭐⭐ **${monster.NAME}**`)
+            } else if (monster.rare == "3") {
+                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEF}] ❤️${monster.HP} ⭐⭐⭐ **${monster.NAME}**`)
+            } else if (monster.rare == "4") {
+                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEF}] ❤️${monster.HP} 🌟 **${monster.NAME}**`)
             } else {
-                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEV}] ❤️${monster.HP} 🌟🌟 **${monster.NAME}**`)
+                arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEF}] ❤️${monster.HP} 🌟🌟 **${monster.NAME}**`)
             }
         }
         let page = Math.round(arr.length / 200)
@@ -42,7 +42,7 @@ module.exports = {
             for (let num = page; num > 1; num -= 1) {
                 let B = arr.slice(0, 55)
                 let shift = 55;
-                B = B.map(v => "[" + v.ATK + "/" + v.DEV + "] " + v.NAME + " [" + v.RARE + "]").join(" \n")
+                B = B.map(v => "[" + v.ATK + "/" + v.DEF + "] " + v.NAME + " [" + v.rare + "]").join(" \n")
                 if (shift > 0) {
                     arr.shift()
                     shift -= 1;

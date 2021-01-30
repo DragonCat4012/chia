@@ -7,7 +7,8 @@
         "type": "sword",
         "ATK": 10,
         "DEF": 0,
-        "uses": 10
+        "uses": 10,
+        "buyable": true
     },
     {
         "name": "NekoShield",
@@ -18,6 +19,7 @@
         "type": "shield",
         "ATK": 0,
         "DEF": 10,
-        "uses": 10
+        "uses": 10,
+        "buyable": false
     }
 ]

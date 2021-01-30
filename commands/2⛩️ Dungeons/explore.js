@@ -42,7 +42,7 @@ module.exports = {
         }
         if (parseInt(A.SHIELD) !== 0) {
             Item = await msg.client.database.item_cache.getConfig(A.SHIELD)
-            if (Item) CacheShield = Item.DEV
+            if (Item) CacheShield = Item.DEF
         }
         let CacheHP = parseInt(A.HP) + parseInt(calcLevel(A.XP));
 
@@ -97,7 +97,7 @@ module.exports = {
                 }
                 progress.shift()
                 progress.push("▪️")
-                text += line.length + `. **Monster:** [${monster.ATK}/${monster.DEV}] :heart_exclamation:${monster.HP}\n`
+                text += line.length + `. **Monster:** [${monster.ATK}/${monster.DEF}] :heart_exclamation:${monster.HP}\n`
                 emb.setTitle(progress.join(" "))
                     .setDescription(text)
                     .setColor(colors.success)
@@ -117,7 +117,7 @@ async function fight(msg, player, id) {
 
     var enemy = {
         ATK: parseInt(monster.ATK),
-        DEF: parseInt(monster.DEV),
+        DEF: parseInt(monster.DEF),
         HP: parseInt(monster.HP)
     }
     var res = {
@@ -127,7 +127,7 @@ async function fight(msg, player, id) {
     }
 
     let r = 0;
-    if (monster.DEV > player.ATK) {
+    if (monster.DEF > player.ATK) {
         res.value = false
         return res
     } // wenn dev zu hoch für dich

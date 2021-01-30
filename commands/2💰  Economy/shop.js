@@ -1,5 +1,6 @@
 const { Message } = require('discord.js');
 const { rawEmb, emotes } = require('../utilities');
+const shopItems = require('../../items.json')
 
 module.exports = {
     name: 'shop',
@@ -17,44 +18,42 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg) {
-        var shop = await msg.client.database.item_cache.getShop();
-        let emb = rawEmb(msg).setTitle("Shop").setFooter(shop.length + " Items insgesamt")
+        let emb = rawEmb(msg).setTitle("Shop").setFooter(shopItems.length + " Items insgesamt")
 
-        text = ""
-        for (let IID of shop) {
-            var item = await msg.client.database.item_cache.getConfig(IID.IID);
-            if (!item) console.log("Failure by detecting Item")
-            if (item.BUYABLE) {
-                if (item.RARE == "1") {
-                    if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
-                    if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
-                    if (item.TYPE == "MATERIAL") t = "[🍃]"
-                    text = (text + `**${item.VALUE}¥** ⭐ ${item.NAME} ${t}\n`)
-                } else if (item.RARE == "2") {
-                    if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
-                    if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
-                    if (item.TYPE == "MATERIAL") t = "[🍃]"
-                    text = (text + `**${item.VALUE}¥** ⭐⭐ ${item.NAME} ${t}\n`)
-                } else if (item.RARE == "3") {
-                    if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
-                    if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
-                    if (item.TYPE == "MATERIAL") t = "[🍃]"
-                    text = (text + `**${item.VALUE}¥** ⭐⭐⭐ ${item.NAME} ${t}\n`)
-                } else if (item.RARE == "4") {
-                    if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
-                    if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
-                    if (item.TYPE == "MATERIAL") t = "[🍃]"
-                    text = (text + `**${item.VALUE}¥** 🌟 ${item.NAME} ${t}\n`)
-                } else if (item.RARE == "5") {
-                    if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
-                    if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
-                    if (item.TYPE == "MATERIAL") t = "[🍃]"
-                    text = (text + `**${item.VALUE}¥** 🌟🌟 ${item.NAME} ${t}\n`)
+        let text = "",
+            t
+        for (let item of shopItems) {
+            if (item.buyable) {
+                if (item.rare == "1") {
+                    if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
+                    if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
+                    if (item.type == "MATERIAL") t = "[🍃]"
+                    text = (text + `**${item.value}¥** ⭐ ${item.name} ${t}\n`)
+                } else if (item.rare == "2") {
+                    if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
+                    if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
+                    if (item.type == "MATERIAL") t = "[🍃]"
+                    text = (text + `**${item.value}¥** ⭐⭐ ${item.name} ${t}\n`)
+                } else if (item.rare == "3") {
+                    if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
+                    if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
+                    if (item.type == "MATERIAL") t = "[🍃]"
+                    text = (text + `**${item.value}¥** ⭐⭐⭐ ${item.name} ${t}\n`)
+                } else if (item.rare == "4") {
+                    if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
+                    if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
+                    if (item.type == "MATERIAL") t = "[🍃]"
+                    text = (text + `**${item.value}¥** 🌟 ${item.name} ${t}\n`)
+                } else if (item.rare == "5") {
+                    if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
+                    if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
+                    if (item.type == "MATERIAL") t = "[🍃]"
+                    text = (text + `**${item.value}¥** 🌟🌟 ${item.name} \n`)
                 } else {
-                    if (item.TYPE == "SWORD") t = `[⚔️ ${item.ATK}]`
-                    if (item.TYPE == "SHIELD") t = `[${emotes.shield} ${item.DEV}]`
-                    if (item.TYPE == "MATERIAL") t = "[🍃]"
-                    text = (text + `**${item.VALUE}¥** ${item.NAME} ${t}\n`)
+                    if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
+                    if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
+                    if (item.type == "MATERIAL") t = "[🍃]"
+                    text = (text + `**${item.value}¥** ${item.name} ${t}\n`)
                 }
             }
         }

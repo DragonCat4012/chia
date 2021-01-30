@@ -39,7 +39,6 @@ module.exports = {
         materials = crafting[name] //(2) ['ItemTest', 'myNewItem']
 
         materials.forEach(element => {
-            // element = element.toLowerCase()
             text += ("> " + element + "\n")
             let needItem = (oldItems.filter(item => item.name == element)).shift()
             let itemIndex = oldItems.indexOf(needItem)
@@ -54,7 +53,8 @@ module.exports = {
         materials.forEach(element => {
             let needItem = (oldItems.filter(item => item.name == element)).shift()
             let itemIndex = oldItems.indexOf(needItem)
-            delete oldItems[itemIndex]
+
+            itemIndex > -1 ? oldItems.splice(itemIndex, 1) : false
         })
 
         newItem = newItem.shift()

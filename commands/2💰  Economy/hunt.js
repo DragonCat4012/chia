@@ -33,20 +33,20 @@ module.exports = {
         var enemy = await msg.client.database.monster_cache.getEnemy(),
             rare = ""
             ////////////////////////// -- Vorbereitung --/////////////////////////////
-        if (enemy.RARE == 1) rare = "⭐"
-        if (enemy.RARE == 2) rare = "⭐⭐"
-        if (enemy.RARE == 3) rare = "⭐⭐⭐"
-        if (enemy.RARE == 4) rare = "🌟"
-        if (enemy.RARE == 5) rare = "🌟🌟"
+        if (enemy.rare == 1) rare = "⭐"
+        if (enemy.rare == 2) rare = "⭐⭐"
+        if (enemy.rare == 3) rare = "⭐⭐⭐"
+        if (enemy.rare == 4) rare = "🌟"
+        if (enemy.rare == 5) rare = "🌟🌟"
 
         msg.channel.send(emb.setDescription("**" + enemy.NAME + `** ${rare}
-        \n ⚔️ [${enemy.ATK}]  ${emotes.shield} [${enemy.DEV}]  ❤️ [${enemy.HP}]`).setColor(colors.warning))
+        \n ⚔️ [${enemy.ATK}]  ${emotes.shield} [${enemy.DEF}]  ❤️ [${enemy.HP}]`).setColor(colors.warning))
         let quest = "Möchtest du Kämpfen"
         let answer = await getAnswer(msg, quest + "?", 30)
         if (answer !== "yes" && answer !== "ja" && answer !== "Yes" && answer !== "Ja") return msg.channel.send(emb.setDescription("Kampf abgebrochen"))
 
         if (player.WEAPON !== "0" && player.WEAPON !== 0) { var weapon = (await msg.client.database.item_cache.getConfig(player.WEAPON)).ATK } else { weapon = 0 }
-        if (player.SHIELD !== "0" && player.SHIELD !== 0) { var shield = (await msg.client.database.item_cache.getConfig(player.SHIELD)).DEV } else { shield = 0 }
+        if (player.SHIELD !== "0" && player.SHIELD !== 0) { var shield = (await msg.client.database.item_cache.getConfig(player.SHIELD)).DEF } else { shield = 0 }
 
         let r = 0;
         player.STAMINA -= 5;
@@ -54,7 +54,7 @@ module.exports = {
 
         var monster = {
             ATK: parseInt(enemy.ATK),
-            DEF: parseInt(enemy.DEV),
+            DEF: parseInt(enemy.DEF),
             HP: parseInt(enemy.HP)
         }
         var fighter = {
@@ -62,7 +62,7 @@ module.exports = {
             ATK: parseInt(weapon),
             DEF: parseInt(shield),
         }
-        if (monster.DEV > fighter.ATK) emb.setFooter("Die Defensive des Gegners war stärker du")
+        if (monster.DEF > fighter.ATK) emb.setFooter("Die Defensive des Gegners war stärker du")
 
         var Damage = (fighter.ATK) - (monster.DEF);
         var PDamage = (monster.ATK) - (fighter.DEF);
@@ -88,10 +88,10 @@ module.exports = {
             await player.save()
             while (loot > 0) {
                 let item = (await msg.client.database.item_cache.getItem())
-                if (item.RARE == enemy.RARE) {
-                    if (item.TYPE == "SWORD") t = `**[ ⚔️ ATK:  ${item.ATK} ]**`
-                    if (item.TYPE == "SHIELD") t = `**[ ${emotes.shield} DEF:  ${item.DEV} ]**`
-                    if (item.TYPE == "MATERIAL") t = "**[ 🍃 ]**"
+                if (item.rare == enemy.rare) {
+                    if (item.type == "SWORD") t = `**[ ⚔️ ATK:  ${item.ATK} ]**`
+                    if (item.type == "SHIELD") t = `**[ ${emotes.shield} DEF:  ${item.DEF} ]**`
+                    if (item.type == "MATERIAL") t = "**[ 🍃 ]**"
                     arr.push(`${t} ` + item.NAME)
                     let order = await msg.client.database.order_cache.setOrder(item.IID, user.id)
                     await order.save()

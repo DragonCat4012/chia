@@ -7,15 +7,15 @@ const UserShema = new mongoose.Schema({
         unique: true
     },
     stamina: {
-        type: mongoose.SchemaTypes.Integer,
+        type: mongoose.SchemaTypes.Number,
         default: 40
     },
     xp: {
-        type: mongoose.SchemaTypes.Integer,
+        type: mongoose.SchemaTypes.Number,
         default: 0
     },
     healthPoints: {
-        type: mongoose.SchemaTypes.Integer,
+        type: mongoose.SchemaTypes.Number,
         default: 25
     },
     weapon: {
@@ -25,7 +25,7 @@ const UserShema = new mongoose.Schema({
         type: mongoose.SchemaTypes.String
     },
     dungeon: {
-        type: mongoose.SchemaTypes.Integer,
+        type: mongoose.SchemaTypes.Number,
         default: 1
     },
     daily: {

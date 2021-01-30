@@ -20,44 +20,48 @@ module.exports = {
     async execute(msg, args) {
         var userProfile = await msg.client.database.UserConfigCache.getConfig(msg.author.id);
         let oldItems = userProfile.items.toObject()
-        let name = (args.join(" ")).toLowerCase()
+        let name = (args[0]).toLowerCase()
         let emb = rawEmb(msg).setTitle("Item Craften")
+            /*
+                    oldItems.push(shopItems[0])
+                    userProfile.items = oldItems
 
+                    await userProfile.save()
+                    return
+            */
         let obj = crafting.hasOwnProperty(name);
         if (!obj) return msg.channel.send(emb.setDescription("Dieses Item kann nicht gecraftet werden qwq").setColor(colors.error))
-        let newItem = shopItems.filter(e => e.name.toLowerCase() == name)
+        let newItem = shopItems.filter(e => e.name.toLowerCase() == name.toLowerCase())
 
         let text = "";
-        let delteIndexes = []
         let itemFailed = false
         let materials = []
         materials = crafting[name] //(2) ['ItemTest', 'myNewItem']
 
         materials.forEach(element => {
+            // element = element.toLowerCase()
             text += ("> " + element + "\n")
-
-            let needItem = (oldItems.filter(i => i.name.toLowerCase() == element.toLowerCase())).shift()
-            if (!needItem) {
-                emb.addField("Item Fehlt:", element)
-            }
+            let needItem = (oldItems.filter(item => item.name == element)).shift()
             let itemIndex = oldItems.indexOf(needItem)
             if (itemIndex == -1) {
                 itemFailed = true
                 emb.addField("Item Fehlt:", element)
             }
-            delteIndexes.push(itemIndex)
         })
 
         if (itemFailed) return msg.channel.send(emb.setColor(colors.error))
 
-        delteIndexes.forEach(e => {
-            delete oldItems[e]
+        materials.forEach(element => {
+            let needItem = (oldItems.filter(item => item.name == element)).shift()
+            let itemIndex = oldItems.indexOf(needItem)
+            delete oldItems[itemIndex]
         })
 
-        msg.channel.send(emb.setDescription(text))
+        newItem = newItem.shift()
         oldItems.push(newItem)
         userProfile.items = oldItems;
 
-        return msg.channel.send("User Item hinzufügen: \n" + newItem.name)
+        await userProfile.save()
+        msg.channel.send(emb.setDescription(text += `\n User Item hinzufügen: \n  ${newItem.name}`))
     }
 };

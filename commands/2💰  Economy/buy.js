@@ -7,7 +7,6 @@ module.exports = {
     syntax: 'buy <item>',
     args: true,
     description: 'Lässt dich Items kaufen',
-    cooldown: 10,
     type: 'ECONEMY',
     commands: ['buy'],
 
@@ -18,9 +17,7 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg, args) {
-        user = msg.author;
-
-        var userProfile = await msg.client.database.UserConfigCache.getConfig(user.id);
+        var userProfile = await msg.client.database.UserConfigCache.getConfig(msg.author.id);
         let emb = rawEmb(msg).setTitle("Item Kaufen")
 
         let arr = []

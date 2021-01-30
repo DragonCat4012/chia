@@ -1,10 +1,23 @@
 [{
-    "name": "ItemTest",
-    "rare": 1,
-    "price": 20,
-    "value": 15,
-    "description": "Hier steht was XD",
-    "type": "sword",
-    "ATK": 10,
-    "DEF": 0
-}]
+        "name": "ItemTest",
+        "rare": 1,
+        "price": 20,
+        "value": 15,
+        "description": "Hier steht was XD",
+        "type": "sword",
+        "ATK": 10,
+        "DEF": 0,
+        "uses": 10
+    },
+    {
+        "name": "NekoShield",
+        "rare": 1,
+        "price": 20,
+        "value": 15,
+        "description": "Hier steht was XD",
+        "type": "shield",
+        "ATK": 0,
+        "DEF": 10,
+        "uses": 10
+    }
+]

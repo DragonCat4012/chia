@@ -1,5 +1,7 @@
 const { Message } = require('discord.js');
 const { rawEmb, emotes, colors } = require('../utilities');
+const monsterArray = require('../../monster.json')
+const dungeonArray = require('../../dungeons.json')
 
 module.exports = {
     name: 'dungeon',
@@ -19,11 +21,11 @@ module.exports = {
     async execute(msg, args) {
         let emb = rawEmb(msg)
         if (!args[0] || isNaN(args[0])) return msg.channel.send(emb.setDescription('**Achte bitte auf den Syntax! Du musst eine ID angeben**').setColor(colors.error))
-        var dungeon = await msg.client.database.dungeon_cache.findRoom(args[0]);
+        var dungeon = (dungeonArray.filter(m => m.id == args[0])).shift()
         if (!dungeon) return msg.channel.send(emb.setDescription('**Kein Raum mit dieser ID gefunden**').setColor(colors.error))
 
-        emb.setTitle("Dungeon: " + dungeon.name).setFooter(`ID: ${dungeon.DID}`)
-        let line = (dungeon.LINE).split(/ +/);
+        emb.setTitle("Dungeon: " + dungeon.name).setFooter(`ID: ${dungeon.id}`)
+        let line = (dungeon.line).split(/ +/);
         let i = true;
         let progress = []
 
@@ -37,9 +39,9 @@ module.exports = {
             } else if (obj == "H") {
                 progress.push(`♻️ Healing +20`)
             } else {
-                let monster = await msg.client.database.monster_cache.getConfig(obj);
-                if (!monster) monster = await msg.client.database.monster_cache.getConfig(parseInt(obj))
-                progress.push(`🔸 ${monster.name} [${monster.ATK}/${monster.DEF}]`)
+                let monster = (monsterArray.filter(m => m.name.toLowerCase() == obj.toLowerCase())).shift()
+                if (monster) progress.push(`🔸 ${monster.name} [${monster.ATK}/${monster.DEF}]`)
+                if (!monster) progress.push(`🔸 Name [0/0]`)
             }
         }
     }

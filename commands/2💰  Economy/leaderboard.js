@@ -5,7 +5,7 @@ module.exports = {
     name: 'leaderboard',
     syntax: 'leaderboard [coins | rank]',
     args: false,
-    description: 'Zeigt dir das Leaderboard nach "rank", "coins" oder "XP"',
+    description: 'Zeigt dir das Leaderboard nach "rank", "coins" oder "xp"',
     type: 'ECONEMY',
     commands: ['leaderboard', 'lb', 'top'],
 

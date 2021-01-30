@@ -1,0 +1,10 @@
+[{
+    "name": "HexeABC",
+    "rare": 1,
+    "droprate": 2,
+    "dropcoin": 30,
+    "ATK": 1,
+    "DEF": 2,
+    "healthPoints": 20,
+    "description": "Ein Monster XD"
+}]

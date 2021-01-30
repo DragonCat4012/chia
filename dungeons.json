@@ -1,0 +1,8 @@
+[{
+    "name": "firstDungeon",
+    "id": 1,
+    "rare": 1,
+    "line": "HexeABC HexeABC H HexeABC E",
+    "dropcoin": 10,
+    "droprate": 1
+}]

@@ -1,5 +1,8 @@
 const { Message } = require('discord.js');
 const { rawEmb, emotes, calcLevel, colors } = require('../utilities');
+const monsterArray = require('../../monster.json')
+const dungeonArray = require('../../dungeons.json')
+const itemArray = require('../../items.json')
 
 module.exports = {
     name: 'explore',
@@ -18,15 +21,14 @@ module.exports = {
      */
     async execute(msg, args) {
         let emb = rawEmb(msg)
-        user = msg.author;
-        var A = await msg.client.database.UserConfigCache.getConfig(user.id);
-        var room = await msg.client.database.dungeon_cache.findRoom(A.DUNGEON)
-        emb.setFooter(`Dungeon: ${room.name} || ID: ${room.DID}`)
+        var A = await msg.client.database.UserConfigCache.getConfig(msg.author.id);
+        let room = (dungeonArray.filter(d => d.id == A.dungeon)).shift()
+        emb.setFooter(`Dungeon: ${room.name} || ID: ${room.id}`)
         let CacheSword = 0;
         let CacheShield = 0;
 
         if (!room) {
-            emb.setFooter(`Dungeon: Not Found || ID: ${A.DUNGEON}`)
+            emb.setFooter(`Dungeon: Not Found || ID: ${A.dungeon}`)
             emb.setDescription('🔒 **Dieser Dungeon ist noch nicht verfügbar**')
             return msg.channel.send(emb.setColor(colors.error))
         }
@@ -36,33 +38,33 @@ module.exports = {
             return msg.channel.send(emb.setColor(colors.error))
         }
 
-        if (parseInt(A.weapon) !== 0) {
-            let Item = await msg.client.database.item_cache.getConfig(A.weapon)
-            if (Item) CacheSword = Item.ATK
+        if (A.weapon) {
+            let item = (itemArray.filter(i => i.name.toLowerCase() == A.weapon.toLowerCase())).shift()
+            CacheSword = item.ATK
         }
-        if (parseInt(A.shield) !== 0) {
-            Item = await msg.client.database.item_cache.getConfig(A.shield)
-            if (Item) CacheShield = Item.DEF
+        if (A.shield) {
+            let item = (itemArray.filter(i => i.name.toLowerCase() == A.shield.toLowerCase())).shift()
+            if (Item) CacheShield = item.DEF
         }
-        let CacheHP = parseInt(A.healthPoints) + parseInt(calcLevel(A.XP));
+        let CacheHP = A.healthPoints + calcLevel(A.xp);
 
         let player = {
-            ATK: parseInt(CacheSword),
-            DEF: parseInt(CacheShield),
-            healthPoints: parseInt(CacheHP)
+            ATK: CacheSword,
+            DEF: CacheShield,
+            healthPoints: CacheHP
         }
 
+        /*
         if (player.ATK < 7 || player.DEF < 7) {
             emb.setDescription('**Trainiere lieber noch ein bisschen, die Monster hier sind sonst zu stark für dich**')
                 .setFooter('Nutze dafür z.B. -hunt und jage schwächere monster')
             return msg.channel.send(emb.setColor(colors.error))
-        }
+        }*/
 
         player.stamina -= 5;
-        await A.save()
 
-        let line = (room.LINE).split(/ +/);
-        let L = (room.LINE).replace(/H/i, "♻️").replace(/E/i, "🎁").replace(/[0-9]/g, "🔸")
+        let line = (room.line).split(/ +/);
+        let L = (room.line).replace(/H/i, "♻️").replace(/E/i, "🎁").replace(/[0-9]/g, "🔸")
         let progress = L.split(/ +/)
         emb.setTitle(L)
         let i = true
@@ -76,8 +78,7 @@ module.exports = {
             if (obj == "E") {
                 i = false
                 text += "\n**Dungeon beendet**"
-                let newroom = await msg.client.database.dungeon_cache.findRoom(parseInt(A.DUNGEON) + 1)
-                A.DUNGEON = parseInt(A.DUNGEON) + 1
+                A.dungeon = A.dungeon + 1
                 await A.save()
                 return msg.channel.send(emb.setDescription(text).setColor(colors.success)).catch()
             } else if (obj == "H") {
@@ -86,9 +87,7 @@ module.exports = {
                 progress.shift()
                 progress.push("➕")
             } else {
-                let monster = await msg.client.database.monster_cache.getConfig(obj);
-                if (!monster) monster = await msg.client.database.monster_cache.getConfig(parseInt(obj))
-
+                let monster = (monsterArray.filter(m => m.name.toLowerCase() == obj.toLowerCase())).shift()
                 let R = await fight(msg, player, obj)
                 if (!R.value) {
                     i = false
@@ -111,8 +110,8 @@ module.exports = {
  * @param {object} player Item ID
  * @returns {object}  User
  */
-async function fight(msg, player, id) {
-    let monster = await msg.client.database.monster_cache.getConfig(id);
+async function fight(msg, player, name) {
+    let monster = (monsterArray.filter(m => m.name.toLowerCase() == name.toLowerCase())).shift()
     if (!monster) monster = await msg.client.database.monster_cache.getConfig(parseInt(id));
 
     var enemy = {

@@ -1,5 +1,6 @@
 const { Message } = require('discord.js');
 const { rawEmb, emotes, colors } = require('../utilities');
+const dungeonArray = require('../../dungeons.json')
 
 module.exports = {
     name: 'dungeons',
@@ -19,15 +20,14 @@ module.exports = {
     async execute(msg, args) {
         let emb = rawEmb(msg).setTitle("Dungeons")
         let player = await msg.client.database.UserConfigCache.getConfig(msg.author.id)
-        var dungeons = await msg.client.database.dungeon_cache.getDungeons();
         arr = []
 
-        for (let D of dungeons) {
-            let line = (D.LINE).replace(/H/i, "♻️").replace(/E/i, "🎁").replace(/[0-9]/g, "🔸")
+        for (let D of dungeonArray) {
+            let line = (D.line).replace(/H/i, "♻️").replace(/E/i, "🎁").replace(/[0-9]/g, "🔸")
             let ti;
-            if (player.DUNGEON == D.DID) { ti = emotes.location + "**" + D.name + "**" } else {
+            if (player.dungeon == D.id) { ti = emotes.location + "**" + D.name + "**" } else {
                 ti = "**" + D.name + "**"
-                ti = `**${D.name}** [${D.DID}]`
+                ti = `**${D.name}** [${D.id}]`
             }
             let obj = {
                 title: ti,
@@ -47,7 +47,6 @@ module.exports = {
             emb.addField(obj.title, obj.value)
             i += 1
         }
-
         if (!m) msg.channel.send(emb)
     }
 };

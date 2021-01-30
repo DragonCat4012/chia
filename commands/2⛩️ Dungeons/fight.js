@@ -1,5 +1,6 @@
 const { Message } = require('discord.js');
 const { rawEmb, emotes, calcLevel, colors } = require('../utilities');
+const itemArray = require('../../items.json')
 
 module.exports = {
     name: 'fight',
@@ -17,7 +18,6 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg, args) {
-        user = msg.author;
         let emb = rawEmb(msg)
         ranked = false;
         if (args[1] == "ranked") ranked = true;
@@ -34,7 +34,7 @@ module.exports = {
         }
 
         var enemyconfig = await msg.client.database.UserConfigCache.getConfig(enemy_user.id);
-        var player = await msg.client.database.UserConfigCache.getConfig(user.id);
+        var player = await msg.client.database.UserConfigCache.getConfig(msg.author.id);
         let quest = "**Möchtest du Kämpfen?** " + enemy_user.user.tag
 
         const filter = m => m.author.id === enemy_user.id;
@@ -63,25 +63,25 @@ module.exports = {
 
         if (skip) return
             ////////////////////////// -- Vorbereitung --/////////////////////////////
-        let P_Lifes = parseInt(player.healthPoints) + parseInt(calcLevel(player.XP));
-        let E_Lifes = parseInt(enemyconfig.healthPoints) + parseInt(calcLevel(enemyconfig.XP))
+        let P_Lifes = player.healthPoints + player.xp
+        let E_Lifes = enemyconfig.healthPoints + enemyconfig.xp
 
-        if (player.weapon !== "0" && player.weapon !== 0) { var weapon = (await msg.client.database.item_cache.getConfig(player.weapon)).ATK } else { weapon = 0 }
-        if (player.shield !== "0" && player.shield !== 0) { var shield = (await msg.client.database.item_cache.getConfig(player.shield)).DEF } else { shield = 0 }
+        if (player.weapon) { var weapon = ((itemArray.filter(e => e.name.toLowerCase() == player.weapon)).shift()).ATK } else { weapon = 0 }
+        if (player.shield) { var shield = ((itemArray.filter(e => e.name.toLowerCase() == player.shield)).shift()).DEF } else { shield = 0 }
 
-        if (enemyconfig.weapon !== "0" && enemyconfig.weapon !== 0) { var enemy_weapon = (await msg.client.database.item_cache.getConfig(enemyconfig.weapon)).ATK } else { enemy_weapon = 0 }
-        if (enemyconfig.shield !== "0" && enemyconfig.shield !== 0) { var enemy_shield = (await msg.client.database.item_cache.getConfig(enemyconfig.shield)).DEF } else { enemy_shield = 0 }
+        if (enemyconfig.weapon) { var enemy_weapon = ((itemArray.filter(e => e.name.toLowerCase() == enemyconfig.weapon)).shift()).ATK } else { enemy_weapon = 0 }
+        if (enemyconfig.shield) { var enemy_shield = ((itemArray.filter(e => e.name.toLowerCase() == enemyconfig.shield)).shift()).DEF } else { enemy_shield = 0 }
         let r = 0;
 
         var enemy = {
-            healthPoints: parseInt(E_Lifes),
-            ATK: parseInt(enemy_weapon),
-            DEF: parseInt(enemy_shield)
+            healthPoints: E_Lifes,
+            ATK: enemy_weapon,
+            DEF: enemy_shield
         }
         var fighter = {
-            healthPoints: parseInt(P_Lifes),
-            ATK: parseInt(weapon) + 1,
-            DEF: parseInt(shield)
+            healthPoints: P_Lifes,
+            ATK: weapon + 1,
+            DEF: shield
         }
 
         if (fighter == enemy) {

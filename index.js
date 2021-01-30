@@ -56,102 +56,9 @@ const initDatabase = async() => {
 //==================================================================================================================================================
 //Currency and Levelingsystem
 //==================================================================================================================================================
-const { Monster, Items, Dungeons } = require('./database/dbInit');
-
-var monster_cache = new Collection();
 var item_cache = new Collection();
-var dungeon_cache = new Collection();
-
-//==================================================================================================================================================
-Reflect.defineProperty(dungeon_cache, "getDungeons", {
-    /**
-     * @returns {Model} new User
-     */
-    value: async function() {
-        dungeons = await Dungeons.findAll({});
-        return dungeons;
-    }
-});
-Reflect.defineProperty(dungeon_cache, "findRoom", {
-    /**
-     * @param {number} id Dungeon ID
-     * @returns {Model} new User
-     */
-    value: async function(id) {
-        var dungeon = dungeon_cache.get({ DID: id });
-        if (!dungeon) dungeon = await Dungeons.findOne({ where: { DID: id } });
-        if (!dungeon) {
-            console.log("No Results by searching for dungeon")
-            return false
-        } else {
-            return dungeon;
-        }
-    }
-});
-
-Reflect.defineProperty(dungeon_cache, "getRoom", {
-    /**
-     * @returns {Model} new User
-     */
-    value: async function() {
-        let M = (await Dungeons.findAll({})).length;
-        var size = Math.floor(Math.floor(Math.random() * (M - 0 + 1) + 0))
-        if (size == 0) size = 1
-        size = "" + size + ""
-
-        var room = dungeon_cache.get({ DID: size })
-        if (!room) room = await Dungeons.findOne({ where: { DID: size } });
-
-        if (!room) console.log("No Results by searching for random Room")
-        return room;
-    }
-});
-//==================================================================================================================================================
-Reflect.defineProperty(monster_cache, "getMonsters", {
-    /**
-     * @returns {Model} new User
-     */
-    value: async function() {
-        dungeon = await Monster.findAll({});
-        return dungeon;
-    }
-});
-Reflect.defineProperty(monster_cache, "getConfig", {
-    /**
-     * @param {number} id Monster ID
-     * @returns {Model} new User
-     */
-    value: async function(id) {
-        id = "" + id + ""
-        var monster = monster_cache.get({ MID: id });
-        if (!monster) monster = await Monster.findOne({ where: { MID: id } });
-        if (!monster) console.log("No Results by searching for monster")
-        return monster;
-    }
-});
-Reflect.defineProperty(monster_cache, "getEnemy", {
-    /**
-     * @returns {Model} new User
-     */
-    value: async function() {
-        let M = (await Monster.findAll({})).length;
-        var size = Math.floor(Math.floor(Math.random() * (M - 0 + 1) + 0))
-        if (size == 0) size = 1
-        size = "" + size + ""
-
-        var monster = monster_cache.get({ MID: size })
-        if (!monster) monster = await Monster.findOne({ where: { MID: size } });
-
-        console.log("Gegner-ID:  " + size)
-        if (!monster) console.log("No Results by searching for Enemy")
-        return monster;
-    }
-});
 //==================================================================================================================================================
 Reflect.defineProperty(item_cache, "getItem", {
-    /**
-     * @returns {Model} new User
-     */
     value: async function() {
         let t = await Items.findAll({})
         let M = t.length;
@@ -166,10 +73,6 @@ Reflect.defineProperty(item_cache, "getItem", {
     }
 });
 Reflect.defineProperty(item_cache, "getConfig", {
-    /**
-     * @param {number} id Item ID
-     * @returns {Model} new User
-     */
     value: async function(id) {
         id = "" + id + ""
         var item = item_cache.get({ IID: id });

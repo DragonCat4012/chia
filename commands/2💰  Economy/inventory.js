@@ -1,12 +1,11 @@
 const { Message } = require('discord.js');
 const { rawEmb, emotes, colors } = require('../utilities');
-const itemTest = require('../../items.json')
+
 module.exports = {
     name: 'inventory',
-    syntax: 'inventory [@user] [full/rare]',
+    syntax: 'inventory [@user] [full/value]',
     args: false,
-    description: 'Zeigt dir das Inventar eines Spielers, nutze "full" oder "rare" für genauere Auskunft darüber.',
-    cooldown: 10,
+    description: 'Zeigt dir das Inventar eines Spielers, nutze "full" oder "value" für genauere Auskunft darüber.',
     type: 'ECONEMY',
     commands: ['inventory', 'inv'],
 
@@ -55,37 +54,32 @@ module.exports = {
             switch (caseSwitch) {
                 case ("normal"):
                     {
-                        for (let item of itemArray) {
-                            if (item.type == "SWORD") Swords += 1;
-                            if (item.type == "SHIELD") Shields += 1;
-                            if (item.type == "MATERIAL") Material += 1;
-                        }
                         let text = []
-                        if (Swords > 1) text.push("⚔️ **Schwerter:** ⚔️ " + Swords)
-                        if (Shields > 1) text.push("🛡️ **Schilder:** 🛡️ " + Shields)
-                        if (Material > 1) text.push("🍃 **Material:** 🍃 " + Material)
-                        emb.setDescription(text.join("\n"))
-                        return msg.channel.send(emb)
-                        break
-                    }
-                case ("rare"):
-                    {
-                        emb.setTitle("Inventar [Rare]")
-
                         for (let item of itemArray) {
+                            if (item.type == "sword") Swords += 1;
+                            if (item.type == "shield") Shields += 1;
+                            if (item.type == "material") Material += 1;
+
                             if (item.rare == 1) Eins += 1;
                             if (item.rare == 2) Zwei += 1;
                             if (item.rare == 3) Drei += 1;
                             if (item.rare == 4) Vier += 1;
                             if (item.rare == 5) Fünf += 1;
+
                         }
-                        let text = []
-                        if (Eins > 1) text.push("⭐  " + Eins)
-                        if (Zwei > 1) text.push("⭐⭐  " + Zwei)
-                        if (Drei > 1) text.push("⭐⭐⭐ " + Drei)
-                        if (Vier > 1) text.push("🌟  " + Vier)
-                        if (Fünf > 1) text.push("🌟🌟  " + Fünf)
-                            //✨
+                        text.push('Item Typen')
+                        if (Swords >= 1) text.push("⚔️ **Schwerter:** ⚔️ " + Swords)
+                        if (Shields >= 1) text.push("🛡️ **Schilder:** 🛡️ " + Shields)
+                        if (Material >= 1) text.push("🍃 **Material:** 🍃 " + Material)
+
+                        text.push('Item Seltenheiten \n')
+
+                        if (Eins >= 1) text.push("⭐  " + Eins)
+                        if (Zwei >= 1) text.push("⭐⭐  " + Zwei)
+                        if (Drei >= 1) text.push("⭐⭐⭐ " + Drei)
+                        if (Vier >= 1) text.push("🌟  " + Vier)
+                        if (Fünf >= 1) text.push("🌟🌟  " + Fünf)
+
                         emb.setDescription(text.join("\n"))
                         return msg.channel.send(emb)
                         break
@@ -110,7 +104,7 @@ module.exports = {
                             for (let num = page; num > 1; num -= 1) {
                                 let B = arr.slice(0, 55)
                                 let shift = 55;
-                                B = B.map(v => "[" + v.ATK + "/" + v.DEV + "] " + v.name + " [" + v.rare + "]").join(" \n")
+                                B = B.map(v => "[" + v.ATK + "/" + v.DEF + "] " + v.name + " [" + v.rare + "]").join(" \n")
                                 if (shift > 0) {
                                     arr.shift()
                                     shift -= 1;
@@ -119,7 +113,7 @@ module.exports = {
                                 msg.channel.send(emb)
                             }
                         } else {
-                            emb.setDescription(arr.map(v => `[${v.ATK}/${v.DEV}] ${v.name} [${v.rare}]`).join(" \n"))
+                            emb.setDescription(arr.map(v => `[${v.ATK}/${v.DEF}] ${v.name} [${v.rare}]`).join(" \n"))
                             return msg.channel.send(emb)
                         }
                     }

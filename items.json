@@ -4,7 +4,7 @@
     "price": 20,
     "value": 15,
     "description": "Hier steht was XD",
-    "type": "Sword",
+    "type": "sword",
     "ATK": 10,
-    "Def": 0
+    "DEF": 0
 }]

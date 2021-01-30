@@ -3,6 +3,10 @@
 Chia ist ein kleiner RPG Bot der sich auf die lange Reise des Lebens begab. Ihr Lebenssinn besteht darin anderen Freuden zu bereiten^^ 
 Sie basiert auf Discord.JS, Sqlite3 und Sequelize
 
+# databse Changes, this repo probaly won´t work at this moment, in a few hours this will get updated so everything will work right again 
+
+
+
 ## Commands
 ### :envelope:  Allgemein [6]
 |  Name | Beschreibung |

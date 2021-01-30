@@ -19,17 +19,15 @@ module.exports = {
     async execute(msg) {
         let emb = rawEmb(msg)
         var settings = await msg.client.database.GuildConfigCache.getConfig(msg.guild.id);
-        let old = settings.LEVEL
+        let old = settings.levelMessage
 
-        if (settings.LEVEL) {
-            settings.LEVEL = false
-        } else { settings.LEVEL = true }
+        if (settings.levelMessage) {
+            settings.levelMessage = false
+        } else { settings.levelMessage = true }
 
         await settings.save()
 
-        emb.setTitle(`Level Nachricht geändert`)
-            .setDescription(`\`${old}\` zu \`${settings.LEVEL}\``)
-
+        emb.setDescription(`Level Nachricht geändert zu \`${settings.levelMessage}\``)
         msg.channel.send(emb)
     }
 };

@@ -56,7 +56,7 @@ const initDatabase = async() => {
 //==================================================================================================================================================
 //Currency and Levelingsystem
 //==================================================================================================================================================
-const { Spieler, Monster, Items, Order, Dungeons } = require('./database/dbInit');
+const { Monster, Items, Order, Dungeons } = require('./database/dbInit');
 
 var monster_cache = new Collection();
 var item_cache = new Collection();
@@ -64,25 +64,6 @@ var UserConfigCache = new Collection();
 var order_cache = new Collection();
 var dungeon_cache = new Collection();
 
-Reflect.defineProperty(UserConfigCache, "refillStamina", {
-    /**
-     * @param {number} id User ID
-     * @returns {Model} new User
-     */
-    value: async function() {
-        let i = 0;
-        let cache = await Spieler.findAll({})
-
-        cache.forEach(p => {
-            if (p.STAMINA !== 40) {
-                i++
-                p.STAMINA = 40
-                p.save()
-            }
-        })
-        return i;
-    }
-});
 //==================================================================================================================================================
 Reflect.defineProperty(order_cache, "getOrder", {
     /**

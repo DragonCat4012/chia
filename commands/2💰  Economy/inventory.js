@@ -1,6 +1,6 @@
 const { Message } = require('discord.js');
 const { rawEmb, emotes, colors } = require('../utilities');
-
+const itemTest = require('../../items.json')
 module.exports = {
     name: 'inventory',
     syntax: 'inventory [@user] [full/rare]',
@@ -28,33 +28,38 @@ module.exports = {
             return msg.channel.send(emb.setColor(colors.error))
         }
 
-        let S = "Normal"
-        if (args[0] == "full" || args[0] == "Full") S = "full"
-        if (args[0] == "rare" || args[0] == "Rare") S = "rare"
-        if (args[0] == "value" || args[0] == "Value") S = "value"
+        let caseSwitch = args[0] ? args[0].toLowerCase() : 'normal'
+        let optionsArray = ['full', 'rare', 'value']
+        if (!optionsArray.includes(caseSwitch)) caseSwitch = 'normal'
 
         let uid = user.id
-        var order = await msg.client.database.order_cache.getInventory(uid)
+        let userProfile = await msg.client.database.UserConfigCache.getConfig(uid)
 
-        if (!order.length > 0) {
+        let itemArray = userProfile.items.toObject()
+
+        if (!itemArray.length > 0) {
             emb.setDescription(user.username + " besitzt noch keine Items!")
             return msg.channel.send(emb)
         } else {
             arr = []
+            let Swords = 0;
+            let Shields = 0;
+            let Material = 0;
 
-            switch (S) {
-                case ("Normal"):
+            let Eins = 0;
+            let Zwei = 0;
+            let Drei = 0;
+            let Vier = 0;
+            let Fünf = 0;
+
+            switch (caseSwitch) {
+                case ("normal"):
                     {
                         emb.setTitle("Inventar")
-                        let Swords = 0;
-                        let Shields = 0;
-                        let Material = 0;
-
-                        for (let IID of order) {
-                            var item = await msg.client.database.item_cache.getConfig(IID.IID);
-                            if (item.TYPE == "SWORD") Swords += 1;
-                            if (item.TYPE == "SHIELD") Shields += 1;
-                            if (item.TYPE == "MATERIAL") Material += 1;
+                        for (let iten of itemArray) {
+                            if (item.type == "SWORD") Swords += 1;
+                            if (item.type == "SHIELD") Shields += 1;
+                            if (item.type == "MATERIAL") Material += 1;
                         }
                         let text = []
                         if (Swords > 1) text.push("⚔️ **Schwerter:** ⚔️ " + Swords)
@@ -67,19 +72,13 @@ module.exports = {
                 case ("rare"):
                     {
                         emb.setTitle("Inventar [Rare]")
-                        let Eins = 0;
-                        let Zwei = 0;
-                        let Drei = 0;
-                        let Vier = 0;
-                        let Fünf = 0;
 
-                        for (let IID of order) {
-                            var item = await msg.client.database.item_cache.getConfig(IID.IID);
-                            if (item.RARE == 1) Eins += 1;
-                            if (item.RARE == 2) Zwei += 1;
-                            if (item.RARE == 3) Drei += 1;
-                            if (item.RARE == 4) Vier += 1;
-                            if (item.RARE == 5) Fünf += 1;
+                        for (let IID of itemArray) {
+                            if (item.rare == 1) Eins += 1;
+                            if (item.rare == 2) Zwei += 1;
+                            if (item.rare == 3) Drei += 1;
+                            if (item.rare == 4) Vier += 1;
+                            if (item.rare == 5) Fünf += 1;
                         }
                         let text = []
                         if (Eins > 1) text.push("⭐  " + Eins)
@@ -88,7 +87,6 @@ module.exports = {
                         if (Vier > 1) text.push("🌟  " + Vier)
                         if (Fünf > 1) text.push("🌟🌟  " + Fünf)
                             //✨
-
                         emb.setDescription(text.join("\n"))
                         return msg.channel.send(emb)
                         break
@@ -96,9 +94,8 @@ module.exports = {
                 case ("full"):
                     {
                         emb.setTitle("Inventar [Full]")
-                        for (let IID of order) {
-                            var item = await msg.client.database.item_cache.getConfig(IID.IID);
-                            arr.push(item)
+                        for (let IID of itemArray) {
+                            arr.push(IID)
                         }
                         arr.sort(function(a, b) {
                             var nameA = a.TYPE
@@ -132,9 +129,8 @@ module.exports = {
                 case ("value"):
                     {
                         emb.setTitle("Inventar [Value]")
-                        for (let IID of order) {
-                            var item = await msg.client.database.item_cache.getConfig(IID.IID);
-                            arr.push(item)
+                        for (let IID of itemArray) {
+                            arr.push(IID)
                         }
                         arr.sort(function(a, b) {
                             var nameA = a.TYPE

@@ -19,13 +19,12 @@ module.exports = {
     async execute(msg, args) {
         let emb = rawEmb(msg)
         var settings = await msg.client.database.GuildConfigCache.getConfig(msg.guild.id);
-        let old = settings.PREFIX
         let neu = args[0]
 
-        settings.PREFIX = neu
+        settings.prefix = neu
         await settings.save()
 
-        emb.setDescription(`\`${old}\`, Prefix geändert zu \`${neu}\``)
+        emb.setDescription(` Prefix geändert zu \`${neu}\``)
         msg.channel.send(emb)
     }
 };

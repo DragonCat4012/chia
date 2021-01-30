@@ -39,5 +39,25 @@ Reflect.defineProperty(UserConfigCache, "getConfig", {
     }
 });
 
+Reflect.defineProperty(UserConfigCache, "refillStamina", {
+    /**
+     * @param {number} id User ID
+     * @returns {Model} new User
+     */
+    value: async function() {
+        let i = 0;
+        let cache = await UserConfigShema.findAll({})
+
+        cache.forEach(p => {
+            if (p.stamina !== 40) {
+                i++
+                p.stamina = 40
+                p.save()
+            }
+        })
+        return i;
+    }
+});
+
 client.database = { GuildConfigCache, UserConfigCache }
 module.exports = () => console.log('Database Cache setted')

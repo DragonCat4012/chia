@@ -17,7 +17,7 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg, args) {
-        let emb = rawEmb(msg)
+        let emb = rawEmb(msg).setTitle("Inventar")
         let user;
         if (msg.mentions.users.first()) {
             user = msg.mentions.users.first();
@@ -55,8 +55,7 @@ module.exports = {
             switch (caseSwitch) {
                 case ("normal"):
                     {
-                        emb.setTitle("Inventar")
-                        for (let iten of itemArray) {
+                        for (let item of itemArray) {
                             if (item.type == "SWORD") Swords += 1;
                             if (item.type == "SHIELD") Shields += 1;
                             if (item.type == "MATERIAL") Material += 1;
@@ -73,7 +72,7 @@ module.exports = {
                     {
                         emb.setTitle("Inventar [Rare]")
 
-                        for (let IID of itemArray) {
+                        for (let item of itemArray) {
                             if (item.rare == 1) Eins += 1;
                             if (item.rare == 2) Zwei += 1;
                             if (item.rare == 3) Drei += 1;
@@ -93,26 +92,25 @@ module.exports = {
                     }
                 case ("full"):
                     {
+                        arr = itemArray
                         emb.setTitle("Inventar [Full]")
-                        for (let IID of itemArray) {
-                            arr.push(IID)
-                        }
+
                         arr.sort(function(a, b) {
-                            var nameA = a.TYPE
-                            var nameB = b.TYPE
+                            var nameA = a.type
+                            var nameB = b.type
                             if (nameA < nameB) { return -1; }
                             if (nameA > nameB) { return 1; }
                             return 0;
                         });
 
-                        let size = arr.map(v => `[${v.ATK}/${v.DEV}] ${v.NAME} [${v.Rare}]`).join(" \n")
+                        let size = arr.map(v => `[${v.ATK}/${v.DEF}] ${v.name} [${v.rare}]`).join(" \n")
                         page = Math.round(size.length / 2000)
 
                         if (page > 1) {
                             for (let num = page; num > 1; num -= 1) {
                                 let B = arr.slice(0, 55)
                                 let shift = 55;
-                                B = B.map(v => "[" + v.ATK + "/" + v.DEV + "] " + v.NAME + " [" + v.RARE + "]").join(" \n")
+                                B = B.map(v => "[" + v.ATK + "/" + v.DEV + "] " + v.name + " [" + v.rare + "]").join(" \n")
                                 if (shift > 0) {
                                     arr.shift()
                                     shift -= 1;
@@ -121,7 +119,7 @@ module.exports = {
                                 msg.channel.send(emb)
                             }
                         } else {
-                            emb.setDescription(arr.map(v => `[${v.ATK}/${v.DEV}] ${v.NAME} [${v.RARE}]`).join(" \n"))
+                            emb.setDescription(arr.map(v => `[${v.ATK}/${v.DEV}] ${v.name} [${v.rare}]`).join(" \n"))
                             return msg.channel.send(emb)
                         }
                     }
@@ -129,25 +127,24 @@ module.exports = {
                 case ("value"):
                     {
                         emb.setTitle("Inventar [Value]")
-                        for (let IID of itemArray) {
-                            arr.push(IID)
-                        }
+                        arr = itemArray
+
                         arr.sort(function(a, b) {
-                            var nameA = a.TYPE
-                            var nameB = b.TYPE
+                            var nameA = a.type
+                            var nameB = b.type
                             if (nameA < nameB) { return -1; }
                             if (nameA > nameB) { return 1; }
                             return 0;
                         });
 
-                        let size = arr.map(v => `${v.VALUE}¥ ${v.NAME}`).join(" \n")
+                        let size = arr.map(v => `${v.value}¥ ${v.name}`).join(" \n")
                         page = Math.round(size.length / 2000)
 
                         if (page > 1) {
                             for (let num = page; num > 1; num -= 1) {
                                 let B = arr.slice(0, 55)
                                 let shift = 55;
-                                B = B.map(v => v.VALUE + "¥  " + v.NAME).join(" \n")
+                                B = B.map(v => v.value + "¥  " + v.name).join(" \n")
                                 if (shift > 0) {
                                     arr.shift()
                                     shift -= 1;
@@ -156,7 +153,7 @@ module.exports = {
                                 msg.channel.send(emb)
                             }
                         } else {
-                            emb.setDescription(arr.map(v => `${v.VALUE}¥ ${v.NAME}`).join(" \n"))
+                            emb.setDescription(arr.map(v => `${v.value}¥ ${v.name}`).join(" \n"))
                             return msg.channel.send(emb)
                         }
                     }

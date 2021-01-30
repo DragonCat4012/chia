@@ -1,6 +1,9 @@
 const fs = require("fs");
-const Discord = require("discord.js");
+const mongoose = require('mongoose')
 const { Message, Collection, Client, MessageEmbed } = require("discord.js");
+
+const GuildConfigShema = require('./database/GuildShema')
+const UserConfigshema = require('./database/UserShema')
 
 const { colors, newEmb, rawEmb, calcLevel, emotes } = require("./commands/utilities");
 const config = require("./config.json");
@@ -28,6 +31,29 @@ setTimeout(() => {
 }, planed - now)
 
 process.on("warning", console.warn);
+
+mongoose.connect('mongodb://localhost:27017/chia?gssapiServiceName=mongodb', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: true,
+}).then(() => {
+    console.log("Connected to the Mongodb database");
+}).catch((err) => {
+    console.log("Unable to connect to the Mongodb database. Error:" + err, "error");
+});
+
+const initDatabase = async() => {
+    try {
+        for (let entr of(await GuildConfigShema.find({}))) client.database.GuildSettingsCache.set(entr.guildID, entr);
+        for (let entr of(await UserConfigShema.find({}))) client.database.UserConfigCache.set(entr.userID, entr);
+        console.log(" > 🗸 Cached Database Entries");
+    } catch (e) {
+        console.log(" > ❌ Error While Caching Database")
+        console.log(e);
+    }
+}
+
 //==================================================================================================================================================
 //Currency and Levelingsystem
 //==================================================================================================================================================
@@ -315,32 +341,11 @@ Reflect.defineProperty(item_cache, "getConfig", {
         return item;
     }
 });
-//==================================================================================================================================================
-//Sync
-//==================================================================================================================================================
-const initDatabase = async() => {
-    await syncDatabase();
-
-    try {
-        for (let entr of(await Spieler.findAll())) player_cache.set(entr.UID, entr);
-        for (let entr of(await Items.findAll())) item_cache.set(entr.IID, entr);
-        for (let entr of(await Order.findAll())) { order_cache.set(entr.IID, entr.UID); }
-        for (let entr of(await Monster.findAll())) { monster_cache.set(entr.MID, entr); }
-        for (let entr of(await Dungeons.findAll())) { dungeon_cache.set(entr.DID, entr); }
-
-        console.log(" > 🗸 Cached Database Entries");
-    } catch (e) {
-        console.log(" > ❌ Error While Caching Database")
-        console.log(e);
-    }
-}
-
-client.database = { player_cache, monster_cache, item_cache, order_cache, dungeon_cache, settings_cache };
 
 //==================================================================================================================================================
 //Initialize the Commands
 //==================================================================================================================================================
-client.commands = new Discord.Collection();
+client.commands = new Collection();
 
 const commandDirectorys = fs
     .readdirSync("./commands").map(name => "./commands/" + name).filter(path => fs.lstatSync(path).isDirectory());
@@ -376,8 +381,6 @@ const start = async() => {
             //Preventing instant Restart
             setTimeout(() => { throw e }, 5000); //5 Second Timeout
         });
-
-        console.log("Starting Database");
         await initDatabase();
     } catch (e) {
         console.log(e);
@@ -516,7 +519,7 @@ client.on("message", async message => {
     }
 
     if (!cooldowns.has(command.name)) {
-        cooldowns.set(command.name, new Discord.Collection());
+        cooldowns.set(command.name, new Collection());
     }
 
     const now = Date.now();
@@ -555,3 +558,7 @@ client.on("message", async message => {
         message.channel.send(emb)
     }
 });
+
+
+module.exports = client
+require('./database/request')

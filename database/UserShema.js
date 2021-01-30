@@ -18,6 +18,10 @@ const UserShema = new mongoose.Schema({
         type: mongoose.SchemaTypes.Number,
         default: 0
     },
+    rank: {
+        type: mongoose.SchemaTypes.Number,
+        default: 10
+    },
     healthPoints: {
         type: mongoose.SchemaTypes.Number,
         default: 25

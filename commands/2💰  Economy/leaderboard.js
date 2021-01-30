@@ -22,19 +22,19 @@ module.exports = {
         if (args[0] == "coins") {
             emb.setTitle("Leaderboard [Coins]")
             users = users
-                .sort((a, b) => b.COINS - a.COINS)
+                .sort((a, b) => b.coins - a.coins)
                 .filter((v, i, arr) => i < 10)
                 .map((user, index) => {
-                    let u = msg.client.users.resolve(user.UID);
+                    let u = msg.client.users.resolve(user.userID);
                     if (!u) {
                         entry = {
                             a: `**${index + 1}. | Not Found**`,
-                            b: `**¥.** \`${(user.COINS).toLocaleString()}\``
+                            b: `**¥.** \`${(user.coins).toLocaleString()}\``
                         }
                     } else {
                         entry = {
                             a: `**${index + 1}. | ${u.tag}**`,
-                            b: `**¥.** \`${(user.COINS).toLocaleString()}\``
+                            b: `**¥.** \`${(user.coins).toLocaleString()}\``
                         }
                     }
                     return entry
@@ -42,38 +42,38 @@ module.exports = {
         } else if (args[0] == "rank") {
             emb.setTitle("Leaderboard [Rank]")
             users = users
-                .sort((a, b) => (b.RANK - a.RANK))
+                .sort((a, b) => (b.rank - a.rank))
                 .filter((v, i, arr) => i < 10)
                 .map((user, index) => {
-                    let u = msg.client.users.resolve(user.UID);
+                    let u = msg.client.users.resolve(user.userID);
                     if (!u) {
                         entry = {
                             a: `**${index + 1}. | Not Found**`,
-                            b: ` \`${(user.RANK).toLocaleString()}\``
+                            b: ` \`${(user.rank).toLocaleString()}\``
                         }
                     } else {
                         entry = {
                             a: `**${index + 1}. | ${u.tag}**`,
-                            b: ` \`${(user.RANK).toLocaleString()}\``
+                            b: ` \`${(user.rank).toLocaleString()}\``
                         }
                     }
                     return entry
                 });
         } else {
             users = users
-                .sort((a, b) => b.XP - a.XP)
+                .sort((a, b) => b.xp - a.xp)
                 .filter((v, i, arr) => i < 10)
                 .map((user, index) => {
-                    let u = msg.client.users.resolve(user.UID);
+                    let u = msg.client.users.resolve(user.userID);
                     if (!u) {
                         entry = {
                             a: `**${index + 1}. | Not Found**`,
-                            b: `Lvl. **${calcLevel(user.XP)}** - \`[${(user.XP).toLocaleString()}]\``
+                            b: `Lvl. **${calcLevel(user.xp)}** - \`[${(user.xp).toLocaleString()}]\``
                         }
                     } else {
                         entry = {
                             a: `**${index + 1}. | ${u.tag}**`,
-                            b: `Lvl. **${calcLevel(user.XP)}** \`[${(user.XP).toLocaleString()}]\``
+                            b: `Lvl. **${calcLevel(user.xp)}** \`[${(user.xp).toLocaleString()}]\``
                         }
                     }
                     return entry

@@ -24,27 +24,27 @@ module.exports = {
             t
         for (let item of shopItems) {
             if (item.buyable) {
-                if (item.rare == "1") {
+                if (item.rare == 1) {
                     if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
                     if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
                     if (item.type == "MATERIAL") t = "[🍃]"
                     text = (text + `**${item.value}¥** ⭐ ${item.name} ${t}\n`)
-                } else if (item.rare == "2") {
+                } else if (item.rare == 2) {
                     if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
                     if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
                     if (item.type == "MATERIAL") t = "[🍃]"
                     text = (text + `**${item.value}¥** ⭐⭐ ${item.name} ${t}\n`)
-                } else if (item.rare == "3") {
+                } else if (item.rare == 3) {
                     if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
                     if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
                     if (item.type == "MATERIAL") t = "[🍃]"
                     text = (text + `**${item.value}¥** ⭐⭐⭐ ${item.name} ${t}\n`)
-                } else if (item.rare == "4") {
+                } else if (item.rare == 4) {
                     if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
                     if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
                     if (item.type == "MATERIAL") t = "[🍃]"
                     text = (text + `**${item.value}¥** 🌟 ${item.name} ${t}\n`)
-                } else if (item.rare == "5") {
+                } else if (item.rare == 5) {
                     if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
                     if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
                     if (item.type == "MATERIAL") t = "[🍃]"

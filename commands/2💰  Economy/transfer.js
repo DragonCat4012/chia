@@ -19,9 +19,9 @@ module.exports = {
     async execute(msg, args) {
         let emb = rawEmb(msg).setTitle("Transfer")
         if (msg.mentions.members.first()) { user = msg.mentions.members.first().user }
-        if (!user) return msg.channel.send(emb.setTitle("Bitte gib einen Nutzer an").setColor(colors.nothing))
+        if (!user) return msg.channel.send(emb.setTitle("Bitte gib einen Nutzer an"))
 
-        if (user.bot) return msg.channel.send(emb.setTitle("Bots können keine Coins haben qwq").setColor(colors.nothing))
+        if (user.bot) return msg.channel.send(emb.setTitle("Bots können keine Coins haben qwq"))
 
         let Kunde = await msg.client.database.UserConfigCache.getConfig(user.id)
         let Verkäufer = await msg.client.database.UserConfigCache.getConfig(msg.author.id)
@@ -29,21 +29,16 @@ module.exports = {
         let amount = parseInt(args[1])
         if (Math.sign(amount) == -1) amount = amount * -1
 
-        if (isNaN(amount) || !amount) return msg.channel.send(emb.setTitle("Bitte gib eine gültige Zahl an").setColor(colors.nothing))
+        if (isNaN(amount) || !amount) return msg.channel.send(emb.setTitle("Bitte gib eine gültige Zahl an"))
 
-        if (Verkäufer.COINS < amount) return msg.channel.send(emb.setTitle("Du hats nicht gnügend Geld auf deinem Konto!").setColor(colors.nothing))
+        if (Verkäufer.coins < amount) return msg.channel.send(emb.setTitle("Du hats nicht gnügend Geld auf deinem Konto!"))
         let Paid = Math.floor(amount * 0.75)
 
-        Verkäufer.COINS -= Paid
-        Kunde.COINS += Paid;
+        Verkäufer.coins -= Paid
+        Kunde.coins += Paid;
         await Kunde.save()
         await Verkäufer.save()
 
         return msg.channel.send(emb.setTitle(Paid + ` [25% Steuern] Coins erfolgreich übertragen OvO`))
-
-
-
-
-
     }
 };

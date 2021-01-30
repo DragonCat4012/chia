@@ -17,39 +17,39 @@ module.exports = {
      */
     async execute(msg) {
         let user;
-        let emb = rawEmb(msg)
         if (msg.mentions.users.first()) {
             user = msg.mentions.users.first();
         } else { user = msg.author; }
+        let emb = rawEmb(msg).setTitle(`Profil von ${user.username}`)
 
         if (user.bot) {
             emb.setDescription("Bots haben kein Profil qwq")
             return msg.channel.send(emb.setColor(colors.error))
         }
+
         var player = await msg.client.database.UserConfigCache.getConfig(user.id);
         let inventory = player.items.toObject()
         var AK = 0;
         var DK = 0;
-        emb.setTitle(`Profil von ${user.username}`)
 
-        if (player.weapon) { a = emotes.false } else {
+        if (!player.weapon) { a = emotes.false } else {
             var item = await inventory.filter(e => e.name == player.weapon)
             if (!item) {
                 a = emotes.false
             } else {
-                if (item.type !== "sword") { a = emotes.false } else { a = item.name + "  [" + item.ATK + "/" + item.DEF + "]" }
+                if (item.type !== "sword") { a = emotes.false } else { a = `${item.name} [${item.ATK} / ${item.DEF}]` }
             }
-            AK += item.ATK
+            AK = item ? item.ATK : 0
         }
 
-        if (player.shield) { b = emotes.false } else {
+        if (!player.shield) { b = emotes.false } else {
             var item = await inventory.filter(e => e.name == player.weapon)
             if (!item) {
                 b = emotes.false
             } else {
-                if (item.type !== "shield") { b = emotes.false } else { b = item.name + "  [" + item.ATK + "/" + item.DEF + "]" }
+                if (item.type !== "shield") { b = emotes.false } else { b = `${item.name} [${item.ATK} / ${item.DEF}]` }
             }
-            DK += item.DEF
+            DK = item ? item.DEF : 0
         }
 
         let query = parseInt(user.id)
@@ -62,7 +62,7 @@ module.exports = {
         text += `⚔️ ${a} \n ${emotes.shield} ${b}\n`
         text += `**Münzen:** \`${player.coins} ¥\` \n`
         text += `**Level:** \`${calcLevel(player.xp)}\` \n`
-        text += `**Rank:** \`${player.rank} [${rank}]\` \n`
+        text += `**Rank:** \`${rank}. [${player.rank}]\` \n`
         text += `**Ausdauer:** \`${player.stamina} /40\` \n`
         text += `**Dungeon** \`${player.dungeon}\``
 

@@ -1,5 +1,6 @@
 const { Message } = require('discord.js');
 const { rawEmb, emotes } = require('../utilities');
+const shopItems = require('../../items.json')
 
 module.exports = {
     name: 'items',
@@ -17,48 +18,43 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg) {
-        var shop = await msg.client.database.item_cache.getShop();
-        let emb = rawEmb(msg).setTitle("Alle Items").setFooter(shop.length + " Items insgesamt")
+        let emb = rawEmb(msg).setTitle("Alle Items").setFooter(shopItems.length + " Items insgesamt")
         let arr = []
 
-        text = ""
-        for (let IID of shop) {
-            var item = await msg.client.database.item_cache.getConfig(IID.IID);
-            if (!item) console.log("Failure by detecting Item")
-
-            if (item.rare == "1") {
+        let text = "",
+            t
+        for (let item of shopItems) {
+            if (item.rare == 1) {
                 if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
                 if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
                 if (item.type == "MATERIAL") t = "[🍃]"
-                arr.push(`**${item.value}¥** ⭐ ${item.NAME} ${t}`)
-            } else if (item.rare == "2") {
+                text = (text + `**${item.value}¥** ⭐ ${item.name} ${t}\n`)
+            } else if (item.rare == 2) {
                 if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
                 if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
                 if (item.type == "MATERIAL") t = "[🍃]"
-                arr.push(`**${item.value}¥** ⭐⭐ ${item.NAME} ${t}`)
-            } else if (item.rare == "3") {
+                text = (text + `**${item.value}¥** ⭐⭐ ${item.name} ${t}\n`)
+            } else if (item.rare == 3) {
                 if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
                 if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
                 if (item.type == "MATERIAL") t = "[🍃]"
-                arr.push(`**${item.value}¥** ⭐⭐⭐ ${item.NAME} ${t}`)
-            } else if (item.rare == "4") {
+                text = (text + `**${item.value}¥** ⭐⭐⭐ ${item.name} ${t}\n`)
+            } else if (item.rare == 4) {
                 if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
                 if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
                 if (item.type == "MATERIAL") t = "[🍃]"
-                arr.push(`**${item.value}¥** 🌟 ${item.NAME} ${t}`)
-            } else if (item.rare == "5") {
+                text = (text + `**${item.value}¥** 🌟 ${item.name} ${t}\n`)
+            } else if (item.rare == 5) {
                 if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
                 if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
                 if (item.type == "MATERIAL") t = "[🍃]"
-                arr.push(`**${item.value}¥** 🌟🌟 ${item.NAME} ${t}`)
+                text = (text + `**${item.value}¥** 🌟🌟 ${item.name} \n`)
             } else {
                 if (item.type == "SWORD") t = `[⚔️ ${item.ATK}]`
                 if (item.type == "SHIELD") t = `[${emotes.shield} ${item.DEF}]`
                 if (item.type == "MATERIAL") t = "[🍃]"
-                arr.push(`**${item.value}¥** ${item.NAME} ${t}`)
+                text = (text + `**${item.value}¥** ${item.name} ${t}\n`)
             }
-
-
         }
 
         let size = (arr.join('\n')).length
@@ -79,7 +75,6 @@ module.exports = {
             emb.setDescription(arr.join(" \n"))
             return msg.channel.send(emb)
         }
-
         //  emb.setDescription(text)
         //    msg.channel.send(emb)
     }

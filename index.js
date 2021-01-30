@@ -56,81 +56,12 @@ const initDatabase = async() => {
 //==================================================================================================================================================
 //Currency and Levelingsystem
 //==================================================================================================================================================
-const { Monster, Items, Order, Dungeons } = require('./database/dbInit');
+const { Monster, Items, Dungeons } = require('./database/dbInit');
 
 var monster_cache = new Collection();
 var item_cache = new Collection();
-var UserConfigCache = new Collection();
-var order_cache = new Collection();
 var dungeon_cache = new Collection();
 
-//==================================================================================================================================================
-Reflect.defineProperty(order_cache, "getOrder", {
-    /**
-     * @param {number} id Guild ID
-     *  @param {number} uid Channel ID
-     * @returns {Model} new User
-     */
-    value: async function(id, uid) {
-        var order = order_cache.get({ IID: id, UID: uid })
-        if (!order) order = await Order.findOne({ where: { IID: id, UID: uid } });
-
-        else if (!order) {
-            order = null;
-        }
-        return order;
-    }
-});
-Reflect.defineProperty(order_cache, "setOrder", {
-    /**
-     * @param {number} id Guild ID
-     *  @param {number} uid Channel ID
-     * @returns {Model} new User
-     */
-    value: async function(id, uid) {
-        var order = await Order.create({ IID: id, UID: uid });
-        order_cache.set({ IID: id, UID: uid });
-        return order;
-    }
-});
-Reflect.defineProperty(order_cache, "deleteOrder", {
-    /**
-     * @param {number} id Guild ID
-     *  @param {number} uid Channel ID
-     * @returns {Model} new User
-     */
-    value: async function(id, uid) {
-        order_cache.delete({ IID: id, UID: uid })
-        let item = await Order.findOne({ where: { IID: id, UID: uid } })
-        await Order.destroy({ where: { IID: item.IID, UID: item.UID, id: item.id } });
-        return "S";
-
-    }
-});
-//==================================================================================================================================================
-Reflect.defineProperty(order_cache, "getInventory", {
-    /**
-     *  @param {number} uid Channel ID
-     * @returns {Model} new User
-     */
-    value: async function(uid) {
-        var order = order_cache.get({ UID: uid })
-        if (!order) order = await Order.findAll({ where: { UID: uid } });
-        else if (!order) {
-            order = null;
-        }
-        return order;
-    }
-});
-Reflect.defineProperty(item_cache, "getShop", {
-    /**
-     * @returns {Model} new User
-     */
-    value: async function() {
-        shop = await Items.findAll({});
-        return shop;
-    }
-});
 //==================================================================================================================================================
 Reflect.defineProperty(dungeon_cache, "getDungeons", {
     /**

@@ -1,11 +1,7 @@
 
 # chia
 Chia ist ein kleiner RPG Bot der sich auf die lange Reise des Lebens begab. Ihr Lebenssinn besteht darin anderen Freuden zu bereiten^^ 
-Sie basiert auf Discord.JS, Sqlite3 und Sequelize
-
-# databse Changes, this repo probaly won´t work at this moment, in a few hours this will get updated so everything will work right again 
-
-
+Basierend auf Discord.JS & mongoose
 
 ## Commands
 ### :envelope:  Allgemein [6]
@@ -58,8 +54,8 @@ npm i
 
 ## Dependencies
 * "discord.js": "^12.2.0"
-* "sequelize": "5.21.13"    
-* "sqlite3": "^5.0.0"
+* "mongoose": "^5.11.14",
+* "parse-ms": "^2.1.0"
 
 ## Start
 ```node index.js```

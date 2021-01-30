@@ -17,8 +17,6 @@
         "dblapi.js": "^2.4.1",
         "discord.js": "^12.5.1",
         "mongoose": "^5.11.14",
-        "parse-ms": "^2.1.0",
-        "sequelize": "^6.5.0",
-        "sqlite3": "^5.0.1"
+        "parse-ms": "^2.1.0"
     }
 }

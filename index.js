@@ -54,35 +54,6 @@ const initDatabase = async() => {
 }
 
 //==================================================================================================================================================
-//Currency and Levelingsystem
-//==================================================================================================================================================
-var item_cache = new Collection();
-//==================================================================================================================================================
-Reflect.defineProperty(item_cache, "getItem", {
-    value: async function() {
-        let t = await Items.findAll({})
-        let M = t.length;
-        var size = Math.floor(Math.floor(Math.random() * (M - 0 + 1) + 0))
-        if (size == 0) size = 1
-        size = "" + size + ""
-
-        var item = item_cache.get({ IID: size })
-        if (!item) item = await Items.findOne({ where: { IID: size } });
-        if (!item) console.log("No Results by searching for random Item")
-        return item;
-    }
-});
-Reflect.defineProperty(item_cache, "getConfig", {
-    value: async function(id) {
-        id = "" + id + ""
-        var item = item_cache.get({ IID: id });
-        if (!item) item = await Items.findOne({ where: { IID: id } });
-        if (!item) console.log("No Results by searching for Item:  " + id)
-        return item;
-    }
-});
-
-//==================================================================================================================================================
 //Initialize the Commands
 //==================================================================================================================================================
 client.commands = new Collection();
@@ -102,7 +73,6 @@ for (const dir of commandDirectorys) {
         });
     }
 }
-
 //Starting the Bot
 //==================================================================================================================================================
 const start = async() => {

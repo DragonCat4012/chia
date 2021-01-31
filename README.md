@@ -3,8 +3,6 @@
 Chia ist ein kleiner RPG Bot der sich auf die lange Reise des Lebens begab. Ihr Lebenssinn besteht darin anderen Freuden zu bereiten^^ 
 Basierend auf Discord.JS & mongoose
 
-# craft und alle dungeon cmds sind in der wartung
-
 ## Commands
 ### :envelope:  Allgemein [6]
 |  Name | Beschreibung |

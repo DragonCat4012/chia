@@ -4,7 +4,7 @@ const shopItems = require('../../items.json')
 
 module.exports = {
     name: 'sell',
-    syntax: 'sell <item>',
+    syntax: 'sell <itemID>',
     args: true,
     description: 'Lässt dich Items verkaufen',
     type: 'ECONEMY',
@@ -19,18 +19,19 @@ module.exports = {
     async execute(msg, args) {
         var player = await msg.client.database.UserConfigCache.getConfig(msg.author.id);
         let emb = rawEmb(msg).setTitle("Item Verkauf")
-
         var inventory = player.items.toObject()
-        let arr = [];
 
-        let itemTosell = (inventory.filter(e => e.name.toLowerCase() == args[0].toLowerCase())).shift()
-        if (!itemTosell) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq"))
+        let itemTosell = (inventory.filter(e => e.itemID == parseInt(args[0]))).shift()
+        var itemValue = (shopItems.filter(e => e.itemID == parseInt(args[0]))).shift()
 
-        player.coins += itemTosell.value;
-        emb.addField("**Preis:**", itemTosell.value + " ¥[55%]")
-            .addField("**Item:**", itemTosell.name)
+        if (!itemTosell) return msg.channel.send(emb.setTitle("Du besitzt dieses Item nicht qwq"))
+        if (!itemValue) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq"))
 
-        let needItem = (inventory.filter(item => item.name == itemTosell.name)).shift()
+        player.coins += itemValue.value;
+        emb.addField("**Preis:**", itemValue.value + " ¥[55%]")
+            .addField("**Item:**", itemValue.name)
+
+        let needItem = (inventory.filter(item => item.itemID == itemValue.itemID)).shift()
         let itemIndex = inventory.indexOf(needItem)
         itemIndex > -1 ? inventory.splice(itemIndex, 1) : false
         player.items = inventory

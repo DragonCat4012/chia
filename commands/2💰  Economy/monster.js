@@ -1,5 +1,6 @@
 const { Message } = require('discord.js');
 const { rawEmb, emotes } = require('../utilities');
+const allMontser = require('../../monster.json')
 
 module.exports = {
     name: 'monster',
@@ -17,14 +18,11 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg) {
-        var dungeon = await msg.client.database.monster_cache.getMonsters();
-        let emb = rawEmb(msg).setTitle("[ATK/DEF] healthPoints Monster ").setFooter(dungeon.length + " Monster insgesamt")
-
+        let emb = rawEmb(msg).setTitle("[ATK/DEF] healthPoints Monster ").setFooter(allMontser.length + " Monster insgesamt")
         text = ""
         let arr = []
-        for (let MID of dungeon) {
-            var monster = await msg.client.database.monster_cache.getConfig(MID.MID);
-            if (!monster) console.log("Failure by detecting monster")
+
+        for (let monster of allMontser) {
             if (monster.rare == "1") {
                 arr.push(`**${monster.id} -** [${monster.ATK}/${monster.DEF}] ❤️${monster.healthPoints} ⭐ **${monster.name}**`)
             } else if (monster.rare == "2") {

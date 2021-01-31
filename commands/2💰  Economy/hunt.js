@@ -28,7 +28,12 @@ module.exports = {
             return msg.channel.send(emb.setColor(colors.error))
         }
         ////////////////////////// -- ITEM BREAK --/////////////////////////////
-        var inventory = player.items.toObject()
+        var playerInventory = player.items.toObject()
+        let inventory = []
+        playerInventory.forEach(e => {
+            let i = (shopItems.filter(a => a.itemID == e)).shift()
+            inventory.push(i)
+        })
         var enemy = monsterArray[Math.floor(Math.random() * monsterArray.length)];
         rare = ""
             ////////////////////////// -- Vorbereitung --/////////////////////////////
@@ -45,8 +50,8 @@ module.exports = {
         let answerArray = ['ja', 'yes', 'si']
         if (!answerArray.includes(answer.toLowerCase())) return msg.channel.send(emb.setDescription("Kampf abgebrochen"))
 
-        if (player.weapon) { var weapon = ((shopItems.filter(e => e.name.toLowerCase() == (player.weapon).toLowerCase())).shift()).ATK } else { weapon = 0 }
-        if (player.shield) { var shield = ((shopItems.filter(e => e.name.toLowerCase() == (player.shield).toLowerCase())).shift()).DEF } else { shield = 0 }
+        if (player.weapon) { var weapon = ((shopItems.filter(e => e.itemID == player.weapon)).shift()).ATK } else { weapon = 0 }
+        if (player.shield) { var shield = ((shopItems.filter(e => e.itemID == player.shield)).shift()).DEF } else { shield = 0 }
 
         let r = 0;
         player.stamina -= 5;
@@ -94,12 +99,13 @@ module.exports = {
             }
             player.items = inventory
             if (arr.length == 0) arr.push("Kein Loot qwq", "qwq")
+            await player.save()
             msg.channel.send(emb.setTitle("Sieg").setDescription(arr.join("\n")).setColor(colors.success))
 
         } else if (fighter.healthPoints <= 0) {
             if (player.coins > 10) player.coins -= 10;
+            await player.save()
             msg.channel.send(emb.setTitle("Niederlage").setDescription("Du verlierst 10 Coins.").setColor(colors.error))
         }
-        await player.save()
     }
 };

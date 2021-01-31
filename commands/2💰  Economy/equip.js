@@ -22,25 +22,28 @@ module.exports = {
         let emb = rawEmb(msg).setTitle("Equip")
         var inventory = player.items.toObject()
 
-        let item = (inventory.filter(e => e.name.toLowerCase() == args[0].toLowerCase())).shift()
+        let playerItem = (inventory.filter(e => e.itemID == args[0])).shift()
+        if (!playerItem) return msg.channel.send(emb.setTitle("Dieses Item besitzt du nicht"))
+        if (playerItem.type !== "sword" && item.type !== "shield") return msg.channel.send(emb.setTitle("Du kannst nur Schilder oder Schwerter ausrüsten"))
+
+        let item = (shopItems.filter(e => e.itemID == args[0])).shift()
         if (!item) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq"))
-        if (item.type !== "sword" && item.type !== "shield") return msg.channel.send(emb.setTitle("Du kannst nur Schilder oder Schwerter ausrüsten"))
 
         if (item.type == "sword") {
             if (player.weapon) {
-                let oldWeapon = (shopItems.filter(e => e.name.toLowerCase() == player.weapon.toLowerCase())).shift()
+                let oldWeapon = (shopItems.filter(e => e.itemID == player.weapon)).shift()
                 emb.addField("Voherige Waffe", (oldWeapon.name + " [" + oldWeapon.ATK + "/" + oldWeapon.DEF + "]"))
             }
-            player.weapon = item.name;
+            player.weapon = item.itemID;
             emb.addField("**Jetzige Waffe:**", (item.name + " [" + item.ATK + "/" + item.DEF + "]"))
             return player.save().then(() => msg.channel.send(emb));
 
         } else if (item.type == "shield") {
             if (player.shield) {
-                let oldShield = (shopItems.filter(e => e.name.toLowerCase() == player.shield.toLowerCase())).shift()
+                let oldShield = (shopItems.filter(e => e.itemID == player.shield)).shift()
                 emb.addField("Voheriges Schild", (oldShield.name + " [" + oldShield.ATK + "/" + oldShield.DEF + "]"))
             }
-            player.shield = item.name
+            player.shield = item.itemID
             emb.addField("**Jetziges Schild:**", (item.name + " [" + item.ATK + "/" + item.DEF + "]"))
             return player.save().then(() => msg.channel.send(emb));
         }

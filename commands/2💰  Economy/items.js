@@ -20,40 +20,39 @@ module.exports = {
     async execute(msg) {
         let emb = rawEmb(msg).setTitle("Alle Items").setFooter(shopItems.length + " Items insgesamt")
         let arr = []
+        let t;
 
-        let text = "",
-            t
         for (let item of shopItems) {
             if (item.rare == 1) {
                 if (item.type == "sword") t = `[⚔️ ${item.ATK}]`
                 if (item.type == "shield") t = `[${emotes.shield} ${item.DEF}]`
                 if (item.type == "material") t = "[🍃]"
-                text = (text + `**${item.value}¥** ⭐ ${item.name} ${t}\n`)
+                arr.push(`**${item.value}¥** ⭐ ${item.name} ${t}\n`)
             } else if (item.rare == 2) {
                 if (item.type == "sword") t = `[⚔️ ${item.ATK}]`
                 if (item.type == "shield") t = `[${emotes.shield} ${item.DEF}]`
                 if (item.type == "material") t = "[🍃]"
-                text = (text + `**${item.value}¥** ⭐⭐ ${item.name} ${t}\n`)
+                arr.push(`**${item.value}¥** ⭐⭐ ${item.name} ${t}\n`)
             } else if (item.rare == 3) {
                 if (item.type == "sword") t = `[⚔️ ${item.ATK}]`
                 if (item.type == "shield") t = `[${emotes.shield} ${item.DEF}]`
                 if (item.type == "material") t = "[🍃]"
-                text = (text + `**${item.value}¥** ⭐⭐⭐ ${item.name} ${t}\n`)
+                arr.push(`**${item.value}¥** ⭐⭐⭐ ${item.name} ${t}\n`)
             } else if (item.rare == 4) {
                 if (item.type == "sword") t = `[⚔️ ${item.ATK}]`
                 if (item.type == "shield") t = `[${emotes.shield} ${item.DEF}]`
                 if (item.type == "material") t = "[🍃]"
-                text = (text + `**${item.value}¥** 🌟 ${item.name} ${t}\n`)
+                arr.push(`**${item.value}¥** 🌟 ${item.name} ${t}\n`)
             } else if (item.rare == 5) {
                 if (item.type == "sword") t = `[⚔️ ${item.ATK}]`
                 if (item.type == "shield") t = `[${emotes.shield} ${item.DEF}]`
                 if (item.type == "material") t = "[🍃]"
-                text = (text + `**${item.value}¥** 🌟🌟 ${item.name} \n`)
+                arr.push(`**${item.value}¥** 🌟🌟 ${item.name} \n`)
             } else {
                 if (item.type == "sword") t = `[⚔️ ${item.ATK}]`
                 if (item.type == "shield") t = `[${emotes.shield} ${item.DEF}]`
                 if (item.type == "material") t = "[🍃]"
-                text = (text + `**${item.value}¥** ${item.name} ${t}\n`)
+                arr.push(`**${item.value}¥** ${item.name} ${t}\n`)
             }
         }
 
@@ -75,7 +74,5 @@ module.exports = {
             emb.setDescription(arr.join(" \n"))
             return msg.channel.send(emb)
         }
-        //  emb.setDescription(text)
-        //    msg.channel.send(emb)
     }
 };

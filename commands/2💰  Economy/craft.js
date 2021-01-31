@@ -22,42 +22,35 @@ module.exports = {
         let oldItems = userProfile.items.toObject()
         let name = (args[0]).toLowerCase()
         let emb = rawEmb(msg).setTitle("Item Craften")
-            /*
-                    oldItems.push(shopItems[0])
-                    userProfile.items = oldItems
 
-                    await userProfile.save()
-                    return
-            */
         let obj = crafting.hasOwnProperty(name);
         if (!obj) return msg.channel.send(emb.setDescription("Dieses Item kann nicht gecraftet werden qwq").setColor(colors.error))
-        let newItem = shopItems.filter(e => e.name.toLowerCase() == name.toLowerCase())
+        let newItem = (shopItems.filter(e => e.name.toLowerCase() == name.toLowerCase())).shift()
 
         let text = "";
         let itemFailed = false
         let materials = []
-        materials = crafting[name] //(2) ['ItemTest', 'myNewItem']
+        materials = crafting[name] //(2) [1, 2]
 
         materials.forEach(element => {
-            text += ("> " + element + "\n")
-            let needItem = (oldItems.filter(item => item.name == element)).shift()
-            let itemIndex = oldItems.indexOf(needItem)
+            let item = (shopItems.filter(a => a.itemID == element)).shift()
+            text += ("> " + item.name + "\n")
+            let itemIndex = oldItems.indexOf(item)
             if (itemIndex == -1) {
                 itemFailed = true
-                emb.addField("Item Fehlt:", element)
+                emb.addField("Item Fehlt:", `${item.name } [${item.itemID}]`)
             }
         })
 
         if (itemFailed) return msg.channel.send(emb.setColor(colors.error))
 
         materials.forEach(element => {
-            let needItem = (oldItems.filter(item => item.name == element)).shift()
+            let needItem = (oldItems.filter(item => item.itemID == element)).shift()
             let itemIndex = oldItems.indexOf(needItem)
 
             itemIndex > -1 ? oldItems.splice(itemIndex, 1) : false
         })
 
-        newItem = newItem.shift()
         oldItems.push(newItem)
         userProfile.items = oldItems;
 

@@ -1,5 +1,4 @@
-[
-    {
+[{
         "itemID": 1,
         "name": "Starter Sword",
         "rare": 1,
@@ -348,7 +347,7 @@
         "ATK": 0,
         "DEF": 0,
         "uses": 10,
-        "buyable": false
+        "buyable": true
     },
     {
         "itemID": 28,

@@ -9,7 +9,6 @@ module.exports = {
     syntax: 'explore',
     args: false,
     description: 'Kämpfe in Dungeons',
-    cooldwon: 30,
     type: 'DUNGEONS',
     commands: ['explore', 'e'],
 
@@ -22,8 +21,8 @@ module.exports = {
     async execute(msg, args) {
         let emb = rawEmb(msg)
         var A = await msg.client.database.UserConfigCache.getConfig(msg.author.id);
-        let room = (dungeonArray.filter(d => d.id == A.dungeon)).shift()
-        emb.setFooter(`Dungeon: ${room.name} || ID: ${room.id}`)
+        let room = (dungeonArray.filter(d => d.dungeonID == A.dungeon)).shift()
+
         let CacheSword = 0;
         let CacheShield = 0;
 
@@ -37,14 +36,15 @@ module.exports = {
             emb.setDescription('**Du benötigst 5 Ausdauer zum kämpfen. Diese werden jeden Tag zurück gesetzt, bitte warte bis deine Ausdauer wieder aufgefüllt ist**')
             return msg.channel.send(emb.setColor(colors.error))
         }
+        emb.setFooter(`Dungeon: ${room.name} || ID: ${room.dungeonID}`)
 
         if (A.weapon) {
-            let item = (itemArray.filter(i => i.name.toLowerCase() == A.weapon.toLowerCase())).shift()
-            CacheSword = item.ATK
+            let item = (itemArray.filter(i => i.itemID == A.weapon)).shift()
+            if (item) CacheSword = item.ATK
         }
         if (A.shield) {
-            let item = (itemArray.filter(i => i.name.toLowerCase() == A.shield.toLowerCase())).shift()
-            if (Item) CacheShield = item.DEF
+            let item = (itemArray.filter(i => i.itemID == A.shield)).shift()
+            if (item) CacheShield = item.DEF
         }
         let CacheHP = A.healthPoints + calcLevel(A.xp);
 
@@ -54,12 +54,12 @@ module.exports = {
             healthPoints: CacheHP
         }
 
-        /*
+
         if (player.ATK < 7 || player.DEF < 7) {
             emb.setDescription('**Trainiere lieber noch ein bisschen, die Monster hier sind sonst zu stark für dich**')
                 .setFooter('Nutze dafür z.B. -hunt und jage schwächere monster')
             return msg.channel.send(emb.setColor(colors.error))
-        }*/
+        }
 
         player.stamina -= 5;
 
@@ -74,20 +74,19 @@ module.exports = {
 
         while (i) {
             let obj = line.shift()
-
             if (obj == "E") {
                 i = false
                 text += "\n**Dungeon beendet**"
                 A.dungeon = A.dungeon + 1
                 await A.save()
-                return msg.channel.send(emb.setDescription(text).setColor(colors.success)).catch()
+                return m.edit(emb.setDescription(text).setColor(colors.success)).catch()
             } else if (obj == "H") {
                 player.healthPoints += 20
                 text += "---- Heal **+20** ---- \n"
                 progress.shift()
                 progress.push("➕")
             } else {
-                let monster = (monsterArray.filter(m => m.name.toLowerCase() == obj.toLowerCase())).shift()
+                let monster = (monsterArray.filter(m => m.monsterID == obj)).shift()
                 let R = await fight(msg, player, obj)
                 if (!R.value) {
                     i = false
@@ -110,13 +109,12 @@ module.exports = {
  * @param {object} player Item ID
  * @returns {object}  User
  */
-async function fight(msg, player, name) {
-    let monster = (monsterArray.filter(m => m.name.toLowerCase() == name.toLowerCase())).shift()
-    if (!monster) monster = await msg.client.database.monster_cache.getConfig(parseInt(id));
+async function fight(msg, player, id) {
+    let monster = (monsterArray.filter(m => m.monsterID == id)).shift()
 
     var enemy = {
-        ATK: parseInt(monster.ATK),
-        DEF: parseInt(monster.DEF),
+        ATK: monster.ATK,
+        DEF: monster.DEF,
         healthPoints: parseInt(monster.healthPoints)
     }
     var res = {

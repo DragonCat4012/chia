@@ -21,7 +21,7 @@ module.exports = {
     async execute(msg, args) {
         let emb = rawEmb(msg)
         if (!args[0] || isNaN(args[0])) return msg.channel.send(emb.setDescription('**Achte bitte auf den Syntax! Du musst eine ID angeben**').setColor(colors.error))
-        var dungeon = (dungeonArray.filter(m => m.id == args[0])).shift()
+        var dungeon = (dungeonArray.filter(m => m.dungeonID == args[0])).shift()
         if (!dungeon) return msg.channel.send(emb.setDescription('**Kein Raum mit dieser ID gefunden**').setColor(colors.error))
 
         emb.setTitle("Dungeon: " + dungeon.name).setFooter(`ID: ${dungeon.id}`)
@@ -39,7 +39,7 @@ module.exports = {
             } else if (obj == "H") {
                 progress.push(`♻️ Healing +20`)
             } else {
-                let monster = (monsterArray.filter(m => m.name.toLowerCase() == obj.toLowerCase())).shift()
+                let monster = (monsterArray.filter(m => m.monsterID == obj)).shift()
                 if (monster) progress.push(`🔸 ${monster.name} [${monster.ATK}/${monster.DEF}]`)
                 if (!monster) progress.push(`🔸 Name [0/0]`)
             }

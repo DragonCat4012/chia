@@ -7,7 +7,6 @@ module.exports = {
     syntax: 'items',
     args: false,
     description: 'Zeigt dir alle Items',
-    cooldown: 10,
     type: 'ECONEMY',
     commands: ['items'],
 

@@ -100,7 +100,6 @@ module.exports = {
                         if (nameA > nameB) { return 1; }
                         return 0;
                     });
-                    console.log(arr)
                     let size = arr.map(v => `10 - [${v.ATK}/${v.DEF}] ${v.name} [${ v.rare}]`).join(" \n")
                     page = Math.round(size.length / 2000)
 

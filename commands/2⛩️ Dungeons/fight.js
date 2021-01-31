@@ -7,7 +7,7 @@ module.exports = {
     syntax: 'fight <@user>',
     args: true,
     description: 'Kämpf gegen andere Spieler. Nutze "ranked" um das Ergebnis zu werten',
-    cooldown: 30,
+    cooldown: 10,
     type: 'DUNGEONS',
     commands: ['fight'],
 
@@ -66,11 +66,11 @@ module.exports = {
         let P_Lifes = player.healthPoints + player.xp
         let E_Lifes = enemyconfig.healthPoints + enemyconfig.xp
 
-        if (player.weapon) { var weapon = ((itemArray.filter(e => e.name.toLowerCase() == player.weapon)).shift()).ATK } else { weapon = 0 }
-        if (player.shield) { var shield = ((itemArray.filter(e => e.name.toLowerCase() == player.shield)).shift()).DEF } else { shield = 0 }
+        if (player.weapon) { var weapon = ((itemArray.filter(e => e.itemID == player.weapon)).shift()).ATK } else { weapon = 0 }
+        if (player.shield) { var shield = ((itemArray.filter(e => e.itemID == player.shield)).shift()).DEF } else { shield = 0 }
 
-        if (enemyconfig.weapon) { var enemy_weapon = ((itemArray.filter(e => e.name.toLowerCase() == enemyconfig.weapon)).shift()).ATK } else { enemy_weapon = 0 }
-        if (enemyconfig.shield) { var enemy_shield = ((itemArray.filter(e => e.name.toLowerCase() == enemyconfig.shield)).shift()).DEF } else { enemy_shield = 0 }
+        if (enemyconfig.weapon) { var enemy_weapon = ((itemArray.filter(e => e.itemID == enemyconfig.weapon)).shift()).ATK } else { enemy_weapon = 0 }
+        if (enemyconfig.shield) { var enemy_shield = ((itemArray.filter(e => e.itemID == enemyconfig.shield)).shift()).DEF } else { enemy_shield = 0 }
         let r = 0;
 
         var enemy = {
@@ -93,7 +93,7 @@ module.exports = {
             emb.setDescription(`**<@${enemy_user}> ist zu stark für dich!**`).setColor(colors.error).setFooter('Tipp: Lege dir bessere Waffen zu')
         }
         if (fighter.DEF > enemy.ATK) {
-            emb.setDescription(`**<@${user.id}> du bist zu stark für deinen gegner... Kämpfe lieber gegen ebenbürdige**`).setColor(colors.error).setFooter('Tipp: Lege dir bessere Waffen zu')
+            emb.setDescription(`**<@${msg.author.id}> du bist zu stark für deinen gegner... Kämpfe lieber gegen ebenbürdige**`).setColor(colors.error).setFooter('Tipp: Lege dir bessere Waffen zu')
         }
         ///////////////////////////////////////////////////////////////////////
         var Damage = fighter.DEF - enemy.ATK;
@@ -117,7 +117,7 @@ module.exports = {
                 await player.save()
                 emb.setDescription("Du gewinnst 3 Punkte " + emotes.cool)
             }
-            return msg.channel.send(emb.setTitle("Sieg für " + user.username + emotes.cool).setColor(colors.success))
+            return msg.channel.send(emb.setTitle("Sieg für " + msg.author.username + emotes.cool).setColor(colors.success))
         } else if (fighter.healthPoints <= 0) {
             if (ranked) {
                 enemy.RANK += 3;

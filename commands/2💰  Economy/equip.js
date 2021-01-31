@@ -7,7 +7,6 @@ module.exports = {
     syntax: 'equip <item>',
     args: true,
     description: 'Lässt dich Items ausrüsten',
-    cooldown: 5,
     type: 'ECONEMY',
     commands: ['equip'],
 
@@ -24,7 +23,7 @@ module.exports = {
 
         let playerItem = (inventory.filter(e => e.itemID == args[0])).shift()
         if (!playerItem) return msg.channel.send(emb.setTitle("Dieses Item besitzt du nicht"))
-        if (playerItem.type !== "sword" && item.type !== "shield") return msg.channel.send(emb.setTitle("Du kannst nur Schilder oder Schwerter ausrüsten"))
+        if (playerItem.type !== "sword" && playerItem.type !== "shield") return msg.channel.send(emb.setTitle("Du kannst nur Schilder oder Schwerter ausrüsten"))
 
         let item = (shopItems.filter(e => e.itemID == args[0])).shift()
         if (!item) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq"))

@@ -7,7 +7,6 @@ module.exports = {
     syntax: 'shop',
     args: false,
     description: 'Zeigt dir alle verfügbaren Items',
-    cooldown: 10,
     type: 'ECONEMY',
     commands: ['shop'],
 

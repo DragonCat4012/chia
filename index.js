@@ -33,6 +33,7 @@ setTimeout(() => {
 process.on("warning", console.warn);
 
 mongoose.connect('mongodb://localhost:27017/chia?gssapiServiceName=mongodb', {
+
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,

@@ -7,7 +7,6 @@ module.exports = {
     syntax: 'dungeons',
     args: false,
     description: 'Zeigt dir alle verfügbaren Dungeons',
-    cooldown: 5,
     type: 'DUNGEONS',
     commands: ['dungeons'],
 

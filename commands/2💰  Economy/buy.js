@@ -25,7 +25,6 @@ module.exports = {
             if (msg.content.toLowerCase().includes(item.name.toLowerCase()))
                 arr.push(item)
         }
-
         item = arr[0];
         if (arr.length < 1) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq"))
 

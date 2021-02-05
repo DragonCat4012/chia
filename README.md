@@ -3,6 +3,10 @@
 Chia ist ein kleiner RPG Bot der sich auf die lange Reise des Lebens begab. Ihr Lebenssinn besteht darin anderen Freuden zu bereiten^^ 
 Basierend auf Discord.JS & mongoose
 
+<a href="https://top.gg/bot/744883074508259329">
+    <img src="https://top.gg/api/widget/744883074508259329.svg" alt="Chia" />
+</a>
+
 ## Commands
 ### :envelope:  Allgemein [6]
 |  Name | Beschreibung |

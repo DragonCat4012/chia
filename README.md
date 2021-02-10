@@ -7,6 +7,10 @@ Basierend auf Discord.JS & mongoose
     <img src="https://top.gg/api/widget/744883074508259329.svg" alt="Chia" />
 </a>
 
+
+[![Code Grade](https://www.code-inspector.com/project/18829/status/svg)](https://www.code-inspector.com/public/project/18829/dashboard)
+
+
 ## Commands
 ### :envelope:  Allgemein [6]
 |  Name | Beschreibung |

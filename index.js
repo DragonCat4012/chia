@@ -15,20 +15,20 @@ const cooldowns = new Collection();
 var report_channel;
 
 var now = new Date(),
-    planed = new Date();
+    planned = new Date();
 
-planed.setHours(21);
-planed.setMinutes(38);
-planed.setSeconds(20)
+planned.setHours(21);
+planned.setMinutes(38);
+planned.setSeconds(20)
 
-if (planed.getTime() < now.getTime())
-    planed.setTime(planed.getTime() + 1000 * 60 * 60 * 24);
+if (planned.getTime() < now.getTime())
+    planned.setTime(planned.getTime() + 1000 * 60 * 60 * 24);
 
 setTimeout(() => {
     setInterval(() => {
         client.database.UserConfigCache.refillStamina()
     }, 1000 * 60 * 60 * 24);
-}, planed - now)
+}, planned - now)
 
 process.on("warning", console.warn);
 

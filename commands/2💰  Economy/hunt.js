@@ -19,7 +19,6 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg, args) {
-        msg.client.guilds.cache.size
         var player = await msg.client.database.UserConfigCache.getConfig(msg.author.id);
         let emb = rawEmb(msg)
         ////////////////////////// -- Stamina BREAK --/////////////////////////////
@@ -35,18 +34,15 @@ module.exports = {
             inventory.push(i)
         })
         var enemy = monsterArray[Math.floor(Math.random() * monsterArray.length)];
-        rare = ""
         ////////////////////////// -- Vorbereitung --/////////////////////////////
-        if (enemy.rare == 1) rare = "⭐"
-        if (enemy.rare == 2) rare = "⭐⭐"
-        if (enemy.rare == 3) rare = "⭐⭐⭐"
-        if (enemy.rare == 4) rare = "🌟"
-        if (enemy.rare == 5) rare = "🌟🌟"
+
+        var rare = rarity(enemy.rare)
 
         msg.channel.send(emb.setDescription("**" + enemy.name + `** ${rare}
         \n ⚔️ [${enemy.ATK}]  ${emotes.shield} [${enemy.DEF}]  ❤️ [${enemy.healthPoints}]`).setColor(colors.warning))
-        let quest = "Möchtest du Kämpfen"
-        let answer = await getAnswer(msg, quest + "?", 30)
+        let quest = "Möchtest du Kämpfen";
+        let answer = await getAnswer(msg, quest + "?", 30);
+        player = await msg.client.database.UserConfigCache.getConfig(msg.author.id);
         let answerArray = ['ja', 'yes', 'si']
         if (!answerArray.includes(answer.toLowerCase())) return msg.channel.send(emb.setDescription("Kampf abgebrochen"))
 
@@ -108,3 +104,11 @@ module.exports = {
         await player.save()
     }
 };
+
+function rarity(level) {
+    if (level == 1) return "⭐"
+    if (level == 2) return "⭐⭐"
+    if (level == 3) return "⭐⭐⭐"
+    if (level == 4) return "🌟"
+    if (level == 5) return "🌟🌟"
+}

@@ -153,7 +153,7 @@ client.on("message", async message => {
     let oldLevel = CachedPlayer.xp
     let addedXp = Math.floor(Math.floor(Math.random() * (5 - 1 + 1) + 1))
     CachedPlayer.xp += addedXp
-    await CachedPlayer.save()
+    //await CachedPlayer.save()
     if (levelMessage) {
         let newLevel = CachedPlayer.xp;
 
@@ -242,7 +242,8 @@ client.on("message", async message => {
     }
 
     try {
-        command.execute(message, args, settings);
+        await command.execute(message, args, settings);
+        await CachedPlayer.save();
     } catch (error) {
         console.error(error);
         emb.setDescription(

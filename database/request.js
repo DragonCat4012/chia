@@ -12,7 +12,7 @@ Reflect.defineProperty(GuildConfigCache, "getConfig", {
      * @param {number} id Guild ID
      * @returns {Model} new Model
      */
-    value: async function(id) {
+    value: async function (id) {
         var server = GuildConfigCache.get(id);
         if (!server) server = await GuildConfigShema.findOne({ where: { guildID: id } });
         if (!server) {
@@ -28,7 +28,7 @@ Reflect.defineProperty(UserConfigCache, "getConfig", {
      * @param {number} id User ID
      * @returns {Model} new User
      */
-    value: async function(id) {
+    value: async function (id) {
         var user = UserConfigCache.get(id);
         if (!user) user = await UserConfigShema.findOne({ where: { userID: id } });
         if (!user) {
@@ -44,9 +44,9 @@ Reflect.defineProperty(UserConfigCache, "refillStamina", {
      * @param {number} id User ID
      * @returns {Model} new User
      */
-    value: async function() {
+    value: async function () {
         let i = 0;
-        let cache = await UserConfigShema.findAll({})
+        let cache = await UserConfigShema.find({})
 
         cache.forEach(p => {
             if (p.stamina !== 40) {

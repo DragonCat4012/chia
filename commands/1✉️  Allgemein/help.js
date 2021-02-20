@@ -15,7 +15,7 @@ module.exports = {
      * @param {Message} msg Nachricht in dem der Befehl geschickt wurde
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
-    async execute(msg, args) {
+    async execute(msg, args, settings) {
         let emb = rawEmb(msg)
 
         if (args[0]) {
@@ -45,7 +45,7 @@ module.exports = {
                 a += 1;
                 let prop = (mod.toString()).toLowerCase()
 
-                emb.addField(`**${mod}** [${commands.length}]`, commands.map(v => `**-${v.syntax}** [\`${v.description}\`]`).join('\n') + "\n\u200b");
+                emb.addField(`**${mod}** [${commands.length}]`, commands.map(v => `**${settings.prefix}${v.syntax}** [\`${v.description}\`]`).join('\n') + "\n\u200b");
             }
             let voteLink = 'https://top.gg/bot/744883074508259329/vote'
             let githubLink = 'https://github.com/DragonCat4012/chia'

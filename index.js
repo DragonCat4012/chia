@@ -242,7 +242,7 @@ client.on("message", async message => {
     }
 
     try {
-        command.execute(message, args);
+        command.execute(message, args, settings);
     } catch (error) {
         console.error(error);
         emb.setDescription(

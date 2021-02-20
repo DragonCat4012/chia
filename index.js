@@ -233,14 +233,6 @@ client.on("message", async message => {
     timestamps.set(message.author.id, now);
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
-    if (command.type !== 'ALLGEMEIN' && command.type !== 'EINSTELLUNGEN') {
-        let databaseCheck = await client.database.UserConfigCache.getConfig(message.author.id)
-        if (!databaseCheck) {
-            let emb = rawEmb().setColor(colors.error).setDescription(`${message.author}**Du musst** \`-start\` **eingeben um dein Abenteuer mit mir zu starten ;-;**`)
-            return message.channel.send(emb).catch()
-        }
-    }
-
     try {
         await command.execute(message, args, settings);
         await CachedPlayer.save();

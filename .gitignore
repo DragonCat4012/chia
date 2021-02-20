@@ -112,10 +112,5 @@ dist
 
 # TernJS port file
 .tern-port
-order.sqlite
-commands/config.json
-config.json
-config.json
-config.json
 config.json
 configtest.json

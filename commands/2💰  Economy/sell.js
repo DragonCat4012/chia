@@ -24,8 +24,8 @@ module.exports = {
         let itemTosell = (inventory.filter(e => e.itemID == parseInt(args[0]))).shift()
         var itemValue = (shopItems.filter(e => e.itemID == parseInt(args[0]))).shift()
 
-        if (!itemTosell) return msg.channel.send(emb.setTitle("Du besitzt dieses Item nicht qwq"))
-        if (!itemValue) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq"))
+        if (!itemTosell) return msg.channel.send(emb.setTitle("Du besitzt dieses Item nicht qwq").setColor(colors.error))
+        if (!itemValue) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq").setColor(colors.error))
 
         player.coins += itemValue.value;
         emb.addField("**Preis:**", itemValue.value + " ¥[55%]")

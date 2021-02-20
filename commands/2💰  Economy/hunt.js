@@ -24,7 +24,7 @@ module.exports = {
         ////////////////////////// -- Stamina BREAK --/////////////////////////////
         if (player.stamina <= 5) {
             emb.setDescription('**Du benötigst 5 Ausdauer zum kämpfen. Diese werden jeden Tag zurück gesetzt, bitte warte bis deine Ausdauer wieder aufgefüllt ist**')
-            return msg.channel.send(emb.setColor(colors.error))
+            return msg.channel.send(emb.setColor(colors.error)).catch()
         }
         ////////////////////////// -- ITEM BREAK --/////////////////////////////
         var playerInventory = player.items.toObject()
@@ -44,7 +44,7 @@ module.exports = {
         let answer = await getAnswer(msg, quest + "?", 30);
         player = await msg.client.database.UserConfigCache.getConfig(msg.author.id);
         let answerArray = ['ja', 'yes', 'si']
-        if (!answerArray.includes(answer.toLowerCase())) return msg.channel.send(emb.setDescription("Kampf abgebrochen"))
+        if (!answerArray.includes(answer.toLowerCase())) return msg.channel.send(emb.setDescription("Kampf abgebrochen")).catch()
 
         if (player.weapon) { var weapon = ((shopItems.filter(e => e.itemID == player.weapon)).shift()).ATK } else { weapon = 0 }
         if (player.shield) { var shield = ((shopItems.filter(e => e.itemID == player.shield)).shift()).DEF } else { shield = 0 }
@@ -98,7 +98,7 @@ module.exports = {
 
         } else if (fighter.healthPoints <= 0) {
             if (player.coins > 10) player.coins -= 10;
-            msg.channel.send(emb.setTitle("Niederlage").setDescription("Du verlierst 10 Coins.").setColor(colors.error))
+            msg.channel.send(emb.setTitle("Niederlage").setDescription("Du verlierst 10 Coins.").setColor(colors.error)).catch()
         }
         player.stamina -= 5;
         await player.save()

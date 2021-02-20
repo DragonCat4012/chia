@@ -38,7 +38,7 @@ module.exports = {
 
         if (!itemArray.length > 0) {
             emb.setDescription(user.username + " besitzt noch keine Items!")
-            return msg.channel.send(emb)
+            return msg.channel.send(emb.setColor(colors.error))
         }
         let inventory = itemArray
 
@@ -93,21 +93,21 @@ module.exports = {
                     arr = inventory
                     emb.setTitle("Inventar [Full]")
 
-                    arr.sort(function(a, b) {
+                    arr.sort(function (a, b) {
                         var nameA = a.type
                         var nameB = b.type
                         if (nameA < nameB) { return -1; }
                         if (nameA > nameB) { return 1; }
                         return 0;
                     });
-                    let size = arr.map(v => `10 - [${v.ATK}/${v.DEF}] ${v.name} [${ v.rare}]`).join(" \n")
+                    let size = arr.map(v => `10 - [${v.ATK}/${v.DEF}] ${v.name} [${v.rare}]`).join(" \n")
                     page = Math.round(size.length / 2000)
 
                     if (page > 1) {
                         for (let num = page; num > 1; num -= 1) {
                             let B = arr.slice(0, 55)
                             let shift = 55;
-                            B = B.map(v => `${v.itemID} - [${v.ATK}/${v.DEF}] ${v.name} [${ v.rare}]`).join(" \n")
+                            B = B.map(v => `${v.itemID} - [${v.ATK}/${v.DEF}] ${v.name} [${v.rare}]`).join(" \n")
                             if (shift > 0) {
                                 arr.shift()
                                 shift -= 1;
@@ -116,7 +116,7 @@ module.exports = {
                             msg.channel.send(emb)
                         }
                     } else {
-                        emb.setDescription(arr.map(v => `${v.itemID} - [${v.ATK}/${v.DEF}] ${v.name} [${ v.rare}]`).join(" \n"))
+                        emb.setDescription(arr.map(v => `${v.itemID} - [${v.ATK}/${v.DEF}] ${v.name} [${v.rare}]`).join(" \n"))
                         return msg.channel.send(emb)
                     }
                 }
@@ -126,7 +126,7 @@ module.exports = {
                     emb.setTitle("Inventar [Value]")
                     arr = inventory
 
-                    arr.sort(function(a, b) {
+                    arr.sort(function (a, b) {
                         var nameA = a.type
                         var nameB = b.type
                         if (nameA < nameB) { return -1; }

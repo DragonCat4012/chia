@@ -23,10 +23,10 @@ module.exports = {
 
         let playerItem = (inventory.filter(e => e.itemID == args[0])).shift()
         if (!playerItem) return msg.channel.send(emb.setTitle("Dieses Item besitzt du nicht"))
-        if (playerItem.type !== "sword" && playerItem.type !== "shield") return msg.channel.send(emb.setTitle("Du kannst nur Schilder oder Schwerter ausrüsten"))
+        if (playerItem.type !== "sword" && playerItem.type !== "shield") return msg.channel.send(emb.setTitle("Du kannst nur Schilder oder Schwerter ausrüsten").setColor(colors.error)).catch()
 
         let item = (shopItems.filter(e => e.itemID == args[0])).shift()
-        if (!item) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq"))
+        if (!item) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq").setColor(colors.error)).catch()
 
         if (item.type == "sword") {
             if (player.weapon) {
@@ -35,7 +35,7 @@ module.exports = {
             }
             player.weapon = item.itemID;
             emb.addField("**Jetzige Waffe:**", (item.name + " [" + item.ATK + "/" + item.DEF + "]"))
-            return player.save().then(() => msg.channel.send(emb));
+            return player.save().then(() => msg.channel.send(emb).catch());
 
         } else if (item.type == "shield") {
             if (player.shield) {
@@ -44,7 +44,7 @@ module.exports = {
             }
             player.shield = item.itemID
             emb.addField("**Jetziges Schild:**", (item.name + " [" + item.ATK + "/" + item.DEF + "]"))
-            return player.save().then(() => msg.channel.send(emb));
+            return player.save().then(() => msg.channel.send(emb).catch());
         }
         return msg.channel.send(emb)
     }

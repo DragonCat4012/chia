@@ -40,10 +40,9 @@ module.exports = {
         const timeString = segments.join('\n');
 
         if (cooldown - (now - lastDaily) > 0) {
-            emb.setColor(colors.economy)
-                .setDescription(`**${timeString}**`)
+            emb.setDescription(`**${timeString}**`)
             emb.setTitle("Du musst noch warten ;-;")
-            return msg.channel.send(emb).catch()
+            return msg.channel.send(emb.setColor(colors.error)).catch()
 
         } else {
             profile.weekly = now;

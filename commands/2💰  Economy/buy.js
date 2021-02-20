@@ -1,5 +1,5 @@
 const { Message } = require('discord.js');
-const { rawEmb, emotes } = require('../utilities');
+const { rawEmb, colors } = require('../utilities');
 const shopItems = require('../../items.json')
 
 module.exports = {
@@ -18,7 +18,7 @@ module.exports = {
      */
     async execute(msg, args) {
         var userProfile = await msg.client.database.UserConfigCache.getConfig(msg.author.id);
-        let emb = rawEmb(msg).setTitle("Item Kaufen")
+        let emb = rawEmb().setTitle("Item Kaufen")
 
         let arr = []
         for (let item of shopItems) {
@@ -26,9 +26,9 @@ module.exports = {
                 arr.push(item)
         }
         item = arr[0];
-        if (arr.length < 1) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq"))
+        if (arr.length < 1) return msg.channel.send(emb.setTitle("Dieses Item konnte nicht gefunden werden qwq").setColor(colors.error)).catch()
 
-        if (!item.price) return msg.channel.send(emb.setDescription("Dieses Item steht nicht zum Verkauf"))
+        if (!item.price) return msg.channel.send(emb.setDescription("Dieses Item steht nicht zum Verkauf").setColor(colors.error)).catch()
 
         userProfile.coins -= item.price;
         let oldItems = userProfile.items.toObject()
@@ -37,6 +37,6 @@ module.exports = {
 
         emb.setDescription(`**${item.name}** für ¥${item.price} gekauft`)
         await userProfile.save()
-        return msg.channel.send(emb)
+        return msg.channel.send(emb).catch()
     }
 };

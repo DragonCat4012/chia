@@ -17,7 +17,7 @@ module.exports = {
      * @param {String[]} args Argumente die im Befehl mitgeliefert wurden
      */
     async execute(msg) {
-        let emb = rawEmb(msg)
+        let emb = rawEmb()
         let now = Date.now();
 
         let profile = await msg.client.database.UserConfigCache.getConfig(msg.author.id)
@@ -40,18 +40,15 @@ module.exports = {
         const timeString = segments.join('\n');
 
         if (cooldown - (now - lastDaily) > 0) {
-            emb.setColor(colors.economy)
-                .setDescription(`**${timeString}**`)
-            emb.setTitle("Du musst noch warten ;-;")
-            return msg.channel.send(emb).catch()
+            emb.setDescription(`**${timeString}**`)
+                .setTitle("Du musst noch warten ;-;")
+            return msg.channel.send(emb.setColor(colors.error)).catch()
 
         } else {
             profile.daily = now;
             profile.coins += money.daily;
             await profile.save()
-
-            emb.setDescription("Tägliche **" + money.daily + "¥** wurden dir ausgezahlt")
-            msg.channel.send(emb).catch()
+            msg.channel.send(emb.setDescription("Tägliche **" + money.daily + "¥** wurden dir ausgezahlt")).catch()
         }
     }
 };

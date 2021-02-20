@@ -1,5 +1,5 @@
 const client = require('../index')
-const { Collection, User } = require('discord.js')
+const { Collection } = require('discord.js')
 
 const GuildConfigShema = require('./GuildShema')
 const UserConfigShema = require('./UserShema')

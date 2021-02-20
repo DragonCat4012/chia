@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const { defaultPrefix } = require('../config.json')
 
 const GuildShema = new mongoose.Schema({
     guildID: {
@@ -8,7 +9,7 @@ const GuildShema = new mongoose.Schema({
     },
     prefix: {
         type: mongoose.SchemaTypes.String,
-        default: '-'
+        default: defaultPrefix ?? '-'
     },
     levelMessage: {
         type: mongoose.SchemaTypes.Boolean,

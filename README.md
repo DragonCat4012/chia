@@ -72,7 +72,7 @@ Basierend auf Discord.JS & mongoose
 
 Beispiel Config Setup
 
-```
+```json
 {
     "owner": [
         "ownerID",
@@ -109,7 +109,7 @@ Beispiel:
 
 Beispiel Emote Setup:
 
-```Javascript
+```javascript
 const emotes = {
     shield: "<:shield:753309572055171173>",
     location: "<:location:771483527169966090>",
@@ -127,8 +127,8 @@ const emotes = {
 3. Der Bot Status kann in activities.json eingetragen werden
 Beispiel Actibvity setup:
 
-```
-  [
+```json
+[
     "Monster suchen",
     "Shop aufräumen",
     "Dungeons ordnen . . .",
@@ -150,9 +150,8 @@ npm i
 
 ***
 ## Dependencies
-        "discord.js": "^12.5.1",
-        "mongoose": "^5.11.14",
-        "parse-ms": "^2.1.0"
-
-
-
+|  Package | Version |
+| ------------- | ------------- |
+| discord.js | ^12.5.1 |
+| mongoose | ^5.11.14 |
+| parse-ms | ^2.1.0 |

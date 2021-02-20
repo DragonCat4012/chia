@@ -1,0 +1,8 @@
+{
+    "owner": [
+        "ownerID",
+        "ownerID"
+    ],
+    "defaultPrefix": "--",
+    "token": "YourDiscordBotToken"
+}

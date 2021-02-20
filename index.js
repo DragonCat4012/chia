@@ -6,7 +6,7 @@ const GuildConfigShema = require('./database/GuildShema')
 const UserConfigShema = require('./database/UserShema')
 const activities_list = require('./activities.json')
 
-const { colors, newEmb, rawEmb, calcLevel, emotes } = require("./commands/utilities");
+const { colors, rawEmb, calcLevel, emotes } = require("./commands/utilities");
 const config = require("./config.json");
 var { token, defaultPrefix } = config;
 
@@ -129,7 +129,7 @@ client.on("guildCreate", async guild => {
             }
         }
     })
-    emb.setTitle("Hii mein Name lautet Chia").setColor(colors.red)
+    emb.setTitle("Hii mein Name lautet Chia")
     defaultChannel.send(emb.setDescription("**Danke das du mich auf deinen Server geholt hast** \n Nutze -help um meine Befehle zu sehen \n\nIch bin noch in der Testphase wodurch Fehler entstehen könnten qwq"))
 })
 //==================================================================================================================================================

@@ -4,29 +4,21 @@ const fs = require("fs")
 const colors = {
     error: 0xF91A3C,
     blue: 0x93a7cf,
-    red: 0x3a3fe4,
-    info: 0x1AE3F9,
     success: 0x13EF8D,
     warning: 0xF9D71A,
     nothing: 0x303136,
-    unimportant: 0x738F8A
 }
 const emotes = {
-    false: "<:false:740942401413185656>",
-    true: "<:true:740942401161527426>",
-    mobile: "<:mobile:741225706843013122>",
-    bot: "<:Clyde:741225707203592232>",
-    desktop: "<:desktop:741225709351206993>",
-    coin: "<:coin:743414375255113739>",
     shield: "<:shield:753309572055171173>",
     location: "<:location:771483527169966090>",
     wus: '<:wus:761274129583964201>',
     threatening: '<:threatening:750711786256203777>',
     cool: '<:gilgacool:754654249773957134>',
     oha: '<:0000:761274355841499207>',
+    yeah: '<:yeah:768747358937808926>',
+
     staff: "<:staff:752248790198648852>",
-    plus: "<:plus:768749896995569674>",
-    yeah: '<:yeah:768747358937808926>'
+    plus: "<:plus:768749896995569674>"
 }
 
 const money = {
@@ -43,16 +35,16 @@ const money = {
  */
 
 const confirmAction = (msg, text, confim, cancel) => {
-    var emb = newEmb(msg);
+    var emb = rawEmb();
 
     emb.setTitle('Bestätigung').setDescription(text)
 
     msg.channel.send(emb).then(async message => {
-        emb = newEmb(msg);
+        emb = rawEmb(msg);
 
         const filter = (reaction, user) => {
             return (reaction.emoji.name == '✅' ||
-                    reaction.emoji.name === '❌') &&
+                reaction.emoji.name === '❌') &&
                 user.id == msg.author.id;
         };
         const collector = message.createReactionCollector(filter, { time: 5000 });
@@ -95,25 +87,14 @@ const confirmAction = (msg, text, confim, cancel) => {
         });
     });
 }
-
 /**
  * @param {Message} msg 
  * @returns {MessageEmbed} a clean Embed
  */
-const newEmb = (msg) => {
+const rawEmb = () => {
     return new MessageEmbed()
-        .setColor(colors.red)
-        .setFooter(msg.client.user.tag, msg.client.user.displayAvatarURL())
-        .setTimestamp(new Date());
-}
-
-/**
- * @param {Message} msg 
- * @returns {MessageEmbed} a clean Embed
- */
-const rawEmb = (msg) => {
-    return new MessageEmbed()
-        .setColor(colors.blue);
+        .setColor(colors.nothing)
+        .setTimestamp()
 }
 
 
@@ -151,12 +132,12 @@ function getStats() {
  * @param {string} question Question?
  * @param {number} time Time in seconds
  */
-const getAnswer = async(msg, question, time, user) => {
-    return new Promise(async(resolve, reject) => {
+const getAnswer = async (msg, question, time, user) => {
+    return new Promise(async (resolve, reject) => {
         const channel = msg.channel;
         let emb = rawEmb(msg);
 
-        await msg.channel.send(emb.setTitle(question).setColor(colors.info).setFooter("cancel, to abort | " + time + " Seconds to answer"));
+        await msg.channel.send(emb.setTitle(question).setFooter("cancel, to abort | " + time + " Seconds to answer"));
         emb = rawEmb(msg);
         if (!user) user = msg.author
         const collector = channel.createMessageCollector(m => m.author.id === user.id, {
@@ -206,13 +187,13 @@ const getAnswer = async(msg, question, time, user) => {
  * @param {number} xp
  * @returns {number}
  */
-const calcLevel = function(xp) {
+const calcLevel = function (xp) {
     return Math.floor(0.07 * Math.sqrt(xp));
 };
 
 
-const levelToXP = function(level) {
+const levelToXP = function (level) {
     return (level * level / 0.0049)
 };
 
-module.exports = { colors, confirmAction, newEmb, rawEmb, emotes, getStats, calcLevel, getAnswer, levelToXP, money };
+module.exports = { colors, confirmAction, rawEmb, emotes, getStats, calcLevel, getAnswer, levelToXP, money };

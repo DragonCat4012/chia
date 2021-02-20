@@ -28,7 +28,7 @@ module.exports = {
             emb.setTitle(command.name)
                 .addField("**Syntax:**", command.syntax)
                 .setFooter("Trigger: " + command.commands.join(', '))
-            emb.addField("**Beschreibung:**", command.description ? command.description : emotes.false)
+            emb.addField("**Beschreibung:**", command.description ? command.description : '❌')
 
             msg.channel.send(emb);
         } else {

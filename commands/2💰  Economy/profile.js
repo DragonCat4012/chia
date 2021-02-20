@@ -32,22 +32,22 @@ module.exports = {
         var AK = 0;
         var DK = 0;
 
-        if (!player.weapon) { a = emotes.false } else {
+        if (!player.weapon) { a = '❌' } else {
             var item = (items.filter(e => e.itemID == player.weapon)).shift()
             if (!item) {
-                a = emotes.false
+                a = '❌'
             } else {
-                if (item.type !== "sword") { a = emotes.false } else { a = `${item.name} \`[${item.ATK} / ${item.DEF}]\`` }
+                if (item.type !== "sword") { a = '❌' } else { a = `${item.name} \`[${item.ATK} / ${item.DEF}]\`` }
             }
             AK = item ? item.ATK : 0
         }
 
-        if (!player.shield) { b = emotes.false } else {
+        if (!player.shield) { b = '❌' } else {
             var item = (items.filter(e => e.itemID == player.shield)).shift()
             if (!item) {
-                b = emotes.false
+                b = '❌'
             } else {
-                if (item.type !== "shield") { b = emotes.false } else { b = `${item.name} \`[${item.ATK} / ${item.DEF}]\`` }
+                if (item.type !== "shield") { b = '❌' } else { b = `${item.name} \`[${item.ATK} / ${item.DEF}]\`` }
             }
             DK = item ? item.DEF : 0
         }

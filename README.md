@@ -2,16 +2,11 @@
 [![Code Grade](https://www.code-inspector.com/project/18829/status/svg)](https://www.code-inspector.com/public/project/18829/dashboard)
 [![Code Score](https://www.code-inspector.com/project/18829/score/svg)](https://www.code-inspector.com/public/project/18829/dashboard)
 
-
 # chia
 Chia ist ein kleiner RPG Bot der sich auf die lange Reise des Lebens begab. Ihr Lebenssinn besteht darin anderen Freuden zu bereiten^^ 
 Basierend auf Discord.JS & mongoose
 </br>
 
-<a href="https://top.gg/bot/744883074508259329">
-    <img src="https://top.gg/api/widget/744883074508259329.svg" alt="Chia" />
-</a>
-</br>
 
 ***
 ## Commands
@@ -64,7 +59,15 @@ Basierend auf Discord.JS & mongoose
 | prefix | Ändert das Prefix für deinen Server |
 </br>
 
-</br>
+
+***
+## Support
+
+**[![widget](https://discord.com/api/guilds/553942677117337600/widget.png?style=banner2)](https://discord.gg/Emk2udJ)**
+
+<a href="https://top.gg/bot/744883074508259329">
+    <img src="https://top.gg/api/widget/744883074508259329.svg" alt="Chia" />
+</a>
 
 ***
 ## Run

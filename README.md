@@ -1,4 +1,3 @@
-
 [![Code Grade](https://www.code-inspector.com/project/18829/status/svg)](https://www.code-inspector.com/public/project/18829/dashboard)
 [![Code Score](https://www.code-inspector.com/project/18829/score/svg)](https://www.code-inspector.com/public/project/18829/dashboard)
 

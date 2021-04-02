@@ -144,6 +144,13 @@ node index.js
 ```
 </br>
 
+
+***
+## Contributions 
+<a href="https://github.com/DragonCat4012/chia/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=DragonCat4012/chia" />
+</a>
+
 ***
 ## Installation
 ```

@@ -5,7 +5,7 @@ module.exports = {
     name: 'info',
     syntax: 'info',
     args: false,
-    description: 'Zeigt dir Inos über mich ^^',
+    description: 'Zeigt dir Infos über mich ^^',
     type: 'ALLGEMEIN',
     commands: ['info', 'botinfo'],
 

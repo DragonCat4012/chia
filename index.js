@@ -105,8 +105,7 @@ client.on("ready", async () => {
     console.log(" >  Logged in as: " + client.user.tag);
     setInterval(() => {
         const index = Math.floor(Math.random() * (activities_list.length - 1) + 1);
-        let act = (activities_list[index]).replace(/{PREFIX}/g, config.defaultPrefix)
-        client.user.setActivity(act);
+        client.user.setActivity(activities_list[index]);
     }, 60000);
 
     report_channel = client.guilds.cache

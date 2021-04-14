@@ -107,8 +107,9 @@ module.exports = {
 
 function rarity(level) {
     if (level == 1) return "⭐"
-    if (level == 2) return "⭐⭐"
-    if (level == 3) return "⭐⭐⭐"
-    if (level == 4) return "🌟"
-    if (level == 5) return "🌟🌟"
+    else if (level == 2) return "⭐⭐"
+    else if (level == 3) return "⭐⭐⭐"
+    else if (level == 4) return "🌟"
+    else if (level == 5) return "🌟🌟"
+return "-"
 }

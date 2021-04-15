@@ -60,9 +60,12 @@ module.exports = {
                 {
                     let text = []
                     for (let item of inventory) {
-                        if (item.type == "sword") Swords += 1;
-                        if (item.type == "shield") Shields += 1;
-                        if (item.type == "material") Material += 1;
+                        if (!item) continue
+                        if (item.type) {
+                            if (item.type == "sword") Swords += 1;
+                            if (item.type == "shield") Shields += 1;
+                            if (item.type == "material") Material += 1;
+                        }
 
                         if (item.rare == 1) Eins += 1;
                         if (item.rare == 2) Zwei += 1;

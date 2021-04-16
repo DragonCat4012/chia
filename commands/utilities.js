@@ -8,6 +8,7 @@ const colors = {
     warning: 0xF9D71A,
     nothing: 0x303136,
 }
+
 const emotes = {
     shield: "<:shield:753309572055171173>",
     location: "<:location:771483527169966090>",
@@ -16,7 +17,6 @@ const emotes = {
     cool: '<:gilgacool:754654249773957134>',
     oha: '<:0000:761274355841499207>',
     yeah: '<:yeah:768747358937808926>',
-
     staff: "<:staff:752248790198648852>",
     plus: "<:plus:768749896995569674>"
 }
@@ -96,7 +96,6 @@ const rawEmb = () => {
         .setColor(colors.nothing)
         .setTimestamp()
 }
-
 
 function getStats() {
     var project_stats = {
@@ -181,7 +180,6 @@ const getAnswer = async (msg, question, time, user) => {
         });
     });
 }
-
 
 /**
  * @param {number} xp

@@ -15,7 +15,7 @@ Basierend auf Discord.JS & mongoose
 |  Name | Beschreibung |
 | ------------- | ------------- |
 | help | Zeigt dir alle Befehle |
-| info | Zeigt dir Inos über mich ^^ |
+| info | Zeigt dir Infos über mich ^^ |
 | invite | Gibt den Linki mit dem du mich zu deinem server hinzufügen kannst UwU |
 | start | Zeigt dir die Spieler Karte eines Läst dich dein Abenteuer mit mir starten ^^ |
 | up | Bin ich online.....? |

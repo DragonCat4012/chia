@@ -49,7 +49,7 @@ module.exports = {
             profile.coins += money.weekly;
             await profile.save()
 
-            emb.setDescription("Tägliche **" + money.weekly + "¥** wurden dir ausgezahlt")
+            emb.setDescription("Wöchentliche **" + money.weekly + "¥** wurden dir ausgezahlt")
             msg.channel.send(emb).catch()
         }
     }
